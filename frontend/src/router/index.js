@@ -11,6 +11,7 @@ import Account from '../views/Account.vue'
 import Checkout from '../views/Checkout.vue'
 import AdminDashboard from '../views/AdminDashboard.vue'
 import AdminProductEdit from '../views/AdminProductEdit.vue'
+import AdminUncategorizedProducts from '../views/AdminUncategorizedProducts.vue'
 import CategoryManager from '../views/CategoryManager.vue'
 import ProductCategoryMover from '../views/ProductCategoryMover.vue'
 import OrderConfirmation from '../views/OrderConfirmation.vue'
@@ -82,6 +83,11 @@ const routes = [
         path: 'products/:id/edit',
         name: 'AdminProductEdit',
         component: AdminProductEdit,
+      },
+      {
+        path: 'products/uncategorized',
+        name: 'AdminUncategorizedProducts',
+        component: AdminUncategorizedProducts,
       },
       {
         path: 'categories/manager',

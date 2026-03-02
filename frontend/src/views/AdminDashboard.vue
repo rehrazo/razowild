@@ -44,6 +44,10 @@
             <span class="nav-icon">🧲</span>
             <span class="nav-text">Product Mover</span>
           </button>
+          <button class="nav-item" @click="openUncategorizedProducts">
+            <span class="nav-icon">🗃️</span>
+            <span class="nav-text">Uncategorized</span>
+          </button>
           <button class="nav-item nav-item-logout">
             <span class="nav-icon">🚪</span>
             <span class="nav-text">Logout</span>
@@ -147,6 +151,7 @@
           <div class="section-header">
             <h2>Products Management</h2>
             <div class="action-buttons">
+              <button class="btn btn-secondary" @click="openUncategorizedProducts">Uncategorized Products</button>
               <button class="btn btn-primary" @click="openProductCategoryMover">Category Product Mover</button>
               <button class="btn btn-secondary" @click="loadProducts" :disabled="productsLoading">Refresh</button>
               <button class="btn btn-primary" @click="openCreateProductForm">+ Add Product</button>
@@ -1298,6 +1303,10 @@ export default {
       await router.push('/admin/products/category-mover')
     }
 
+    const openUncategorizedProducts = async () => {
+      await router.push('/admin/products/uncategorized')
+    }
+
     const applyProductCategoryFromQuery = () => {
       const rawValue = String(route.query.category_id || '').trim()
       const parsedValue = Number(rawValue)
@@ -1457,6 +1466,7 @@ export default {
       getSortIndicator,
       openCategoryManager,
       openProductCategoryMover,
+      openUncategorizedProducts,
       onFileSelected,
       runImport,
     }
