@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import StorefrontLayout from '../layouts/StorefrontLayout.vue'
+import AdminLayout from '../layouts/AdminLayout.vue'
 import Home from '../views/Home.vue'
 import Products from '../views/Products.vue'
 import ProductDetail from '../views/ProductDetail.vue'
@@ -16,70 +18,82 @@ import OrderConfirmation from '../views/OrderConfirmation.vue'
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
-  },
-  {
-    path: '/products',
-    name: 'Products',
-    component: Products,
-  },
-  {
-    path: '/products/:id',
-    name: 'ProductDetail',
-    component: ProductDetail,
-  },
-  {
-    path: '/cart',
-    name: 'Cart',
-    component: Cart,
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: Login,
-  },
-  {
-    path: '/register',
-    name: 'Signup',
-    component: Signup,
-  },
-  {
-    path: '/account',
-    name: 'Account',
-    component: Account,
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '/checkout',
-    name: 'Checkout',
-    component: Checkout,
-    meta: { requiresAuth: true },
+    component: StorefrontLayout,
+    children: [
+      {
+        path: '',
+        name: 'Home',
+        component: Home,
+      },
+      {
+        path: 'products',
+        name: 'Products',
+        component: Products,
+      },
+      {
+        path: 'products/:id',
+        name: 'ProductDetail',
+        component: ProductDetail,
+      },
+      {
+        path: 'cart',
+        name: 'Cart',
+        component: Cart,
+      },
+      {
+        path: 'login',
+        name: 'Login',
+        component: Login,
+      },
+      {
+        path: 'register',
+        name: 'Signup',
+        component: Signup,
+      },
+      {
+        path: 'account',
+        name: 'Account',
+        component: Account,
+        meta: { requiresAuth: true },
+      },
+      {
+        path: 'checkout',
+        name: 'Checkout',
+        component: Checkout,
+        meta: { requiresAuth: true },
+      },
+      {
+        path: 'order-confirmation/:orderId',
+        name: 'OrderConfirmation',
+        component: OrderConfirmation,
+      },
+    ],
   },
   {
     path: '/admin',
-    name: 'AdminDashboard',
-    component: AdminDashboard,
-  },
-  {
-    path: '/admin/products/:id/edit',
-    name: 'AdminProductEdit',
-    component: AdminProductEdit,
-  },
-  {
-    path: '/admin/categories/manager',
-    name: 'CategoryManager',
-    component: CategoryManager,
-  },
-  {
-    path: '/admin/products/category-mover',
-    name: 'ProductCategoryMover',
-    component: ProductCategoryMover,
-  },
-  {
-    path: '/order-confirmation/:orderId',
-    name: 'OrderConfirmation',
-    component: OrderConfirmation,
+    component: AdminLayout,
+    children: [
+      {
+        path: '',
+        name: 'AdminDashboard',
+        component: AdminDashboard,
+      },
+      {
+        path: 'products/:id/edit',
+        name: 'AdminProductEdit',
+        component: AdminProductEdit,
+      },
+      {
+        path: 'categories/manager',
+        name: 'CategoryManager',
+        component: CategoryManager,
+      },
+      {
+        path: 'products/category-mover',
+        name: 'ProductCategoryMover',
+        component: ProductCategoryMover,
+      },
+    ],
   },
 ]
 
