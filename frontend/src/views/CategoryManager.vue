@@ -20,7 +20,7 @@
 
     <div v-if="loading" class="loading">Loading categories...</div>
 
-    <div v-else class="tree-card">
+    <div v-else ref="treeCardRef" class="tree-card">
       <div v-if="flatCategories.length === 0" class="empty-state">No categories found.</div>
 
       <div
@@ -53,6 +53,14 @@
           >
             View Products
           </router-link>
+          <button
+            type="button"
+            class="delete-category-btn"
+            draggable="false"
+            @click.stop="deleteCategory(category)"
+          >
+            Delete
+          </button>
         </div>
       </div>
     </div>
@@ -60,7 +68,7 @@
 </template>
 
 <script>
-import { onMounted, ref } from 'vue'
+import { nextTick, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 export default {
@@ -78,6 +86,7 @@ export default {
     const dropTargetId = ref(null)
     const rootDropActive = ref(false)
     const descendantsMap = ref(new Map())
+    const treeCardRef = ref(null)
 
     const goBack = () => {
       router.push({ path: '/admin', query: { tab: 'categories' } })
@@ -138,6 +147,18 @@ export default {
         error.value = loadError.message || 'Failed to load categories'
       } finally {
         loading.value = false
+      }
+    }
+
+    const restoreTreeScroll = async (scrollTop = 0, pageScrollY = 0) => {
+      await nextTick()
+
+      if (treeCardRef.value) {
+        treeCardRef.value.scrollTop = scrollTop
+      }
+
+      if (Number.isFinite(pageScrollY)) {
+        window.scrollTo({ top: pageScrollY, behavior: 'auto' })
       }
     }
 
@@ -270,6 +291,37 @@ export default {
       }
     }
 
+    const deleteCategory = async (category) => {
+      const categoryName = String(category?.name || '').trim() || 'this category'
+      const confirmed = window.confirm(`Delete "${categoryName}"?`)
+      if (!confirmed) {
+        return
+      }
+
+      const previousScrollTop = treeCardRef.value?.scrollTop || 0
+      const previousPageScrollY = window.scrollY || 0
+
+      try {
+        error.value = ''
+        successMessage.value = ''
+
+        const response = await fetch(`/api/categories/${category.category_id}`, {
+          method: 'DELETE',
+        })
+
+        const data = await response.json().catch(() => ({}))
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to delete category')
+        }
+
+        await loadCategories()
+        await restoreTreeScroll(previousScrollTop, previousPageScrollY)
+        successMessage.value = 'Category deleted successfully.'
+      } catch (deleteError) {
+        error.value = deleteError.message || 'Failed to delete category'
+      }
+    }
+
     onMounted(async () => {
       await loadCategories()
     })
@@ -283,6 +335,7 @@ export default {
       draggedCategoryId,
       dropTargetId,
       rootDropActive,
+      treeCardRef,
       getProductCount,
       goBack,
       loadCategories,
@@ -293,6 +346,7 @@ export default {
       onRootDragOver,
       dropOnCategory,
       dropOnRoot,
+      deleteCategory,
     }
   },
 }
@@ -416,6 +470,21 @@ export default {
 
 .view-products-link:hover {
   text-decoration: underline;
+}
+
+.delete-category-btn {
+  border: none;
+  border-radius: 4px;
+  background: #f5d8d8;
+  color: #7e1f1f;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.delete-category-btn:hover {
+  background: #efc6c6;
 }
 
 .loading,

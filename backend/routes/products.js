@@ -427,6 +427,55 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+router.patch('/:id/category', async (req, res) => {
+  const pool = req.app.locals.pool;
+  const productId = toNumber(req.params.id);
+  const categoryId = toNumber(req.body?.category_id);
+
+  if (!productId) {
+    return res.status(400).json({ error: 'Invalid product id' });
+  }
+
+  if (!categoryId) {
+    return res.status(400).json({ error: 'category_id is required' });
+  }
+
+  const connection = await pool.getConnection();
+
+  try {
+    await connection.beginTransaction();
+
+    const [existingRows] = await connection.execute('SELECT product_id FROM products WHERE product_id = ?', [productId]);
+    if (!existingRows.length) {
+      await connection.rollback();
+      return res.status(404).json({ error: 'Product not found' });
+    }
+
+    const categoryRow = await getCategoryById(connection, categoryId);
+    if (!categoryRow) {
+      await connection.rollback();
+      return res.status(404).json({ error: 'Category not found' });
+    }
+
+    await connection.execute(
+      `UPDATE products
+       SET category_id = ?, category = ?, updated_at = CURRENT_TIMESTAMP
+       WHERE product_id = ?`,
+      [categoryRow.category_id, categoryRow.path, productId]
+    );
+
+    await connection.commit();
+
+    const product = await fetchProductById(connection, productId);
+    return res.json(product);
+  } catch (error) {
+    await connection.rollback();
+    return res.status(500).json({ error: error.message });
+  } finally {
+    connection.release();
+  }
+});
+
 router.delete('/:id', async (req, res) => {
   const pool = req.app.locals.pool;
 

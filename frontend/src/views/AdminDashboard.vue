@@ -40,6 +40,10 @@
             <span class="nav-icon">🧩</span>
             <span class="nav-text">Category Manager</span>
           </button>
+          <button class="nav-item" @click="openProductCategoryMover">
+            <span class="nav-icon">🧲</span>
+            <span class="nav-text">Product Mover</span>
+          </button>
           <button class="nav-item nav-item-logout">
             <span class="nav-icon">🚪</span>
             <span class="nav-text">Logout</span>
@@ -143,6 +147,7 @@
           <div class="section-header">
             <h2>Products Management</h2>
             <div class="action-buttons">
+              <button class="btn btn-primary" @click="openProductCategoryMover">Category Product Mover</button>
               <button class="btn btn-secondary" @click="loadProducts" :disabled="productsLoading">Refresh</button>
               <button class="btn btn-primary" @click="openCreateProductForm">+ Add Product</button>
             </div>
@@ -336,6 +341,16 @@
 
           <div class="products-controls">
             <div class="form-group">
+              <label for="categoryFilterSearch">Filter Categories</label>
+              <input
+                id="categoryFilterSearch"
+                v-model="categoryFilterSearch"
+                type="text"
+                class="form-input"
+                placeholder="Search by name, path, or parent"
+              />
+            </div>
+            <div class="form-group">
               <label for="newCategoryName">Category Name</label>
               <input id="newCategoryName" v-model="newCategoryName" type="text" class="form-input" placeholder="e.g. Tents" />
             </div>
@@ -377,23 +392,25 @@
                     Parent {{ getSortIndicator('parent') }}
                   </button>
                 </th>
+                <th>Products</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="category in sortedCategoryRows" :key="category.category_id">
+              <tr v-for="category in filteredCategoryRows" :key="category.category_id">
                 <td>{{ category.category_id }}</td>
                 <td>{{ category.label }}</td>
                 <td>{{ category.path }}</td>
                 <td>{{ getCategoryParentPath(category) }}</td>
+                <td>{{ getCategoryProductCount(category.category_id) }}</td>
                 <td class="action-buttons">
                   <button class="edit-btn" title="Rename" @click="renameCategory(category)">✎</button>
                   <button class="view-btn" title="Move" @click="moveCategory(category)">⇄</button>
                   <button class="delete-btn" title="Delete" @click="deleteCategory(category)">🗑️</button>
                 </td>
               </tr>
-              <tr v-if="!categoriesLoading && categoryOptions.length === 0">
-                <td colspan="5" class="center">No categories found.</td>
+              <tr v-if="!categoriesLoading && filteredCategoryRows.length === 0">
+                <td colspan="6" class="center">No categories found.</td>
               </tr>
             </tbody>
           </table>
@@ -692,8 +709,10 @@ export default {
     const categoryOptions = ref([])
     const categoriesLoading = ref(false)
     const categoriesError = ref('')
+    const categoryFilterSearch = ref('')
     const newCategoryName = ref('')
     const newCategoryParentId = ref(null)
+    const categoryProductCounts = ref({})
     const categorySortKey = ref('name')
     const categorySortDirection = ref('asc')
     const customerSearch = ref('')
@@ -1027,11 +1046,45 @@ export default {
 
         categoryTree.value = Array.isArray(data.data) ? data.data : []
         categoryOptions.value = flattenCategoryTree(categoryTree.value)
+        await loadCategoryProductCounts(categoryOptions.value)
       } catch (error) {
         categoriesError.value = error.message || 'Failed to load categories'
+        categoryProductCounts.value = {}
       } finally {
         categoriesLoading.value = false
       }
+    }
+
+    const fetchProductsTotalForCategory = async (categoryId) => {
+      const params = new URLSearchParams({
+        page: '1',
+        limit: '1',
+        category_id: String(categoryId),
+      })
+
+      const response = await fetch(`/api/products?${params.toString()}`)
+      const payload = await response.json().catch(() => ({}))
+
+      if (!response.ok) {
+        return 0
+      }
+
+      return Number(payload?.pagination?.total || 0)
+    }
+
+    const loadCategoryProductCounts = async (categories = []) => {
+      const entries = await Promise.all(
+        categories.map(async (category) => {
+          const total = await fetchProductsTotalForCategory(category.category_id)
+          return [category.category_id, total]
+        })
+      )
+
+      categoryProductCounts.value = Object.fromEntries(entries)
+    }
+
+    const getCategoryProductCount = (categoryId) => {
+      return Number(categoryProductCounts.value?.[categoryId] || 0)
     }
 
     const createCategory = async () => {
@@ -1204,6 +1257,21 @@ export default {
       return rows
     })
 
+    const filteredCategoryRows = computed(() => {
+      const query = String(categoryFilterSearch.value || '').trim().toLowerCase()
+      if (!query) {
+        return sortedCategoryRows.value
+      }
+
+      return sortedCategoryRows.value.filter((category) => {
+        const name = String(category?.name || '').toLowerCase()
+        const path = String(category?.path || '').toLowerCase()
+        const parent = String(getCategoryParentPath(category) || '').toLowerCase()
+
+        return name.includes(query) || path.includes(query) || parent.includes(query)
+      })
+    })
+
     const toggleCategorySort = (key) => {
       if (categorySortKey.value === key) {
         categorySortDirection.value = categorySortDirection.value === 'asc' ? 'desc' : 'asc'
@@ -1224,6 +1292,10 @@ export default {
 
     const openCategoryManager = async () => {
       await router.push('/admin/categories/manager')
+    }
+
+    const openProductCategoryMover = async () => {
+      await router.push('/admin/products/category-mover')
     }
 
     const applyProductCategoryFromQuery = () => {
@@ -1342,6 +1414,9 @@ export default {
       productPagination,
       categoryOptions,
       sortedCategoryRows,
+      filteredCategoryRows,
+      categoryFilterSearch,
+      getCategoryProductCount,
       categoriesLoading,
       categoriesError,
       newCategoryName,
@@ -1381,6 +1456,7 @@ export default {
       toggleCategorySort,
       getSortIndicator,
       openCategoryManager,
+      openProductCategoryMover,
       onFileSelected,
       runImport,
     }

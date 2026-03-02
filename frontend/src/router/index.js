@@ -10,6 +10,7 @@ import Checkout from '../views/Checkout.vue'
 import AdminDashboard from '../views/AdminDashboard.vue'
 import AdminProductEdit from '../views/AdminProductEdit.vue'
 import CategoryManager from '../views/CategoryManager.vue'
+import ProductCategoryMover from '../views/ProductCategoryMover.vue'
 import OrderConfirmation from '../views/OrderConfirmation.vue'
 
 const routes = [
@@ -69,6 +70,11 @@ const routes = [
     path: '/admin/categories/manager',
     name: 'CategoryManager',
     component: CategoryManager,
+  },
+  {
+    path: '/admin/products/category-mover',
+    name: 'ProductCategoryMover',
+    component: ProductCategoryMover,
   },
   {
     path: '/order-confirmation/:orderId',
