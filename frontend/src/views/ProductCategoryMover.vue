@@ -63,7 +63,7 @@
         <div v-else-if="selectedSourceCategoryId === null" class="empty-state">Select a source category to load products.</div>
         <div v-else-if="filteredProducts.length === 0" class="empty-state">No matching products found.</div>
 
-        <div v-else class="product-list">
+        <div v-else ref="productListRef" class="product-list">
           <div
             v-for="product in filteredProducts"
             :key="product.product_id"
@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import { computed, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 export default {
@@ -105,6 +105,8 @@ export default {
     const draggedProduct = ref(null)
     const dropTargetCategoryId = ref(null)
     const products = ref([])
+    const productListRef = ref(null)
+    const preservedProductListScrollTop = ref(0)
     const placeholderImage = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"><rect width="100%" height="100%" fill="%23e8ecf5"/><text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-size="18">%F0%9F%93%A6</text></svg>'
 
     const flatCategoryOptions = computed(() => {
@@ -175,6 +177,7 @@ export default {
           page: '1',
           limit: '500',
           category_id: String(selectedSourceCategoryId.value),
+          include_descendants: 'false',
         })
 
         const response = await fetch(`/api/products?${params.toString()}`)
@@ -191,6 +194,21 @@ export default {
       } finally {
         productsLoading.value = false
       }
+    }
+
+    const captureProductListScroll = () => {
+      preservedProductListScrollTop.value = productListRef.value?.scrollTop || 0
+    }
+
+    const restoreProductListScroll = async () => {
+      await nextTick()
+
+      if (!productListRef.value) {
+        return
+      }
+
+      const maxScrollTop = Math.max(0, productListRef.value.scrollHeight - productListRef.value.clientHeight)
+      productListRef.value.scrollTop = Math.min(preservedProductListScrollTop.value, maxScrollTop)
     }
 
     const loadInitialData = async () => {
@@ -261,7 +279,9 @@ export default {
         }
 
         successMessage.value = `Moved "${product.name}" to "${targetCategory.name}".`
+        captureProductListScroll()
         await loadProductsForSource()
+        await restoreProductListScroll()
       } catch (moveError) {
         error.value = moveError.message || 'Failed to move product category'
       } finally {
@@ -296,6 +316,7 @@ export default {
       flatCategoryOptions,
       dropTargetCategoryId,
       filteredProducts,
+      productListRef,
       goBack,
       loadInitialData,
       loadProductsForSource,

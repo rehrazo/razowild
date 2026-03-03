@@ -167,6 +167,7 @@ router.get('/', async (req, res) => {
     const search = req.query.search ? `%${req.query.search}%` : null;
     const category = req.query.category || null;
     const categoryId = toNumber(req.query.category_id);
+    const includeDescendants = String(req.query.include_descendants || 'true').toLowerCase() !== 'false';
     const brand = req.query.brand || null;
 
     const where = [];
@@ -177,25 +178,30 @@ router.get('/', async (req, res) => {
       params.push(search, search, search);
     }
     if (categoryId) {
-      const connection = await pool.getConnection();
-      try {
-        const descendantIds = await getDescendantCategoryIds(connection, categoryId);
-        if (!descendantIds.length) {
-          return res.json({
-            data: [],
-            pagination: {
-              page,
-              limit,
-              total: 0,
-              pages: 0,
-            },
-          });
-        }
+      if (!includeDescendants) {
+        where.push('p.category_id = ?');
+        params.push(categoryId);
+      } else {
+        const connection = await pool.getConnection();
+        try {
+          const descendantIds = await getDescendantCategoryIds(connection, categoryId);
+          if (!descendantIds.length) {
+            return res.json({
+              data: [],
+              pagination: {
+                page,
+                limit,
+                total: 0,
+                pages: 0,
+              },
+            });
+          }
 
-        where.push(`p.category_id IN (${descendantIds.map(() => '?').join(', ')})`);
-        params.push(...descendantIds);
-      } finally {
-        connection.release();
+          where.push(`p.category_id IN (${descendantIds.map(() => '?').join(', ')})`);
+          params.push(...descendantIds);
+        } finally {
+          connection.release();
+        }
       }
     }
     if (category) {

@@ -48,6 +48,10 @@
             <span class="nav-icon">🗃️</span>
             <span class="nav-text">Uncategorized</span>
           </button>
+          <button class="nav-item" @click="openOrderExportManager">
+            <span class="nav-icon">📤</span>
+            <span class="nav-text">Order Export</span>
+          </button>
           <button class="nav-item nav-item-logout">
             <span class="nav-icon">🚪</span>
             <span class="nav-text">Logout</span>
@@ -425,13 +429,9 @@
         <section v-if="activeTab === 'orders'" class="orders-tab">
           <div class="section-header">
             <h2>Orders Management</h2>
-            <select class="filter-select">
-              <option value="">All Orders</option>
-              <option value="pending">Pending</option>
-              <option value="processing">Processing</option>
-              <option value="shipped">Shipped</option>
-              <option value="delivered">Delivered</option>
-            </select>
+            <div class="action-buttons">
+              <button class="btn btn-primary" @click="openOrderExportManager">Open Order Export Manager</button>
+            </div>
           </div>
 
           <table class="orders-table full-width">
@@ -1307,6 +1307,10 @@ export default {
       await router.push('/admin/products/uncategorized')
     }
 
+    const openOrderExportManager = async () => {
+      await router.push('/admin/orders/export-manager')
+    }
+
     const applyProductCategoryFromQuery = () => {
       const rawValue = String(route.query.category_id || '').trim()
       const parsedValue = Number(rawValue)
@@ -1467,6 +1471,7 @@ export default {
       openCategoryManager,
       openProductCategoryMover,
       openUncategorizedProducts,
+      openOrderExportManager,
       onFileSelected,
       runImport,
     }

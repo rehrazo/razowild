@@ -15,6 +15,7 @@ import AdminUncategorizedProducts from '../views/AdminUncategorizedProducts.vue'
 import CategoryManager from '../views/CategoryManager.vue'
 import ProductCategoryMover from '../views/ProductCategoryMover.vue'
 import OrderConfirmation from '../views/OrderConfirmation.vue'
+import AdminOrderExportManager from '../views/AdminOrderExportManager.vue'
 
 const routes = [
   {
@@ -98,6 +99,11 @@ const routes = [
         path: 'products/category-mover',
         name: 'ProductCategoryMover',
         component: ProductCategoryMover,
+      },
+      {
+        path: 'orders/export-manager',
+        name: 'AdminOrderExportManager',
+        component: AdminOrderExportManager,
       },
     ],
   },
