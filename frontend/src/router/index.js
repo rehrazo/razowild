@@ -16,6 +16,10 @@ import CategoryManager from '../views/CategoryManager.vue'
 import ProductCategoryMover from '../views/ProductCategoryMover.vue'
 import OrderConfirmation from '../views/OrderConfirmation.vue'
 import AdminOrderExportManager from '../views/AdminOrderExportManager.vue'
+import ShippingReturns from '../views/ShippingReturns.vue'
+import PrivacyPolicy from '../views/PrivacyPolicy.vue'
+import TermsConditions from '../views/TermsConditions.vue'
+import TrackOrder from '../views/TrackOrder.vue'
 
 const routes = [
   {
@@ -68,6 +72,26 @@ const routes = [
         path: 'order-confirmation/:orderId',
         name: 'OrderConfirmation',
         component: OrderConfirmation,
+      },
+      {
+        path: 'shipping-returns',
+        name: 'ShippingReturns',
+        component: ShippingReturns,
+      },
+      {
+        path: 'privacy-policy',
+        name: 'PrivacyPolicy',
+        component: PrivacyPolicy,
+      },
+      {
+        path: 'terms-conditions',
+        name: 'TermsConditions',
+        component: TermsConditions,
+      },
+      {
+        path: 'track-order',
+        name: 'TrackOrder',
+        component: TrackOrder,
       },
     ],
   },
