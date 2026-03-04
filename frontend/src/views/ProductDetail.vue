@@ -90,8 +90,12 @@
         <div v-if="product.variantGroups.length" class="variant-selector">
           <h3>Choose Variant</h3>
           <div v-for="group in product.variantGroups" :key="group.theme" class="variant-group">
-            <label :for="`variant-${group.theme}`">{{ group.theme }}:</label>
+            <label :for="group.options.length > 1 ? `variant-${group.theme}` : null">{{ group.theme }}:</label>
+            <p v-if="group.options.length === 1" class="variant-value-display">
+              {{ group.options[0].value }}{{ group.options[0].sku ? ` (SKU: ${group.options[0].sku})` : '' }}
+            </p>
             <select
+              v-else
               :id="`variant-${group.theme}`"
               v-model="selectedVariants[group.theme]"
               class="variant-select"
@@ -279,13 +283,25 @@ export default {
       }
     }
 
+    const initializeSelectedVariants = (variantGroups = []) => {
+      const selections = {}
+
+      variantGroups.forEach((group) => {
+        if (group?.options?.length === 1) {
+          selections[group.theme] = group.options[0].value
+        }
+      })
+
+      return selections
+    }
+
     onMounted(async () => {
       try {
         const response = await fetch(`/api/products/${route.params.id}`)
         const data = await response.json()
         product.value = mapProduct(data)
         selectedImage.value = product.value.image
-        selectedVariants.value = {}
+        selectedVariants.value = initializeSelectedVariants(product.value.variantGroups)
         variantError.value = ''
       } catch (error) {
         console.error('Error fetching product:', error)
@@ -535,6 +551,16 @@ export default {
   padding: 0.55rem;
   border: 1px solid #ddd;
   border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+.variant-value-display {
+  margin: 0;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #f7f7f7;
+  color: #333;
   font-size: 0.95rem;
 }
 

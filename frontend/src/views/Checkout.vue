@@ -115,37 +115,21 @@
             <h2>Shipping Method</h2>
             
             <div class="shipping-options">
-              <label class="radio-option">
-                <input 
-                  v-model="form.shippingMethod" 
-                  type="radio" 
-                  value="standard"
-                />
+              <div v-if="shippingMethods.length === 1" class="single-option-display">
                 <span class="option-text">
-                  <span class="option-title">Standard Shipping (5-7 days)</span>
-                  <span class="option-price">$9.99</span>
+                  <span class="option-title">{{ shippingMethods[0].name }}</span>
+                  <span class="option-price">${{ shippingMethods[0].price.toFixed(2) }}</span>
                 </span>
-              </label>
-              <label class="radio-option">
+              </div>
+              <label v-else v-for="method in shippingMethods" :key="method.id" class="radio-option">
                 <input 
                   v-model="form.shippingMethod" 
                   type="radio" 
-                  value="express"
+                  :value="method.id"
                 />
                 <span class="option-text">
-                  <span class="option-title">Express Shipping (2-3 days)</span>
-                  <span class="option-price">$24.99</span>
-                </span>
-              </label>
-              <label class="radio-option">
-                <input 
-                  v-model="form.shippingMethod" 
-                  type="radio" 
-                  value="overnight"
-                />
-                <span class="option-text">
-                  <span class="option-title">Overnight Shipping</span>
-                  <span class="option-price">$49.99</span>
+                  <span class="option-title">{{ method.name }}</span>
+                  <span class="option-price">${{ method.price.toFixed(2) }}</span>
                 </span>
               </label>
             </div>
@@ -230,6 +214,11 @@ export default {
   setup() {
     const router = useRouter()
     const cartStore = useCartStore()
+    const shippingMethods = [
+      { id: 'standard', name: 'Standard Shipping (5-7 days)', price: 9.99 },
+      { id: 'express', name: 'Express Shipping (2-3 days)', price: 24.99 },
+      { id: 'overnight', name: 'Overnight Shipping', price: 49.99 },
+    ]
     
     const form = ref({
       firstName: '',
@@ -240,7 +229,7 @@ export default {
       city: '',
       state: '',
       zip: '',
-      shippingMethod: 'standard',
+      shippingMethod: shippingMethods[0]?.id || '',
       agreeTerms: false,
     })
 
@@ -254,12 +243,8 @@ export default {
 
     const shippingCost = computed(() => {
       const method = form.value.shippingMethod
-      const costs = {
-        standard: 9.99,
-        express: 24.99,
-        overnight: 49.99,
-      }
-      return costs[method] || 9.99
+      const selectedMethod = shippingMethods.find((item) => item.id === method)
+      return selectedMethod ? selectedMethod.price : Number(shippingMethods[0]?.price || 0)
     })
 
     const tax = computed(() => {
@@ -374,6 +359,7 @@ export default {
 
     return {
       form,
+      shippingMethods,
       orderItems,
       subtotal,
       shippingCost,
@@ -490,6 +476,15 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+.single-option-display {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 4px;
+  background-color: #f9f9f9;
 }
 
 .radio-option,

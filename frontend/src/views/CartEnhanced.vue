@@ -143,7 +143,14 @@
           <!-- Shipping Options -->
           <div class="shipping-options">
             <h3>Shipping Method</h3>
-            <label v-for="method in shippingMethods" :key="method.id" class="shipping-option">
+            <div v-if="shippingMethods.length === 1" class="single-option-display">
+              <span class="option-text">
+                <span class="method-name">{{ shippingMethods[0].name }}</span>
+                <span class="method-time">{{ shippingMethods[0].time }}</span>
+              </span>
+              <span class="method-price">${{ shippingMethods[0].price.toFixed(2) }}</span>
+            </div>
+            <label v-else v-for="method in shippingMethods" :key="method.id" class="shipping-option">
               <input 
                 v-model="selectedShippingMethod"
                 type="radio"
@@ -205,7 +212,12 @@ export default {
     const couponCode = ref('')
     const appliedCoupon = ref(null)
     const couponError = ref('')
-    const selectedShippingMethod = ref('standard')
+    const shippingMethods = [
+      { id: 'standard', name: 'Standard Shipping', time: '5-7 business days', price: 9.99 },
+      { id: 'express', name: 'Express Shipping', time: '2-3 business days', price: 24.99 },
+      { id: 'overnight', name: 'Overnight Shipping', time: 'Next business day', price: 49.99 },
+    ]
+    const selectedShippingMethod = ref(shippingMethods[0]?.id || '')
 
     const cartItems = ref([
       {
@@ -283,12 +295,6 @@ export default {
         discount: 0.25,
         minAmount: 200,
       },
-    ]
-
-    const shippingMethods = [
-      { id: 'standard', name: 'Standard Shipping', time: '5-7 business days', price: 9.99 },
-      { id: 'express', name: 'Express Shipping', time: '2-3 business days', price: 24.99 },
-      { id: 'overnight', name: 'Overnight Shipping', time: 'Next business day', price: 49.99 },
     ]
 
     const subtotal = computed(() => {
@@ -872,6 +878,16 @@ export default {
   padding: 0.75rem;
   cursor: pointer;
   margin-bottom: 0.5rem;
+}
+
+.single-option-display {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fff;
 }
 
 .shipping-option input {
