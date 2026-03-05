@@ -13,7 +13,8 @@
         "migrate:variation-sku": "node scripts/addVariationSkuColumn.js",
         "backfill:brief-descriptions": "node scripts/backfillBriefDescriptions.js",
         "clean:descriptions": "node scripts/cleanProductDescriptions.js",
-        "backfill:long-descriptions": "node scripts/backfillLongDescriptions.js"
+        "backfill:long-descriptions": "node scripts/backfillLongDescriptions.js",
+        "backfill:description-images": "node scripts/backfillDescriptionImages.js"
     },
     "keywords": [
         "ecommerce",

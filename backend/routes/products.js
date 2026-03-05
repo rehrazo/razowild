@@ -7,6 +7,11 @@ const {
 const { generateBriefDescription } = require('../utils/briefDescription');
 const { cleanDescriptionForStorage } = require('../utils/descriptionCleaner');
 const { buildDescriptionSections } = require('../utils/descriptionSections');
+const {
+  extractImageUrlsFromHtml,
+  stripImageTagsFromHtml,
+  normalizeImagesForStorage,
+} = require('../utils/descriptionImages');
 
 const router = express.Router();
 
@@ -43,7 +48,9 @@ async function replaceChildRows(connection, tableName, productId, columns, rows 
 function mapProductPayload(payload = {}) {
   const rawDescription = payload.description || null;
   const rawLongDescription = payload.long_description || null;
-  const htmlDescription = payload.html_description || null;
+  const rawHtmlDescription = payload.html_description || null;
+  const extractedHtmlImageUrls = extractImageUrlsFromHtml(rawHtmlDescription);
+  const htmlDescription = stripImageTagsFromHtml(rawHtmlDescription);
   const longDescriptionSource = rawLongDescription || rawDescription;
   const longDescription = cleanDescriptionForStorage({
     description: longDescriptionSource,
@@ -80,6 +87,7 @@ function mapProductPayload(payload = {}) {
     processing_time: payload.processing_time || null,
     description,
     html_description: htmlDescription,
+    extracted_html_image_urls: extractedHtmlImageUrls,
     long_description: longDescription,
     brief_description: payload.brief_description || generateBriefDescription({
       description,
@@ -283,7 +291,7 @@ router.post('/', async (req, res) => {
   const pool = req.app.locals.pool;
   const payload = mapProductPayload(req.body);
 
-  const images = Array.isArray(req.body.images) ? req.body.images : [];
+  const images = normalizeImagesForStorage(req.body.images, payload.extracted_html_image_urls);
   const variations = Array.isArray(req.body.variations) ? req.body.variations : [];
   const packaging = Array.isArray(req.body.packaging) ? req.body.packaging : [];
   const parameters = Array.isArray(req.body.parameters) ? req.body.parameters : [];
@@ -360,7 +368,7 @@ router.put('/:id', async (req, res) => {
 
   const payload = mapProductPayload(req.body);
 
-  const images = Array.isArray(req.body.images) ? req.body.images : [];
+  const images = normalizeImagesForStorage(req.body.images, payload.extracted_html_image_urls);
   const variations = Array.isArray(req.body.variations) ? req.body.variations : [];
   const packaging = Array.isArray(req.body.packaging) ? req.body.packaging : [];
   const parameters = Array.isArray(req.body.parameters) ? req.body.parameters : [];

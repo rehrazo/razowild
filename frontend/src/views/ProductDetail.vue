@@ -215,6 +215,23 @@ export default {
       return result
     }
 
+    const extractImageUrlsFromHtml = (html = '') => {
+      const source = String(html || '').trim()
+      if (!source) {
+        return []
+      }
+
+      try {
+        const parser = new DOMParser()
+        const doc = parser.parseFromString(source, 'text/html')
+        return Array.from(doc.querySelectorAll('img[src]'))
+          .map((node) => String(node.getAttribute('src') || '').trim())
+          .filter(Boolean)
+      } catch {
+        return []
+      }
+    }
+
     const onImageError = (event) => {
       if (!event?.target) {
         return
@@ -257,13 +274,15 @@ export default {
     const showReviews = computed(() => Number(product.value?.reviews || 0) >= 5)
 
     const mapProduct = (data) => {
-      const images = Array.isArray(data?.images) ? dedupeImages(data.images) : []
+      const descriptionImageUrls = extractImageUrlsFromHtml(data?.html_description)
+      const images = dedupeImages([...(Array.isArray(data?.images) ? data.images : []), ...descriptionImageUrls])
       const primaryImage =
         images[0] ||
         String(data?.primary_image_url || data?.image_url || data?.image || '').trim() ||
         fallbackImage
       const sanitizedDescriptionHtml = DOMPurify.sanitize(String(data?.html_description || ''), {
         USE_PROFILES: { html: true },
+        FORBID_TAGS: ['img'],
       }).trim()
 
       return {
