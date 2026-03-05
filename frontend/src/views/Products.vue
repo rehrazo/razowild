@@ -1,65 +1,81 @@
 <template>
   <div class="products">
     <h1>Our Products</h1>
-    
-    <div class="filters">
-      <input 
-        v-model="searchQuery" 
-        type="text" 
-        placeholder="Search products..."
-        class="search-input"
-      />
-      <select v-model="selectedParentCategoryId" class="category-select" @change="handleParentCategoryChange">
-        <option :value="null">All Parent Categories</option>
-        <option v-for="category in parentCategories" :key="category.category_id" :value="category.category_id">
-          {{ category.name }}
-        </option>
-      </select>
-      <select
-        v-model="selectedChildCategoryId"
-        class="category-select"
-        :disabled="!childCategories.length"
-        @change="handleChildCategoryChange"
-      >
-        <option :value="null">All Child Categories</option>
-        <option v-for="category in childCategories" :key="category.category_id" :value="category.category_id">
-          {{ category.name }}
-        </option>
-      </select>
-    </div>
 
-    <div class="products-grid">
-      <div v-for="product in filteredProducts" :key="product.id" class="product-card">
-        <img :src="product.image" :alt="product.name" />
-        <h3>{{ product.name }}</h3>
-        <p class="category">{{ product.categoryPath || product.category }}</p>
-        <p class="description">{{ product.description }}</p>
-        <p class="price">${{ product.price.toFixed(2) }}</p>
-        <div class="actions">
-          <router-link :to="`/products/${product.id}`" class="btn btn-secondary">View Details</router-link>
-          <button @click="addToCart(product)" class="btn btn-primary">Add to Cart</button>
+    <div class="products-layout">
+      <aside class="category-sidebar">
+        <h2>Categories</h2>
+        <template v-if="selectedParentCategory">
+          <button
+            class="category-menu-link all"
+            :class="{ active: !selectedChildCategoryId }"
+            @click="selectParentOnly"
+          >
+            All in {{ selectedParentCategory.name }}
+          </button>
+
+          <button
+            v-for="child in visibleChildCategories"
+            :key="child.category_id"
+            class="category-menu-link child"
+            :class="{ active: selectedChildCategoryId === child.category_id }"
+            @click="selectChildCategory(selectedParentCategory.category_id, child.category_id)"
+          >
+            {{ child.name }}
+          </button>
+
+          <p v-if="visibleChildCategories.length === 0" class="empty-categories">
+            No child categories under this parent.
+          </p>
+        </template>
+
+        <p v-else class="empty-categories">Select a parent category from the top category bar to browse its children.</p>
+      </aside>
+
+      <div class="products-content">
+        <div class="products-grid">
+          <div
+            v-for="product in filteredProducts"
+            :key="product.id"
+            class="product-card"
+            role="button"
+            tabindex="0"
+            @click="openProduct(product.id)"
+            @keydown.enter.prevent="openProduct(product.id)"
+            @keydown.space.prevent="openProduct(product.id)"
+          >
+            <img :src="product.image" :alt="product.name" />
+            <h3>{{ product.name }}</h3>
+            <p class="category">{{ product.categoryPath || product.category }}</p>
+            <p class="description">{{ product.description }}</p>
+            <p class="price">${{ product.price.toFixed(2) }}</p>
+            <div class="actions">
+              <router-link :to="`/products/${product.id}`" class="btn btn-secondary" @click.stop>View Details</router-link>
+              <button @click.stop="addToCart(product)" class="btn btn-primary">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="filteredProducts.length === 0" class="no-products">
+          <p>No products found matching your criteria.</p>
         </div>
       </div>
-    </div>
-
-    <div v-if="filteredProducts.length === 0" class="no-products">
-      <p>No products found matching your criteria.</p>
     </div>
   </div>
 </template>
 
 <script>
 import { ref, computed, onMounted, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useCartStore } from '../stores/cart'
 
 export default {
   name: 'Products',
   setup() {
     const route = useRoute()
+    const router = useRouter()
     const products = ref([])
     const categoryTree = ref([])
-    const searchQuery = ref('')
     const selectedParentCategoryId = ref(null)
     const selectedChildCategoryId = ref(null)
     const cartStore = useCartStore()
@@ -115,6 +131,10 @@ export default {
       selectedChildCategoryId.value = match.childId
     }
 
+    const syncSearchFromQuery = () => {
+      return String(route.query.search || '').trim().toLowerCase()
+    }
+
     const effectiveCategoryId = computed(() => {
       const selectedChild = Number(selectedChildCategoryId.value)
       if (Number.isFinite(selectedChild) && selectedChild > 0) {
@@ -159,6 +179,13 @@ export default {
       }
     )
 
+    watch(
+      () => route.query.search,
+      async () => {
+        await fetchProducts()
+      }
+    )
+
     const parentCategories = computed(() => categoryTree.value)
 
     const childCategories = computed(() => {
@@ -169,20 +196,39 @@ export default {
       return selectedParent?.children || []
     })
 
+    const selectedParentCategory = computed(() => {
+      return categoryTree.value.find((category) => category.category_id === selectedParentCategoryId.value) || null
+    })
+
+    const visibleChildCategories = computed(() => {
+      return selectedParentCategory.value?.children || []
+    })
+
     const filteredProducts = computed(() => {
+      const query = syncSearchFromQuery()
+
       return products.value.filter(product => {
-        const matchesSearch = product.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-                             (product.description || '').toLowerCase().includes(searchQuery.value.toLowerCase())
+        const matchesSearch = !query ||
+          product.name.toLowerCase().includes(query) ||
+          (product.description || '').toLowerCase().includes(query)
         return matchesSearch
       })
     })
 
-    const handleParentCategoryChange = async () => {
+    const selectChildCategory = async (parentId, childId) => {
+      selectedParentCategoryId.value = parentId
+      selectedChildCategoryId.value = childId
+      await fetchProducts()
+    }
+
+    const selectParentOnly = async () => {
       selectedChildCategoryId.value = null
       await fetchProducts()
     }
 
-    const handleChildCategoryChange = async () => {
+    const selectAllCategories = async () => {
+      selectedParentCategoryId.value = null
+      selectedChildCategoryId.value = null
       await fetchProducts()
     }
 
@@ -190,17 +236,23 @@ export default {
       cartStore.addItem(product, 1)
     }
 
+    const openProduct = (productId) => {
+      router.push(`/products/${productId}`)
+    }
+
     return {
       products,
       parentCategories,
-      childCategories,
-      searchQuery,
       selectedParentCategoryId,
       selectedChildCategoryId,
+      selectedParentCategory,
+      visibleChildCategories,
       filteredProducts,
-      handleParentCategoryChange,
-      handleChildCategoryChange,
+      selectChildCategory,
+      selectParentOnly,
+      selectAllCategories,
       addToCart,
+      openProduct,
     }
   },
 }
@@ -208,9 +260,9 @@ export default {
 
 <style scoped>
 .products {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1.25rem;
 }
 
 .products h1 {
@@ -219,34 +271,65 @@ export default {
   text-align: center;
 }
 
-.filters {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
+.products-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 1.5rem;
+  align-items: start;
 }
 
-.search-input,
-.category-select {
-  padding: 0.75rem;
+.category-sidebar {
+  background: #fff;
   border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
+  border-radius: 8px;
+  padding: 1rem;
 }
 
-.search-input {
-  flex: 1;
-  min-width: 200px;
+.category-sidebar h2 {
+  margin: 0 0 0.8rem;
+  font-size: 1.1rem;
 }
 
-.category-select {
-  min-width: 150px;
+.category-group {
+  margin-bottom: 0.6rem;
+}
+
+.category-menu-link {
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  padding: 0.5rem 0.55rem;
+  margin-bottom: 0.2rem;
+  color: #2B2B2B;
+  cursor: pointer;
+}
+
+.category-menu-link:hover {
+  background: rgba(47, 79, 62, 0.08);
+}
+
+.category-menu-link.active {
+  background: #2F4F3E;
+  color: var(--color-sand);
+}
+
+.category-menu-link.child {
+  font-size: 0.92rem;
+  padding-left: 0.75rem;
+}
+
+.empty-categories {
+  margin: 0.6rem 0 0;
+  color: #666;
+  font-size: 0.9rem;
 }
 
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
   margin-bottom: 2rem;
 }
 
@@ -254,17 +337,23 @@ export default {
   background: white;
   border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 1.5rem;
+  padding: 1rem;
   transition: box-shadow 0.3s;
+  cursor: pointer;
 }
 
 .product-card:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+.product-card:focus-visible {
+  outline: 2px solid #2F4F3E;
+  outline-offset: 2px;
+}
+
 .product-card img {
   width: 100%;
-  height: 250px;
+  height: 210px;
   object-fit: cover;
   border-radius: 4px;
   margin-bottom: 1rem;
@@ -340,5 +429,21 @@ export default {
 
 .no-products p {
   font-size: 1.1rem;
+}
+
+@media (max-width: 980px) {
+  .products-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

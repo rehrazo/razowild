@@ -17,6 +17,17 @@
       <div class="navbar-brand">
         <router-link to="/">It's Camp Time</router-link>
       </div>
+
+      <form class="navbar-search" @submit.prevent="submitHeaderSearch">
+        <input
+          v-model="headerSearch"
+          type="text"
+          placeholder="Search products..."
+          aria-label="Search products"
+        />
+        <button type="submit">Search</button>
+      </form>
+
       <ul class="nav-links">
         <li><router-link to="/">Home</router-link></li>
         <li><router-link to="/products">Products</router-link></li>
@@ -101,7 +112,7 @@
 
 <script>
 import { computed, onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { useCartStore } from '../stores/cart'
 
@@ -109,9 +120,11 @@ export default {
   name: 'StorefrontLayout',
   setup() {
     const route = useRoute()
+    const router = useRouter()
     const authStore = useAuthStore()
     const cartStore = useCartStore()
     const currentYear = new Date().getFullYear()
+    const headerSearch = ref('')
     const isLoggedIn = computed(() => authStore.isLoggedIn)
     const cartItemCount = computed(() => cartStore.itemCount)
     const categoryMenuItems = ref([])
@@ -139,13 +152,23 @@ export default {
       fetchCategoryMenu()
     })
 
+    const submitHeaderSearch = () => {
+      const query = String(headerSearch.value || '').trim()
+      router.push({
+        path: '/products',
+        query: query ? { search: query } : {},
+      })
+    }
+
     return {
       currentYear,
+      headerSearch,
       isLoggedIn,
       cartItemCount,
       categoryMenuItems,
       isCategoryActive,
       isAllCategoriesActive,
+      submitHeaderSearch,
     }
   },
 }
@@ -207,6 +230,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
 }
 
 .navbar-brand a {
@@ -222,6 +246,39 @@ export default {
   gap: 2rem;
   margin: 0;
   padding: 0;
+}
+
+.navbar-search {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  max-width: 460px;
+  border: 1px solid rgba(244, 235, 216, 0.6);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0 1rem;
+}
+
+.navbar-search input {
+  flex: 1;
+  border: none;
+  padding: 0.6rem 0.7rem;
+  background: #fff;
+  color: #2B2B2B;
+  font-size: 0.9rem;
+}
+
+.navbar-search input:focus {
+  outline: none;
+}
+
+.navbar-search button {
+  border: none;
+  background: #2B2B2B;
+  color: var(--color-sand);
+  padding: 0.6rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 700;
 }
 
 .nav-links a {
@@ -279,6 +336,23 @@ export default {
 }
 
 @media (max-width: 768px) {
+  .navbar {
+    flex-wrap: wrap;
+    padding: 1rem;
+  }
+
+  .navbar-search {
+    order: 3;
+    flex-basis: 100%;
+    max-width: none;
+    margin: 0;
+  }
+
+  .nav-links {
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
   .top-header-inner {
     padding: 0.5rem 1rem;
     flex-direction: column;
