@@ -325,7 +325,7 @@ export default {
 }
 
 .category-menu-link:hover {
-  background: rgba(63, 106, 84, 0.08);
+  background: rgba(99, 172, 77, 0.08);
 }
 
 .category-menu-link.active {

@@ -441,8 +441,8 @@ export default {
 }
 
 .tree-row.active {
-  border-color: #2F4F3E;
-  background: rgba(47, 79, 62, 0.08);
+  border-color: #63ac4d;
+  background: rgba(99, 172, 77, 0.08);
 }
 
 .tree-name {
@@ -531,7 +531,7 @@ export default {
 }
 
 .btn-primary {
-  background-color: #2F4F3E;
+  background-color: #63ac4d;
   color: var(--color-sand);
 }
 

@@ -692,7 +692,7 @@ export default {
 .form-input:focus {
   outline: none;
   border-color: var(--color-forest);
-  box-shadow: 0 0 0 2px rgba(47, 79, 62, 0.15);
+  box-shadow: 0 0 0 2px rgba(99, 172, 77, 0.15);
 }
 
 .form-textarea {

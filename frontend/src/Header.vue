@@ -351,7 +351,7 @@ export default {
 }
 
 .dropdown-item:hover {
-  background-color: rgba(63, 106, 84, 0.12);
+  background-color: rgba(99, 172, 77, 0.12);
 }
 
 .divider {
@@ -365,7 +365,7 @@ export default {
 }
 
 .logout-btn:hover {
-  background-color: rgba(63, 106, 84, 0.18);
+  background-color: rgba(99, 172, 77, 0.18);
 }
 
 .mobile-menu-btn {
@@ -414,7 +414,7 @@ export default {
 }
 
 .mobile-nav-link:hover {
-  background-color: rgba(63, 106, 84, 0.12);
+  background-color: rgba(99, 172, 77, 0.12);
   color: var(--color-forest);
 }
 

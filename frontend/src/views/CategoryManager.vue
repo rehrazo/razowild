@@ -394,7 +394,7 @@ export default {
 
 .drop-root.active {
   border-color: var(--color-forest);
-  background: rgba(47, 79, 62, 0.08);
+  background: rgba(99, 172, 77, 0.08);
   color: var(--color-forest);
 }
 
@@ -425,7 +425,7 @@ export default {
 }
 
 .category-row.drop-target {
-  background: rgba(63, 106, 84, 0.08);
+  background: rgba(99, 172, 77, 0.08);
   outline: 2px solid var(--color-forest);
   outline-offset: -2px;
 }

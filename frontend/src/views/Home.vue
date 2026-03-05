@@ -279,7 +279,7 @@ export default {
 }
 
 .recommended {
-  background: rgba(47, 79, 62, 0.07);
+  background: rgba(99, 172, 77, 0.07);
 }
 
 .cta {
