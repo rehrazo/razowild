@@ -4,7 +4,7 @@
     
     <div v-if="product" class="product-container">
       <div class="product-image">
-        <img :src="selectedImage || product.image" :alt="product.name" />
+        <img :src="selectedImage || product.image" :alt="product.name" @error="onImageError" />
         <div v-if="product.images.length > 1" class="image-thumbnails">
           <button
             v-for="(image, index) in product.images"
@@ -14,7 +14,7 @@
             :class="{ active: (selectedImage || product.image) === image }"
             @click="selectedImage = image"
           >
-            <img :src="image" :alt="`${product.name} thumbnail ${index + 1}`" />
+            <img :src="image" :alt="`${product.name} thumbnail ${index + 1}`" @error="onImageError" />
           </button>
         </div>
       </div>
@@ -144,6 +144,8 @@ export default {
     const selectedVariants = ref({})
     const selectedImage = ref('')
     const variantError = ref('')
+    const fallbackImage =
+      'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480"><rect width="100%" height="100%" fill="%23ece3d1"/><text x="50%" y="52%" dominant-baseline="middle" text-anchor="middle" font-size="24" fill="%23666">Image unavailable</text></svg>'
     const cartStore = useCartStore()
 
     const groupVariations = (variations = []) => {
@@ -192,7 +194,11 @@ export default {
       const result = []
 
       images.forEach((item) => {
-        const url = String(item?.image_url || '').trim()
+        const url = String(
+          typeof item === 'string'
+            ? item
+            : item?.image_url || item?.image || item?.url || item?.src || ''
+        ).trim()
         if (!url) {
           return
         }
@@ -207,6 +213,16 @@ export default {
       })
 
       return result
+    }
+
+    const onImageError = (event) => {
+      if (!event?.target) {
+        return
+      }
+
+      if (event.target.src !== fallbackImage) {
+        event.target.src = fallbackImage
+      }
     }
 
     const selectedVariantSku = computed(() => {
@@ -241,7 +257,11 @@ export default {
     const showReviews = computed(() => Number(product.value?.reviews || 0) >= 5)
 
     const mapProduct = (data) => {
-      const primaryImage = Array.isArray(data?.images) && data.images.length ? data.images[0].image_url : null
+      const images = Array.isArray(data?.images) ? dedupeImages(data.images) : []
+      const primaryImage =
+        images[0] ||
+        String(data?.primary_image_url || data?.image_url || data?.image || '').trim() ||
+        fallbackImage
       const sanitizedDescriptionHtml = DOMPurify.sanitize(String(data?.html_description || ''), {
         USE_PROFILES: { html: true },
       }).trim()
@@ -250,8 +270,8 @@ export default {
         ...data,
         id: data.product_id,
         sku: data.sku_code || data.sku || data.item_no || data.spu_no || 'N/A',
-        image: primaryImage || data.image || '/images/placeholder-product.jpg',
-        images: Array.isArray(data?.images) ? dedupeImages(data.images) : [],
+        image: primaryImage,
+        images: images.length ? images : [primaryImage],
         price: Number(data.price) || 0,
         stock: Number(data.stock_quantity) || 0,
         briefDescription: data.brief_description || null,
@@ -352,6 +372,7 @@ export default {
       displaySku,
       showReviews,
       variantError,
+      onImageError,
       addToCart,
       addToWishlist,
     }

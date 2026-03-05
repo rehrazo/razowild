@@ -176,14 +176,43 @@
           <p v-else class="subtitle">No images added yet.</p>
         </div>
         <div v-if="activeTab === 'media'" class="form-group form-group-full">
-          <label for="productVariations">Variations (one per line: Theme|Value|SKU)</label>
-          <textarea
-            id="productVariations"
-            v-model="form.variations_text"
-            class="form-input form-textarea"
-            rows="6"
-            placeholder="Color|Red|SKU-RED&#10;Color|Blue|SKU-BLUE"
-          ></textarea>
+          <label>Variations</label>
+          <div class="variation-editor">
+            <div class="variation-header">
+              <span>Theme</span>
+              <span>Value</span>
+              <span>SKU (optional)</span>
+              <span></span>
+            </div>
+
+            <div
+              v-for="(variation, index) in form.variations"
+              :key="`variation-${index}`"
+              class="variation-row"
+            >
+              <input
+                v-model="variation.theme_name"
+                type="text"
+                class="form-input"
+                placeholder="e.g. Color"
+              />
+              <input
+                v-model="variation.variation_value"
+                type="text"
+                class="form-input"
+                placeholder="e.g. Red"
+              />
+              <input
+                v-model="variation.variation_sku"
+                type="text"
+                class="form-input"
+                placeholder="e.g. SKU-RED"
+              />
+              <button type="button" class="remove-image-btn" @click="removeVariation(index)">Remove</button>
+            </div>
+
+            <button type="button" class="btn btn-secondary add-variation-btn" @click="addVariation">+ Add Variation</button>
+          </div>
         </div>
       </div>
     </div>
@@ -236,7 +265,7 @@ export default {
       shipping_limitations: '',
       processing_time: '',
       imageUrls: [],
-      variations_text: '',
+      variations: [],
     })
 
     const isCreateMode = computed(() => String(route.params.id || '').toLowerCase() === 'new')
@@ -256,13 +285,6 @@ export default {
 
         return [current, ...flattenCategoryTree(node.children || [], depth + 1)]
       })
-    }
-
-    const parseLines = (value = '') => {
-      return String(value)
-        .split(/\r?\n/)
-        .map((line) => line.trim())
-        .filter(Boolean)
     }
 
     const escapeHtml = (value = '') => {
@@ -353,6 +375,21 @@ export default {
       }
     }
 
+    const addVariation = () => {
+      form.value.variations.push({
+        theme_name: '',
+        variation_value: '',
+        variation_sku: '',
+      })
+    }
+
+    const removeVariation = (index) => {
+      form.value.variations.splice(index, 1)
+      if (!form.value.variations.length) {
+        addVariation()
+      }
+    }
+
     const loadCategories = async () => {
       const response = await fetch('/api/categories/tree')
       const data = await response.json()
@@ -383,20 +420,13 @@ export default {
             .filter(Boolean)
         : []
 
-      const variationsText = Array.isArray(data.variations)
-        ? data.variations
-            .map((item) => {
-              const theme = String(item?.theme_name || '').trim()
-              const value = String(item?.variation_value || '').trim()
-              const sku = String(item?.variation_sku || '').trim()
-              if (!theme || !value) {
-                return ''
-              }
-              return sku ? `${theme}|${value}|${sku}` : `${theme}|${value}`
-            })
-            .filter(Boolean)
-            .join('\n')
-        : ''
+      const variationRows = Array.isArray(data.variations)
+        ? data.variations.map((item) => ({
+            theme_name: String(item?.theme_name || '').trim(),
+            variation_value: String(item?.variation_value || '').trim(),
+            variation_sku: String(item?.variation_sku || '').trim(),
+          }))
+        : []
 
       form.value = {
         product_id: data.product_id,
@@ -417,7 +447,9 @@ export default {
         shipping_limitations: data.shipping_limitations || '',
         processing_time: data.processing_time || '',
         imageUrls,
-        variations_text: variationsText,
+        variations: variationRows.length
+          ? variationRows
+          : [{ theme_name: '', variation_value: '', variation_sku: '' }],
       }
     }
 
@@ -447,11 +479,12 @@ export default {
 
       const variations = (() => {
         const unique = new Set()
-        return parseLines(form.value.variations_text).reduce((result, line) => {
-          const parts = line.split('|').map((part) => part.trim())
-          const theme_name = parts[0] || ''
-          const variation_value = parts[1] || ''
-          const variation_sku = parts[2] || null
+        const rows = Array.isArray(form.value.variations) ? form.value.variations : []
+
+        return rows.reduce((result, item) => {
+          const theme_name = String(item?.theme_name || '').trim()
+          const variation_value = String(item?.variation_value || '').trim()
+          const variation_sku = String(item?.variation_sku || '').trim() || null
 
           if (!theme_name || !variation_value) {
             return result
@@ -558,6 +591,8 @@ export default {
         removeImage,
         setPrimaryImage,
         onPreviewError,
+        addVariation,
+        removeVariation,
       saveProduct,
       goBackToList,
     }
@@ -689,6 +724,36 @@ export default {
   align-items: center;
 }
 
+.variation-editor {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.75rem;
+  background: #fafafa;
+}
+
+.variation-header,
+.variation-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.variation-header {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #555;
+  margin-bottom: 0.5rem;
+}
+
+.variation-row {
+  margin-bottom: 0.5rem;
+}
+
+.add-variation-btn {
+  margin-top: 0.25rem;
+}
+
 .image-preview-grid {
   margin-top: 0.75rem;
   display: grid;
@@ -809,6 +874,11 @@ export default {
   .image-add-row {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .variation-header,
+  .variation-row {
+    grid-template-columns: 1fr;
   }
 
   .actions .btn {
