@@ -40,13 +40,6 @@
           </ul>
         </div>
 
-        <div v-if="product.sections.options.length" class="features">
-          <h3>Options</h3>
-          <ul>
-            <li v-for="item in product.sections.options" :key="`option-${item}`">{{ item }}</li>
-          </ul>
-        </div>
-
         <div v-if="product.sections.specifications.length" class="features">
           <h3>Specifications</h3>
           <ul>
@@ -54,16 +47,10 @@
           </ul>
         </div>
 
-        <div v-if="product.sections.packaging.length" class="features">
-          <h3>Packaging</h3>
+        <div v-if="product.sections.packaging.length || product.sections.shipping.length" class="features">
+          <h3>Packaging & Shipping</h3>
           <ul>
             <li v-for="item in product.sections.packaging" :key="`packaging-${item}`">{{ item }}</li>
-          </ul>
-        </div>
-
-        <div v-if="product.sections.shipping.length" class="features">
-          <h3>Shipping</h3>
-          <ul>
             <li v-for="item in product.sections.shipping" :key="`shipping-${item}`">{{ item }}</li>
           </ul>
         </div>
@@ -117,7 +104,7 @@
 
         <div class="product-meta">
           <p><strong>SKU:</strong> {{ displaySku }}</p>
-          <p><strong>Stock:</strong> {{ product.stock > 0 ? `${product.stock} available` : 'Out of Stock' }}</p>
+          <p><strong>Stock:</strong> {{ product.stock > 0 ? `${displayStock} available` : 'Out of Stock' }}</p>
           <p><strong>Shipping:</strong> Free shipping on orders over $50</p>
         </div>
       </div>
@@ -270,6 +257,14 @@ export default {
     })
 
     const displaySku = computed(() => selectedVariantSku.value || product.value?.sku || 'N/A')
+    const displayStock = computed(() => {
+      const stock = Number(product.value?.stock || 0)
+      if (stock > 500) {
+        return '500 +'
+      }
+
+      return String(stock)
+    })
 
     const showReviews = computed(() => Number(product.value?.reviews || 0) >= 5)
 
@@ -389,6 +384,7 @@ export default {
       selectedImage,
       selectedVariantSku,
       displaySku,
+      displayStock,
       showReviews,
       variantError,
       onImageError,
