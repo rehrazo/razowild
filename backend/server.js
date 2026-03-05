@@ -16,6 +16,29 @@ dotenv.config();
 
 const app = express();
 
+function escapeXml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+function getPublicBaseUrl(req) {
+  const fromEnv = String(process.env.PUBLIC_SITE_URL || '').trim();
+  if (fromEnv) {
+    return fromEnv.replace(/\/+$/, '');
+  }
+
+  const forwardedProto = String(req.headers['x-forwarded-proto'] || '').split(',')[0].trim();
+  const forwardedHost = String(req.headers['x-forwarded-host'] || '').split(',')[0].trim();
+  const protocol = forwardedProto || req.protocol || 'https';
+  const host = forwardedHost || req.get('host');
+
+  return `${protocol}://${host}`.replace(/\/+$/, '');
+}
+
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
@@ -60,6 +83,71 @@ app.get('/', (req, res) => {
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'Server is running' });
+});
+
+app.get('/robots.txt', (req, res) => {
+  const baseUrl = getPublicBaseUrl(req);
+  const lines = [
+    'User-agent: *',
+    'Allow: /',
+    'Disallow: /admin',
+    'Disallow: /api',
+    `Sitemap: ${baseUrl}/sitemap.xml`,
+  ];
+
+  res.type('text/plain').send(lines.join('\n'));
+});
+
+app.get('/sitemap.xml', async (req, res) => {
+  const baseUrl = getPublicBaseUrl(req);
+  const staticPaths = [
+    '/',
+    '/products',
+    '/shipping-returns',
+    '/privacy-policy',
+    '/terms-conditions',
+  ];
+
+  try {
+    const [productRows] = await pool.execute(
+      `SELECT product_id, updated_at
+       FROM products
+       ORDER BY product_id ASC`
+    );
+
+    const urls = [];
+
+    staticPaths.forEach((pathValue) => {
+      urls.push({
+        loc: `${baseUrl}${pathValue}`,
+        changefreq: pathValue === '/' ? 'daily' : 'weekly',
+        priority: pathValue === '/' ? '1.0' : '0.7',
+        lastmod: null,
+      });
+    });
+
+    productRows.forEach((row) => {
+      urls.push({
+        loc: `${baseUrl}/products/${row.product_id}`,
+        changefreq: 'weekly',
+        priority: '0.8',
+        lastmod: row.updated_at ? new Date(row.updated_at).toISOString() : null,
+      });
+    });
+
+    const urlXml = urls
+      .map((url) => {
+        const lastmod = url.lastmod ? `<lastmod>${escapeXml(url.lastmod)}</lastmod>` : '';
+        return `<url><loc>${escapeXml(url.loc)}</loc>${lastmod}<changefreq>${url.changefreq}</changefreq><priority>${url.priority}</priority></url>`;
+      })
+      .join('');
+
+    const xml = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urlXml}</urlset>`;
+
+    res.type('application/xml').send(xml);
+  } catch (error) {
+    res.status(500).json({ error: error.message || 'Failed to generate sitemap' });
+  }
 });
 
 app.post('/api/admin/import-products', upload.single('csvFile'), async (req, res) => {

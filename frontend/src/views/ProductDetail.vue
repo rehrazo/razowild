@@ -1,5 +1,13 @@
 <template>
   <div class="product-detail">
+    <nav v-if="breadcrumbItems.length" class="breadcrumbs" aria-label="Breadcrumb">
+      <template v-for="(crumb, index) in breadcrumbItems" :key="`crumb-${index}-${crumb.label}`">
+        <router-link v-if="crumb.to" :to="crumb.to" class="breadcrumb-link">{{ crumb.label }}</router-link>
+        <span v-else class="breadcrumb-current">{{ crumb.label }}</span>
+        <span v-if="index < breadcrumbItems.length - 1" class="breadcrumb-separator">›</span>
+      </template>
+    </nav>
+
     <router-link to="/products" class="back-link">← Back to Products</router-link>
     
     <div v-if="product" class="product-container">
@@ -268,6 +276,36 @@ export default {
     })
 
     const showReviews = computed(() => Number(product.value?.reviews || 0) >= 5)
+    const breadcrumbItems = computed(() => {
+      const currentProduct = product.value
+      if (!currentProduct) {
+        return []
+      }
+
+      const pathSegments = String(currentProduct.categoryPath || '')
+        .split('>')
+        .map((segment) => segment.trim())
+        .filter(Boolean)
+
+      const crumbs = [
+        { label: 'Home', to: '/' },
+        { label: 'Products', to: '/products' },
+      ]
+
+      if (pathSegments.length) {
+        crumbs.push({
+          label: pathSegments[pathSegments.length - 1],
+          to: '/products',
+        })
+      }
+
+      crumbs.push({
+        label: currentProduct.name,
+        to: null,
+      })
+
+      return crumbs
+    })
 
     const applyProductSeo = (mappedProduct, rawProduct = {}) => {
       if (!mappedProduct) {
@@ -317,6 +355,45 @@ export default {
           url: `${window.location.origin}/products/${mappedProduct.id}`,
         },
       })
+
+      const categoryPath = String(rawProduct?.category_path || '').trim()
+      const categorySegments = categoryPath ? categoryPath.split('>').map((segment) => segment.trim()).filter(Boolean) : []
+      const breadcrumbItems = [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: `${window.location.origin}/`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Products',
+          item: `${window.location.origin}/products`,
+        },
+      ]
+
+      if (categorySegments.length) {
+        breadcrumbItems.push({
+          '@type': 'ListItem',
+          position: breadcrumbItems.length + 1,
+          name: categorySegments[categorySegments.length - 1],
+          item: `${window.location.origin}/products`,
+        })
+      }
+
+      breadcrumbItems.push({
+        '@type': 'ListItem',
+        position: breadcrumbItems.length + 1,
+        name: mappedProduct.name,
+        item: `${window.location.origin}/products/${mappedProduct.id}`,
+      })
+
+      setJsonLd('breadcrumb', {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: breadcrumbItems,
+      })
     }
 
     const mapProduct = (data) => {
@@ -339,6 +416,7 @@ export default {
         images: images.length ? images : [primaryImage],
         price: Number(data.price) || 0,
         stock: Number(data.stock_quantity) || 0,
+        categoryPath: data.category_path || data.category || data.category_name || '',
         briefDescription: data.brief_description || null,
         descriptionHtml: sanitizedDescriptionHtml || null,
         description:
@@ -407,6 +485,7 @@ export default {
 
     onBeforeUnmount(() => {
       clearJsonLd('product')
+      clearJsonLd('breadcrumb')
     })
 
     const addToCart = () => {
@@ -452,6 +531,7 @@ export default {
       selectedVariantSku,
       displaySku,
       displayStock,
+      breadcrumbItems,
       showReviews,
       variantError,
       onImageError,
@@ -475,6 +555,34 @@ export default {
   color: #667eea;
   text-decoration: none;
   font-size: 1rem;
+}
+
+.breadcrumbs {
+  margin-bottom: 0.85rem;
+  font-size: 0.9rem;
+  color: #666;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.breadcrumb-link {
+  color: #2F4F3E;
+  text-decoration: none;
+}
+
+.breadcrumb-link:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb-current {
+  color: #333;
+  font-weight: 600;
+}
+
+.breadcrumb-separator {
+  color: #999;
 }
 
 .back-link:hover {
