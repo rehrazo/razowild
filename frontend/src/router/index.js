@@ -20,6 +20,7 @@ import ShippingReturns from '../views/ShippingReturns.vue'
 import PrivacyPolicy from '../views/PrivacyPolicy.vue'
 import TermsConditions from '../views/TermsConditions.vue'
 import TrackOrder from '../views/TrackOrder.vue'
+import { applyPageSeo, DEFAULT_DESCRIPTION } from '../utils/seo'
 
 const routes = [
   {
@@ -30,68 +31,127 @@ const routes = [
         path: '',
         name: 'Home',
         component: Home,
+        meta: {
+          title: 'Camptime | Camping Gear and Outdoor Essentials',
+          description: 'Find premium tents, sleeping bags, camp furniture, and outdoor gear at Camptime.',
+        },
       },
       {
         path: 'products',
         name: 'Products',
         component: Products,
+        meta: {
+          title: 'Shop Camping Products | Camptime',
+          description: 'Browse the Camptime catalog of camping products, outdoor equipment, and travel essentials.',
+        },
       },
       {
         path: 'products/:id',
         name: 'ProductDetail',
         component: ProductDetail,
+        meta: {
+          title: 'Product Details | Camptime',
+          description: 'View product features, specifications, packaging, shipping, and availability on Camptime.',
+        },
       },
       {
         path: 'cart',
         name: 'Cart',
         component: Cart,
+        meta: {
+          title: 'Your Cart | Camptime',
+          description: 'Review items in your cart before checkout.',
+          noindex: true,
+        },
       },
       {
         path: 'login',
         name: 'Login',
         component: Login,
+        meta: {
+          title: 'Login | Camptime',
+          description: 'Sign in to your Camptime account.',
+          noindex: true,
+        },
       },
       {
         path: 'register',
         name: 'Signup',
         component: Signup,
+        meta: {
+          title: 'Create Account | Camptime',
+          description: 'Create your Camptime account to manage orders and checkout faster.',
+          noindex: true,
+        },
       },
       {
         path: 'account',
         name: 'Account',
         component: Account,
-        meta: { requiresAuth: true },
+        meta: {
+          requiresAuth: true,
+          title: 'My Account | Camptime',
+          description: 'Manage your Camptime account settings and order history.',
+          noindex: true,
+        },
       },
       {
         path: 'checkout',
         name: 'Checkout',
         component: Checkout,
-        meta: { requiresAuth: true },
+        meta: {
+          requiresAuth: true,
+          title: 'Checkout | Camptime',
+          description: 'Complete your order securely on Camptime.',
+          noindex: true,
+        },
       },
       {
         path: 'order-confirmation/:orderId',
         name: 'OrderConfirmation',
         component: OrderConfirmation,
+        meta: {
+          title: 'Order Confirmation | Camptime',
+          description: 'Review your order confirmation details.',
+          noindex: true,
+        },
       },
       {
         path: 'shipping-returns',
         name: 'ShippingReturns',
         component: ShippingReturns,
+        meta: {
+          title: 'Shipping and Returns | Camptime',
+          description: 'Read Camptime shipping timelines and return policy information.',
+        },
       },
       {
         path: 'privacy-policy',
         name: 'PrivacyPolicy',
         component: PrivacyPolicy,
+        meta: {
+          title: 'Privacy Policy | Camptime',
+          description: 'Review how Camptime collects, uses, and protects your information.',
+        },
       },
       {
         path: 'terms-conditions',
         name: 'TermsConditions',
         component: TermsConditions,
+        meta: {
+          title: 'Terms and Conditions | Camptime',
+          description: 'Read Camptime terms and conditions for using the site and services.',
+        },
       },
       {
         path: 'track-order',
         name: 'TrackOrder',
         component: TrackOrder,
+        meta: {
+          title: 'Track Order | Camptime',
+          description: 'Track your Camptime order status and delivery progress.',
+          noindex: true,
+        },
       },
     ],
   },
@@ -103,11 +163,21 @@ const routes = [
         path: '',
         name: 'AdminDashboard',
         component: AdminDashboard,
+        meta: {
+          title: 'Admin Dashboard | Camptime',
+          description: DEFAULT_DESCRIPTION,
+          noindex: true,
+        },
       },
       {
         path: 'products/:id/edit',
         name: 'AdminProductEdit',
         component: AdminProductEdit,
+        meta: {
+          title: 'Admin Product Edit | Camptime',
+          description: DEFAULT_DESCRIPTION,
+          noindex: true,
+        },
       },
       {
         path: 'products/uncategorized',
@@ -136,6 +206,19 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+})
+
+router.afterEach((to) => {
+  if (to.name === 'ProductDetail') {
+    return
+  }
+
+  applyPageSeo({
+    title: to.meta?.title || 'Camptime - Camping Gear E-commerce',
+    description: to.meta?.description || DEFAULT_DESCRIPTION,
+    path: to.fullPath,
+    noindex: Boolean(to.meta?.noindex),
+  })
 })
 
 export default router

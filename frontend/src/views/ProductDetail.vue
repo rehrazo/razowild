@@ -79,7 +79,7 @@
           <div v-for="group in product.variantGroups" :key="group.theme" class="variant-group">
             <label :for="group.options.length > 1 ? `variant-${group.theme}` : null">{{ group.theme }}:</label>
             <p v-if="group.options.length === 1" class="variant-value-display">
-              {{ group.options[0].value }}{{ group.options[0].sku ? ` (SKU: ${group.options[0].sku})` : '' }}
+              {{ group.options[0].value }}
             </p>
             <select
               v-else
@@ -89,7 +89,7 @@
             >
               <option value="">Select {{ group.theme }}</option>
               <option v-for="option in group.options" :key="`${group.theme}-${option.value}`" :value="option.value">
-                {{ option.value }}{{ option.sku ? ` (SKU: ${option.sku})` : '' }}
+                {{ option.value }}
               </option>
             </select>
           </div>
@@ -117,10 +117,11 @@
 </template>
 
 <script>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCartStore } from '../stores/cart'
 import DOMPurify from 'dompurify'
+import { applyPageSeo, setJsonLd, clearJsonLd } from '../utils/seo'
 
 export default {
   name: 'ProductDetail',
@@ -268,6 +269,56 @@ export default {
 
     const showReviews = computed(() => Number(product.value?.reviews || 0) >= 5)
 
+    const applyProductSeo = (mappedProduct, rawProduct = {}) => {
+      if (!mappedProduct) {
+        return
+      }
+
+      const descriptionSource =
+        mappedProduct.briefDescription ||
+        mappedProduct.description ||
+        'View product details, specifications, packaging, and shipping information on Camptime.'
+      const description = String(descriptionSource).replace(/\s+/g, ' ').trim().slice(0, 160)
+
+      applyPageSeo({
+        title: `${mappedProduct.name} | Camptime`,
+        description,
+        path: `/products/${mappedProduct.id}`,
+        imageUrl: mappedProduct.image,
+        type: 'product',
+      })
+
+      const priceValue = Number(mappedProduct.price || 0)
+      const stockValue = Number(mappedProduct.stock || 0)
+
+      setJsonLd('product', {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: mappedProduct.name,
+        sku: mappedProduct.sku,
+        image: Array.isArray(mappedProduct.images) && mappedProduct.images.length
+          ? mappedProduct.images
+          : [mappedProduct.image],
+        description,
+        category: rawProduct.category_name || rawProduct.category || undefined,
+        brand: rawProduct.brand
+          ? {
+              '@type': 'Brand',
+              name: rawProduct.brand,
+            }
+          : undefined,
+        offers: {
+          '@type': 'Offer',
+          priceCurrency: 'USD',
+          price: priceValue.toFixed(2),
+          availability: stockValue > 0
+            ? 'https://schema.org/InStock'
+            : 'https://schema.org/OutOfStock',
+          url: `${window.location.origin}/products/${mappedProduct.id}`,
+        },
+      })
+    }
+
     const mapProduct = (data) => {
       const descriptionImageUrls = extractImageUrlsFromHtml(data?.html_description)
       const images = dedupeImages([...(Array.isArray(data?.images) ? data.images : []), ...descriptionImageUrls])
@@ -329,7 +380,7 @@ export default {
       return selections
     }
 
-    onMounted(async () => {
+    const loadProduct = async () => {
       try {
         const response = await fetch(`/api/products/${route.params.id}`)
         const data = await response.json()
@@ -337,9 +388,25 @@ export default {
         selectedImage.value = product.value.image
         selectedVariants.value = initializeSelectedVariants(product.value.variantGroups)
         variantError.value = ''
+        applyProductSeo(product.value, data)
       } catch (error) {
         console.error('Error fetching product:', error)
       }
+    }
+
+    onMounted(async () => {
+      await loadProduct()
+    })
+
+    watch(
+      () => route.params.id,
+      async () => {
+        await loadProduct()
+      }
+    )
+
+    onBeforeUnmount(() => {
+      clearJsonLd('product')
     })
 
     const addToCart = () => {
