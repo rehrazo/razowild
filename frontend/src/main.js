@@ -41,7 +41,7 @@ window.fetch = (input, init = {}) => {
 
 	const headers = new Headers(init.headers || (input instanceof Request ? input.headers : undefined))
 	const authToken = String(localStorage.getItem('authToken') || '').trim()
-	const adminToken = String(localStorage.getItem('adminApiToken') || import.meta.env.VITE_ADMIN_API_TOKEN || authToken).trim()
+	const adminToken = String(localStorage.getItem('adminApiToken') || import.meta.env.VITE_ADMIN_API_TOKEN || '').trim()
 
 	if (adminToken && !headers.has('x-admin-token')) {
 		headers.set('x-admin-token', adminToken)

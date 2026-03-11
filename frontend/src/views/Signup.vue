@@ -167,11 +167,13 @@
 <script>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '../stores/auth'
 
 export default {
   name: 'Signup',
   setup() {
     const router = useRouter()
+    const authStore = useAuthStore()
     const isLoading = ref(false)
     const showPassword = ref(false)
 
@@ -290,23 +292,35 @@ export default {
       isLoading.value = true
 
       try {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1500))
-
-        // In a real app, this would call an API endpoint
-        console.log('Signup attempt:', {
-          firstName: signupForm.value.firstName,
-          lastName: signupForm.value.lastName,
-          email: signupForm.value.email,
-          newsletter: signupForm.value.newsletter,
+        const response = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            firstName: signupForm.value.firstName,
+            lastName: signupForm.value.lastName,
+            email: signupForm.value.email,
+            password: signupForm.value.password,
+          }),
         })
 
-        // Mock successful signup
-        alert('Account created successfully! Please check your email to verify.')
-        router.push('/login')
+        const data = await response.json()
+        if (!response.ok) {
+          throw new Error(data?.error || 'Unable to create account')
+        }
+
+        authStore.login(
+          data.user,
+          data.token,
+          data.user?.role || 'customer'
+        )
+
+        const redirectTarget = String(router.currentRoute.value.query.redirect || '/')
+        router.push(redirectTarget)
       } catch (error) {
         console.error('Signup error:', error)
-        errors.value.email = 'An error occurred. Please try again.'
+        errors.value.email = error.message || 'An error occurred. Please try again.'
       } finally {
         isLoading.value = false
       }

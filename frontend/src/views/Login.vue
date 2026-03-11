@@ -119,11 +119,13 @@
 <script>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '../stores/auth'
 
 export default {
   name: 'Login',
   setup() {
     const router = useRouter()
+    const authStore = useAuthStore()
     const isLoading = ref(false)
     const showPassword = ref(false)
 
@@ -153,9 +155,6 @@ export default {
       if (!loginForm.value.password) {
         errors.value.password = 'Password is required'
         isValid = false
-      } else if (loginForm.value.password.length < 6) {
-        errors.value.password = 'Password must be at least 6 characters'
-        isValid = false
       }
 
       return isValid
@@ -174,21 +173,33 @@ export default {
       isLoading.value = true
 
       try {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1500))
-
-        // In a real app, this would call an API endpoint
-        console.log('Login attempt:', {
-          email: loginForm.value.email,
-          rememberMe: loginForm.value.rememberMe,
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: loginForm.value.email,
+            password: loginForm.value.password,
+          }),
         })
 
-        // Mock successful login
-        alert('Login successful! Welcome back.')
-        router.push('/')
+        const data = await response.json()
+        if (!response.ok) {
+          throw new Error(data?.error || 'Invalid email or password')
+        }
+
+        authStore.login(
+          data.user,
+          data.token,
+          data.user?.role || 'customer'
+        )
+
+        const redirectTarget = String(router.currentRoute.value.query.redirect || '/')
+        router.push(redirectTarget)
       } catch (error) {
         console.error('Login error:', error)
-        errors.value.email = 'Invalid email or password'
+        errors.value.email = error.message || 'Invalid email or password'
       } finally {
         isLoading.value = false
       }

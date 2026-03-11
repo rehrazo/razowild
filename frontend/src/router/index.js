@@ -6,6 +6,7 @@ import Products from '../views/Products.vue'
 import ProductDetail from '../views/ProductDetail.vue'
 import Cart from '../views/Cart.vue'
 import Login from '../views/Login.vue'
+import AdminLogin from '../views/AdminLogin.vue'
 import Signup from '../views/Signup.vue'
 import Account from '../views/Account.vue'
 import Checkout from '../views/Checkout.vue'
@@ -74,6 +75,20 @@ const routes = [
           description: 'Sign in to your Camptime account.',
           noindex: true,
         },
+      },
+      {
+        path: 'admin/login',
+        name: 'AdminLogin',
+        component: AdminLogin,
+        meta: {
+          title: 'Admin Login | Camptime',
+          description: 'Sign in to the Camptime admin portal.',
+          noindex: true,
+        },
+      },
+      {
+        path: 'login/admin',
+        redirect: '/admin/login',
       },
       {
         path: 'register',
@@ -161,6 +176,7 @@ const routes = [
     component: AdminLayout,
     meta: {
       requiresAuth: true,
+      requiresAdmin: true,
     },
     children: [
       {
@@ -214,17 +230,28 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   const requiresAuth = to.matched.some((record) => Boolean(record.meta?.requiresAuth))
+  const requiresAdmin = to.matched.some((record) => Boolean(record.meta?.requiresAdmin))
+  const authStore = useAuthStore()
+
+  if (requiresAdmin && !authStore.isAdmin) {
+    return {
+      name: 'AdminLogin',
+      query: {
+        redirect: to.fullPath,
+      },
+    }
+  }
+
   if (!requiresAuth) {
     return true
   }
 
-  const authStore = useAuthStore()
   if (authStore.isLoggedIn) {
     return true
   }
 
   return {
-    name: 'Login',
+    name: requiresAdmin ? 'AdminLogin' : 'Login',
     query: {
       redirect: to.fullPath,
     },

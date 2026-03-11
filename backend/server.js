@@ -20,15 +20,16 @@ const app = express();
 function enforceStartupSecurityConfig() {
   const nodeEnv = String(process.env.NODE_ENV || 'development').toLowerCase();
   const adminToken = String(process.env.ADMIN_API_TOKEN || '').trim();
+  const jwtSecret = String(process.env.JWT_SECRET || '').trim();
 
   console.log(`[security] CORS allowed origins: ${corsAllowedOrigins.join(', ') || '(none configured)'}`);
 
-  if (adminToken) {
-    console.log('[security] ADMIN_API_TOKEN is configured. Admin write protection is enabled.');
+  if (adminToken || jwtSecret) {
+    console.log('[security] Admin write protection is enabled via ADMIN_API_TOKEN and/or JWT_SECRET.');
     return;
   }
 
-  const message = '[security] ADMIN_API_TOKEN is not set. Admin write routes will return 500 until configured.';
+  const message = '[security] ADMIN_API_TOKEN and JWT_SECRET are not set. Admin write routes will return 500 until configured.';
 
   if (nodeEnv === 'production') {
     console.error(`${message} Refusing to start in production.`);
@@ -44,6 +45,17 @@ const corsAllowedOrigins = String(process.env.FRONTEND_URL || 'http://localhost:
   .map((origin) => origin.trim())
   .filter(Boolean);
 
+const nodeEnv = String(process.env.NODE_ENV || 'development').toLowerCase();
+
+function isLocalDevelopmentOrigin(origin) {
+  try {
+    const parsed = new URL(origin);
+    return ['localhost', '127.0.0.1'].includes(parsed.hostname);
+  } catch (_error) {
+    return false;
+  }
+}
+
 const corsOptions = {
   origin(origin, callback) {
     if (!origin) {
@@ -51,6 +63,10 @@ const corsOptions = {
     }
 
     if (corsAllowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    if (nodeEnv !== 'production' && isLocalDevelopmentOrigin(origin)) {
       return callback(null, true);
     }
 
@@ -127,7 +143,10 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/health', async (req, res) => {
-  const adminAuthConfigured = Boolean(String(process.env.ADMIN_API_TOKEN || '').trim());
+  const adminApiTokenConfigured = Boolean(String(process.env.ADMIN_API_TOKEN || '').trim());
+  const jwtSecretConfigured = Boolean(String(process.env.JWT_SECRET || '').trim());
+  const adminEmailsConfigured = Boolean(String(process.env.ADMIN_EMAILS || '').trim());
+  const adminAuthConfigured = adminApiTokenConfigured || jwtSecretConfigured;
   const stripeConfigured = Boolean(String(process.env.STRIPE_SECRET_KEY || '').trim());
 
   let databaseConnected = false;
@@ -150,6 +169,9 @@ app.get('/api/health', async (req, res) => {
 
   const checks = {
     adminAuthConfigured,
+    adminApiTokenConfigured,
+    jwtSecretConfigured,
+    adminEmailsConfigured,
     corsAllowedOrigins,
     databaseConnected,
     stripeConfigured,
@@ -260,7 +282,7 @@ app.post('/api/admin/import-products', requireAdminAuthIfConfigured, upload.sing
 });
 
 // Import routes (to be created)
-// app.use('/api/auth', require('./routes/auth')); 
+app.use('/api/auth', require('./routes/auth'));
 app.use('/api/products', requireAdminAuthIfConfigured, productsRouter);
 app.use('/api/categories', requireAdminAuthIfConfigured, categoriesRouter);
 // app.use('/api/cart', require('./routes/cart')); 
@@ -270,7 +292,17 @@ app.use('/api/payments', paymentsRouter);
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
+
+  const isJsonParseError = err instanceof SyntaxError && err.status === 400 && 'body' in err;
+  if (isJsonParseError) {
+    return res.status(400).json({ error: 'Invalid JSON request body' });
+  }
+
+  if (err.status && err.message) {
+    return res.status(err.status).json({ error: err.message });
+  }
+
+  return res.status(500).json({ error: err.message || 'Unexpected server error' });
 });
 
 const PORT = process.env.PORT || 5000;

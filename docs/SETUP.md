@@ -30,16 +30,25 @@ Before you begin, ensure you have the following installed on your system:
    - `DB_PASSWORD`: Your MySQL password
    - `DB_NAME`: Your database name (default is camptime)
    - `PORT`: The port on which the application will run (default is 5000)
-   - `ADMIN_API_TOKEN`: Required shared token for admin write endpoints (products/categories/import/order export lifecycle)
+   - `JWT_SECRET`: Required for login/signup JWT authentication
+   - `JWT_EXPIRE`: JWT expiration window (default `7d`)
+   - `ADMIN_EMAILS`: Comma-separated email allowlist for admin login and admin role claims
+   - `ADMIN_API_TOKEN`: Optional shared token for admin write endpoints (products/categories/import/order export lifecycle)
 
-   For frontend admin writes, copy `frontend/.env.example` to `frontend/.env.local` and set:
+   For optional token-based frontend admin writes, copy `frontend/.env.example` to `frontend/.env.local` and set:
    ```dotenv
    VITE_ADMIN_API_TOKEN=replace_with_the_same_token_as_ADMIN_API_TOKEN
    ```
 
    Notes:
-   - In development, if `ADMIN_API_TOKEN` is missing, protected admin write requests return `500` with a configuration error.
-   - In production, backend startup fails fast when `ADMIN_API_TOKEN` is missing.
+   - Login endpoints: `POST /api/auth/signup`, `POST /api/auth/login`, `POST /api/auth/admin/login`.
+   - Admin login requires email to exist in `ADMIN_EMAILS`.
+    - To create your first admin user, run this from the `backend` folder:
+       ```powershell
+       npm run seed:admin-user -- --email admin@example.com --password "ChangeMe123!" --name "Admin User"
+       ```
+   - In development, if both `JWT_SECRET` and `ADMIN_API_TOKEN` are missing, protected admin write requests return `500` with a configuration error.
+   - In production, backend startup fails fast when both `JWT_SECRET` and `ADMIN_API_TOKEN` are missing.
    
 ## Database Setup
 1. **MySQL Configuration**: Ensure your MySQL server is running. You can start it with:
