@@ -7,6 +7,17 @@ Deploy storefront and admin separately under subdomains with secure routing and 
 - Admin: `https://admin.yourdomain.com`
 - API: `https://api.yourdomain.com` (or private/internal)
 
+## AWS Deployment Bundle in This Repo
+
+Use these files for EC2 deployments:
+
+- Full AWS guide: `docs/deploy/AWS-EC2-DEPLOYMENT.md`
+- Go-live checklist: `docs/deploy/GO-LIVE-CHECKLIST-AWS.md`
+- Ops runbook: `docs/deploy/OPERATIONS-RUNBOOK.md`
+- PM2 processes: `deploy/pm2/ecosystem.config.cjs`
+- Nginx vhosts: `deploy/nginx/camptime.conf`
+- EC2 bootstrap script: `deploy/scripts/ec2-bootstrap.sh`
+
 ## Recommended Production Topology
 Run each app on its own internal service/port behind a reverse proxy:
 
