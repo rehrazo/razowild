@@ -32,6 +32,29 @@ function cleanText(value) {
   return text.length ? text : null;
 }
 
+  const ALLOWED_CHILD_TABLE_COLUMNS = Object.freeze({
+    product_images: Object.freeze(['image_url', 'image_order', 'is_additional']),
+    product_variations: Object.freeze(['theme_name', 'variation_value', 'variation_sku', 'variation_order']),
+    product_packaging: Object.freeze(['package_number', 'size', 'weight', 'content']),
+    product_parameters: Object.freeze(['parameter_name', 'parameter_value', 'parameter_order']),
+  });
+
+  function validateChildTableConfig(tableName, columns) {
+    const allowedColumns = ALLOWED_CHILD_TABLE_COLUMNS[tableName];
+
+    if (!allowedColumns) {
+      throw new Error(`Invalid child table: ${tableName}`);
+    }
+
+    if (
+      !Array.isArray(columns)
+      || columns.length !== allowedColumns.length
+      || columns.some((column, index) => column !== allowedColumns[index])
+    ) {
+      throw new Error(`Invalid child table columns for ${tableName}`);
+    }
+  }
+
 function cleanNumber(value) {
   const text = cleanText(value);
   if (text === null) {
@@ -439,6 +462,8 @@ function mapParameters(row) {
 }
 
 async function replaceChildRows(connection, tableName, productId, columns, rows) {
+  validateChildTableConfig(tableName, columns);
+
   await connection.execute(`DELETE FROM ${tableName} WHERE product_id = ?`, [productId]);
   if (!rows.length) {
     return;

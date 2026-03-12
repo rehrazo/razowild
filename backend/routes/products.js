@@ -15,6 +15,29 @@ const {
 
 const router = express.Router();
 
+const ALLOWED_CHILD_TABLE_COLUMNS = Object.freeze({
+  product_images: Object.freeze(['image_url', 'image_order', 'is_additional']),
+  product_variations: Object.freeze(['theme_name', 'variation_value', 'variation_sku', 'variation_order']),
+  product_packaging: Object.freeze(['package_number', 'size', 'weight', 'content']),
+  product_parameters: Object.freeze(['parameter_name', 'parameter_value', 'parameter_order']),
+});
+
+function validateChildTableConfig(tableName, columns) {
+  const allowedColumns = ALLOWED_CHILD_TABLE_COLUMNS[tableName];
+
+  if (!allowedColumns) {
+    throw new Error(`Invalid child table: ${tableName}`);
+  }
+
+  if (
+    !Array.isArray(columns)
+    || columns.length !== allowedColumns.length
+    || columns.some((column, index) => column !== allowedColumns[index])
+  ) {
+    throw new Error(`Invalid child table columns for ${tableName}`);
+  }
+}
+
 function toNumber(value, fallback = null) {
   if (value === undefined || value === null || value === '') {
     return fallback;
@@ -25,6 +48,8 @@ function toNumber(value, fallback = null) {
 }
 
 async function replaceChildRows(connection, tableName, productId, columns, rows = []) {
+  validateChildTableConfig(tableName, columns);
+
   await connection.execute(`DELETE FROM ${tableName} WHERE product_id = ?`, [productId]);
 
   if (!rows.length) {
@@ -236,8 +261,8 @@ router.get('/', async (req, res) => {
        LEFT JOIN categories c ON c.category_id = p.category_id
        ${whereSql}
        ORDER BY p.updated_at DESC
-       LIMIT ${limit} OFFSET ${offset}`,
-      params
+       LIMIT ? OFFSET ?`,
+      [...params, limit, offset]
     );
 
     const [[countRow]] = await pool.execute(
