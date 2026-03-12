@@ -97,8 +97,8 @@ server {
 ### Backend API
 
 - `PORT=4000`
-- `TRUST_PROXY=true`
-- `CORS_ALLOWED_ORIGINS=https://www.yourdomain.com,https://admin.yourdomain.com`
+- `FRONTEND_URL=https://www.yourdomain.com`
+- `PUBLIC_SITE_URL=https://www.yourdomain.com` (recommended for sitemap/robots URLs)
 
 ## Backend Security Controls
 Enforce these in the API layer (not just frontend):

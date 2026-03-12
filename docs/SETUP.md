@@ -2,7 +2,7 @@
 
 ## Prerequisites
 Before you begin, ensure you have the following installed on your system:
-- Node.js (version 14 or above)
+- Node.js (version 18 or above)
 - npm (Node Package Manager)
 - MySQL (version 5.7 or above)
 - Git
@@ -16,7 +16,7 @@ Before you begin, ensure you have the following installed on your system:
 
 2. **Install Dependencies**: Use npm to install the necessary packages:
    ```bash
-   npm install
+   npm run install:all
    ```
 
 3. **Setup Environment Variables**: Copy the sample environment configuration file and update your variables:
@@ -64,9 +64,10 @@ Before you begin, ensure you have the following installed on your system:
    ```powershell
    mysql -u root -p camptime < database/schema.sql
    ```
-4. **Initial Data Seeding** (optional): Run the initial data scripts provided in the `scripts/` folder to populate the database with necessary data:
+4. **Initial Data Seeding** (optional): Seed an admin user from the `backend` folder:
    ```powershell
-   node scripts/seed.js
+   cd backend
+   npm run seed:admin-user -- --email admin@example.com --password "ChangeMe123!" --name "Admin User"
    ```
 
 ## Environment Configuration 
@@ -76,11 +77,15 @@ Before you begin, ensure you have the following installed on your system:
 ## Development Commands
 - **Start the Development Server**:  Run the following command to start the application:
    ```bash
-   npm start
+   npm run dev
+   ```
+ - **Start Backend + Admin Frontend**:
+   ```bash
+   npm run dev:admin
    ```
 - **Run Tests**: Execute tests to ensure everything is functioning as expected:
    ```bash
-   npm test
+   cd backend && npm test
    ```
 
 ## Troubleshooting

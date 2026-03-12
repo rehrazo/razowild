@@ -1,53 +1,39 @@
-# CampTime
+# Camptime
 
-## Project Documentation
+Camptime is an e-commerce storefront and admin platform for camping and outdoor products.
 
-### Introduction
-CampTime is a project designed to help users manage their time effectively with a set of powerful features aimed at enhancing productivity.
+## Technology Stack
+- **Frontend:** Vue 3, Vue Router, Pinia, Vite
+- **Backend:** Node.js, Express.js
+- **Database:** MySQL (`mysql2`)
+- **Payments:** Stripe Checkout
+- **Auth:** JWT-based login with admin access controls
 
-### Features
-- **Task Management**: Create, edit, and delete tasks with ease.
-- **Time Tracking**: Monitor how much time is being spent on tasks.
-- **Reporting**: Generate reports to analyze productivity.
-- **Notifications**: Set reminders for important deadlines.
-- **Multi-Platform Support**: Available on web and mobile platforms.
+## Repository Layout
+- `frontend/` Vue app (storefront + admin UI)
+- `backend/` Express API and admin/import routes
+- `database/schema.sql` MySQL schema
+- `docs/` setup, architecture, and deployment documentation
+- `deploy/` production configs (Nginx, PM2, EC2 bootstrap)
 
-### Architecture
-The architecture of CampTime follows a microservices approach to ensure scalability and maintainability. The main components include:
-- **Frontend**: Built with React for responsive design.
-- **Backend**: RESTful API developed with Node.js and Express.
-- **Database**: MongoDB for flexible data storage.
-- **Authentication**: JSON Web Tokens (JWT) for secure user authentication.
+## Quick Start
+1. Install dependencies:
+   - `npm run install:all`
+2. Configure environment variables:
+   - Copy `.env.example` to `.env` and set DB/auth/payment values
+   - Optionally set frontend env in `frontend/.env.local`
+3. Start development:
+   - `npm run dev` (backend + storefront)
+   - `npm run dev:admin` (backend + admin frontend)
 
-### Getting Started Guide
-1. **Clone the Repository**:  
-   ```bash
-   git clone https://github.com/rehrazo/camptime.git
-   ```
-2. **Install Dependencies**: 
-   Navigate to the project directory and run:
-   ```bash
-   npm install
-   ```
-3. **Start the Server**: 
-   ```bash
-   npm start
-   ```
-4. **Access the Application**:  
-   Open your browser and go to `http://localhost:3000`.
+For full local setup details, see `docs/SETUP.md`.
 
-### Design Assets
-- **Non-product images** (hero backgrounds, brand graphics, UI decorative imagery) should be stored in `frontend/src/assets/images/site/`.
-- Keep **product catalog images** separate from this folder.
-- The file `frontend/src/assets/images/site/.gitkeep` is included so the folder remains tracked in git.
+## Production / Go-Live Docs
+- `README-GOLIVE.md`
+- `docs/deploy/AWS-EC2-DEPLOYMENT.md`
+- `docs/deploy/GO-LIVE-CHECKLIST-AWS.md`
+- `docs/deploy/OPERATIONS-RUNBOOK.md`
 
-### Development Roadmap
-- **Q1 2026**: Implement additional features and integrate user feedback.
-- **Q2 2026**: Release mobile applications for iOS and Android.
-- **Q3 2026**: Optimize performance and enhance user experience.
-- **Q4 2026**: Expand user base and support internationalization.
-
----
-
-### Contact Information
-For further inquiries, please reach out to rehrazo@example.com.
+## Design Assets
+- Non-product site imagery belongs in `frontend/src/assets/images/site/`
+- Product catalog images should remain separate from site/brand assets

@@ -125,7 +125,7 @@ Set production values (required):
 - `JWT_EXPIRE=7d`
 - `ADMIN_EMAILS=<comma-separated-admin-emails>`
 - `ADMIN_API_TOKEN=<long-random-token>`
-- `FRONTEND_URL=https://www.yourdomain.com,https://admin.yourdomain.com`
+- `FRONTEND_URL=https://www.yourdomain.com`
 - `STRIPE_SECRET_KEY=<stripe-secret>`
 - `STRIPE_PUBLISHABLE_KEY=<stripe-publishable-key>`
 - `SMTP_HOST=<smtp-host>`
