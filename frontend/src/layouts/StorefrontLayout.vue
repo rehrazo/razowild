@@ -33,6 +33,14 @@
         <li><router-link to="/cart">Cart ({{ cartItemCount }})</router-link></li>
         <li v-if="!isLoggedIn"><router-link to="/login">Login</router-link></li>
         <li v-if="isLoggedIn"><router-link to="/account">Account</router-link></li>
+        <li class="theme-control">
+          <label for="theme-select">Theme</label>
+          <select id="theme-select" v-model="selectedTheme" @change="onThemeChange">
+            <option v-for="theme in themeOptions" :key="theme.value" :value="theme.value">
+              {{ theme.label }}
+            </option>
+          </select>
+        </li>
       </ul>
     </nav>
 
@@ -114,6 +122,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { useCartStore } from '../stores/cart'
+import { applyTheme, getTheme } from '../utils/theme'
 
 export default {
   name: 'StorefrontLayout',
@@ -127,6 +136,14 @@ export default {
     const isLoggedIn = computed(() => authStore.isLoggedIn)
     const cartItemCount = computed(() => cartStore.itemCount)
     const categoryMenuItems = ref([])
+    const selectedTheme = ref(getTheme())
+    const themeOptions = [
+      { label: 'Lake & Stone', value: 'lake-stone' },
+      { label: 'Forest Trail', value: 'forest-trail' },
+      { label: 'Campfire Dusk', value: 'campfire-dusk' },
+      { label: 'Violet Dew', value: 'violet-dew' },
+      { label: 'Forest Harmony', value: 'forest-harmony' },
+    ]
 
     const isAllCategoriesActive = computed(() => {
       return route.path === '/products' && !route.query.category_id
@@ -149,7 +166,12 @@ export default {
 
     onMounted(() => {
       fetchCategoryMenu()
+      selectedTheme.value = getTheme()
     })
+
+    const onThemeChange = () => {
+      selectedTheme.value = applyTheme(selectedTheme.value)
+    }
 
     const submitHeaderSearch = () => {
       const query = String(headerSearch.value || '').trim()
@@ -165,9 +187,12 @@ export default {
       isLoggedIn,
       cartItemCount,
       categoryMenuItems,
+      selectedTheme,
+      themeOptions,
       isCategoryActive,
       isAllCategoriesActive,
       submitHeaderSearch,
+      onThemeChange,
     }
   },
 }
@@ -181,7 +206,7 @@ export default {
 }
 
 .top-header {
-  background-color: #6A4A30;
+  background-color: var(--color-complement);
   color: var(--color-sand);
   border-bottom: 1px solid rgba(217, 199, 163, 0.25);
 }
@@ -242,9 +267,37 @@ export default {
 .nav-links {
   list-style: none;
   display: flex;
+  align-items: center;
   gap: 2rem;
   margin: 0;
   padding: 0;
+}
+
+.theme-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.theme-control label {
+  color: var(--color-sand);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.theme-control select {
+  border: 1px solid rgba(244, 235, 216, 0.6);
+  background: transparent;
+  color: var(--color-sand);
+  border-radius: 4px;
+  padding: 0.28rem 0.45rem;
+  font-size: 0.78rem;
+}
+
+.theme-control select option {
+  color: var(--color-charcoal);
+  background: #fff;
 }
 
 .navbar-search {
@@ -273,7 +326,7 @@ export default {
 
 .navbar-search button {
   border: none;
-  background: #6A4A30;
+  background: var(--color-complement);
   color: var(--color-sand);
   padding: 0.6rem 0.85rem;
   font-size: 0.85rem;
@@ -373,7 +426,7 @@ export default {
 }
 
 .footer {
-  background-color: #6A4A30;
+  background-color: var(--color-complement);
   color: var(--color-sand);
   margin-top: 2rem;
 }

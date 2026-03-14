@@ -46,7 +46,6 @@
           >
             <img :src="product.image" :alt="product.name" />
             <h3>{{ product.name }}</h3>
-            <p class="category">{{ product.categoryPath || product.category }}</p>
             <p class="description">{{ product.description }}</p>
             <p class="price">${{ product.price.toFixed(2) }}</p>
             <div class="actions">

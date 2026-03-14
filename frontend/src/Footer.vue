@@ -123,7 +123,7 @@ export default {
 
 <style scoped>
 .footer {
-  background-color: #6A4A30;
+  background-color: var(--color-complement);
   color: var(--color-sand);
   margin-top: 4rem;
 }

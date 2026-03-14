@@ -2,6 +2,12 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
+import {
+	applyTheme,
+	getAvailableThemes,
+	getTheme,
+	initTheme,
+} from './utils/theme'
 import './assets/styles/main.scss'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
@@ -66,6 +72,14 @@ window.fetch = (input, init = {}) => {
 }
 
 const app = createApp(App)
+
+initTheme()
+
+window.camptimeTheme = {
+	setTheme: applyTheme,
+	getTheme,
+	getAvailableThemes,
+}
 
 app.use(createPinia())
 app.use(router)

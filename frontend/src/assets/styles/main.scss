@@ -1,12 +1,108 @@
 /* Camptime - Main Stylesheet */
 
 :root {
-  --color-forest: #63ac4d;
-  --color-sand: #F4EBD8;
-  --color-charcoal: #2B2B2B;
-  --color-accent: #B5653B;
-  --color-accent-dark: #9D522E;
+  --color-forest: #0070B0;
+  --color-sand: #FFFFFF;
+  --color-charcoal: #404040;
+  --color-accent: #706080;
+  --color-accent-dark: #303040;
+  --color-complement: #605070;
+  --color-primary-light: #B0D0E0;
+  --color-primary: #0070B0;
+  --color-primary-dark: #005A8E;
+  --color-muted: #706080;
+  --color-surface: #F4F8FA;
 }
+
+body[data-theme='forest-harmony'] {
+  --color-forest: #6a8a73;
+  --color-sand: #f8f1e9;
+  --color-charcoal: #303020;
+  --color-accent: #fe994f;
+  --color-accent-dark: #604000;
+  --color-complement: #14517b;
+  --color-primary-light: #C8D3BE;
+  --color-primary: #202024;
+  --color-primary-dark: #0B1600;
+  --color-muted: #14517b;
+  --color-surface: #ECE8DA;
+}
+
+body[data-theme='forest-trail'] {
+  --color-forest: #102000;
+  --color-sand: #F3F1E8;
+  --color-charcoal: #303020;
+  --color-accent: #A06020;
+  --color-accent-dark: #604000;
+  --color-complement: #6A4A30;
+  --color-primary-light: #C8D3BE;
+  --color-primary: #102000;
+  --color-primary-dark: #0B1600;
+  --color-muted: #604000;
+  --color-surface: #ECE8DA;
+}
+
+body[data-theme='campfire-dusk'] {
+  --color-forest: #303040;
+  --color-sand: #F8F3F1;
+  --color-charcoal: #202010;
+  --color-accent: #D07090;
+  --color-accent-dark: #705070;
+  --color-complement: #6C3E58;
+  --color-primary-light: #D9C8D3;
+  --color-primary: #303040;
+  --color-primary-dark: #1F1F2E;
+  --color-muted: #705070;
+  --color-surface: #F1E8ED;
+}
+
+body[data-theme='violet-dew'] {
+  --color-forest: #7B5AA6;
+  --color-sand: #F5EEF9;
+  --color-charcoal: #2F243A;
+  --color-accent: #D98BC4;
+  --color-accent-dark: #A85E91;
+  --color-complement: #5C3C78;
+  --color-primary-light: #C9B2DE;
+  --color-primary: #7B5AA6;
+  --color-primary-dark: #4E356A;
+  --color-muted: #8E77A8;
+  --color-surface: #EFE4F6;
+}
+
+/*
+  Preset: Forest Trail
+  Copy these into :root to activate.
+
+  --color-forest: #102000;
+  --color-sand: #F3F1E8;
+  --color-charcoal: #303020;
+  --color-accent: #A06020;
+  --color-accent-dark: #604000;
+  --color-complement: #6A4A30;
+  --color-primary-light: #C8D3BE;
+  --color-primary: #102000;
+  --color-primary-dark: #0B1600;
+  --color-muted: #604000;
+  --color-surface: #ECE8DA;
+*/
+
+/*
+  Preset: Campfire Dusk
+  Copy these into :root to activate.
+
+  --color-forest: #303040;
+  --color-sand: #F8F3F1;
+  --color-charcoal: #202010;
+  --color-accent: #D07090;
+  --color-accent-dark: #705070;
+  --color-complement: #6C3E58;
+  --color-primary-light: #D9C8D3;
+  --color-primary: #303040;
+  --color-primary-dark: #1F1F2E;
+  --color-muted: #705070;
+  --color-surface: #F1E8ED;
+*/
 
 * {
   margin: 0;
@@ -69,7 +165,7 @@ input, textarea, select {
   &:focus {
     outline: none;
     border-color: var(--color-forest);
-    box-shadow: 0 0 0 3px rgba(75, 122, 98, 0.18);
+    box-shadow: 0 0 0 3px rgba(0, 112, 176, 0.2);
   }
 }
 
