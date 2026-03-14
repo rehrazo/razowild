@@ -3,8 +3,8 @@
     <header class="admin-global-header">
       <div class="admin-global-inner">
         <router-link class="admin-brand" to="/admin">
-          <span class="admin-brand-icon">⛺</span>
-          <span>Camptime Admin</span>
+          <img src="/src/assets/images/site/razowild-icon.svg" alt="Razo Wild" style="height:28px;border-radius:6px;" />
+          <span>Razo Wild Admin</span>
         </router-link>
         <nav class="admin-global-nav" aria-label="Admin menu">
           <router-link
