@@ -3,7 +3,7 @@
     <header class="admin-global-header">
       <div class="admin-global-inner">
         <router-link class="admin-brand" to="/admin">
-          <img src="/src/assets/images/site/razowild-icon.svg" alt="Razo Wild" style="height:28px;border-radius:6px;" />
+          <img src="/src/assets/images/site/razowildLogo.svg" alt="Razo Wild" style="height:28px;border-radius:6px;" />
           <span>Razo Wild Admin</span>
         </router-link>
         <nav class="admin-global-nav" aria-label="Admin menu">
@@ -59,14 +59,6 @@
         </nav>
 
         <div class="header-actions">
-          <div class="theme-control">
-            <label for="admin-theme-select">Theme</label>
-            <select id="admin-theme-select" v-model="selectedTheme" @change="onThemeChange">
-              <option v-for="theme in themeOptions" :key="theme.value" :value="theme.value">
-                {{ theme.label }}
-              </option>
-            </select>
-          </div>
           <div class="notification-bell">
             <button class="bell-btn" type="button">🔔</button>
             <span v-if="notificationCount > 0" class="badge">{{ notificationCount }}</span>
@@ -86,27 +78,14 @@
 </template>
 
 <script>
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { applyTheme, getTheme } from '../utils/theme'
 
 export default {
   name: 'AdminLayout',
   setup() {
     const route = useRoute()
     const notificationCount = ref(5)
-    const selectedTheme = ref(getTheme())
-    const themeOptions = [
-      { label: 'Lake & Stone', value: 'lake-stone' },
-      { label: 'Forest Trail', value: 'forest-trail' },
-      { label: 'Campfire Dusk', value: 'campfire-dusk' },
-      { label: 'Violet Dew', value: 'violet-dew' },
-      { label: 'Forest Harmony', value: 'forest-harmony' },
-    ]
-
-    onMounted(() => {
-      selectedTheme.value = getTheme()
-    })
 
     const isTabActive = (tab) => {
       return route.path === '/admin' && String(route.query.tab || 'overview') === tab
@@ -124,18 +103,11 @@ export default {
       return route.path !== '/admin/products/category-mover' && route.path !== '/admin/products/uncategorized'
     }
 
-    const onThemeChange = () => {
-      selectedTheme.value = applyTheme(selectedTheme.value)
-    }
-
     return {
       route,
       notificationCount,
-      selectedTheme,
-      themeOptions,
       isTabActive,
       isProductsMenuActive,
-      onThemeChange,
     }
   },
 }
@@ -214,27 +186,6 @@ export default {
   display: flex;
   align-items: center;
   gap: 1rem;
-}
-
-.theme-control {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.theme-control label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #2f3f5a;
-}
-
-.theme-control select {
-  border: 1px solid #d9deea;
-  border-radius: 4px;
-  padding: 0.25rem 0.4rem;
-  background: #fff;
-  color: #2f3f5a;
-  font-size: 0.75rem;
 }
 
 .notification-bell {

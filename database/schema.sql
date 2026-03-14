@@ -136,6 +136,12 @@ CREATE TABLE product_packaging (
     INDEX (product_id)
 );
 
+CREATE TABLE shipping_groups (
+    shipping_group_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    cost DECIMAL(10, 2) NOT NULL
+);
+
 CREATE TABLE orders (
     order_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
@@ -164,11 +170,6 @@ CREATE TABLE tax_groups (
     rate DECIMAL(5, 4) NOT NULL
 );
 
-CREATE TABLE shipping_groups (
-    shipping_group_id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
-    cost DECIMAL(10, 2) NOT NULL
-);
 
 CREATE TABLE customers (
     customer_id INT PRIMARY KEY AUTO_INCREMENT,

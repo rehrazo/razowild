@@ -16,7 +16,7 @@
     <nav class="navbar">
       <div class="navbar-brand">
         <router-link to="/">
-          <img src="/src/assets/images/site/razowild-logo.svg" alt="Razo Wild" style="height:36px;" />
+          <img src="/src/assets/images/site/razoWildLogoGray.png" alt="Razo Wild" style="height:100px;" />
         </router-link>
       </div>
 
@@ -35,14 +35,6 @@
         <li><router-link to="/cart">Cart ({{ cartItemCount }})</router-link></li>
         <li v-if="!isLoggedIn"><router-link to="/login">Login</router-link></li>
         <li v-if="isLoggedIn"><router-link to="/account">Account</router-link></li>
-        <li class="theme-control">
-          <label for="theme-select">Theme</label>
-          <select id="theme-select" v-model="selectedTheme" @change="onThemeChange">
-            <option v-for="theme in themeOptions" :key="theme.value" :value="theme.value">
-              {{ theme.label }}
-            </option>
-          </select>
-        </li>
       </ul>
     </nav>
 
@@ -124,7 +116,6 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { useCartStore } from '../stores/cart'
-import { applyTheme, getTheme } from '../utils/theme'
 
 export default {
   name: 'StorefrontLayout',
@@ -138,14 +129,6 @@ export default {
     const isLoggedIn = computed(() => authStore.isLoggedIn)
     const cartItemCount = computed(() => cartStore.itemCount)
     const categoryMenuItems = ref([])
-    const selectedTheme = ref(getTheme())
-    const themeOptions = [
-      { label: 'Lake & Stone', value: 'lake-stone' },
-      { label: 'Forest Trail', value: 'forest-trail' },
-      { label: 'Campfire Dusk', value: 'campfire-dusk' },
-      { label: 'Violet Dew', value: 'violet-dew' },
-      { label: 'Forest Harmony', value: 'forest-harmony' },
-    ]
 
     const isAllCategoriesActive = computed(() => {
       return route.path === '/products' && !route.query.category_id
@@ -168,12 +151,7 @@ export default {
 
     onMounted(() => {
       fetchCategoryMenu()
-      selectedTheme.value = getTheme()
     })
-
-    const onThemeChange = () => {
-      selectedTheme.value = applyTheme(selectedTheme.value)
-    }
 
     const submitHeaderSearch = () => {
       const query = String(headerSearch.value || '').trim()
@@ -189,12 +167,9 @@ export default {
       isLoggedIn,
       cartItemCount,
       categoryMenuItems,
-      selectedTheme,
-      themeOptions,
       isCategoryActive,
       isAllCategoriesActive,
       submitHeaderSearch,
-      onThemeChange,
     }
   },
 }
@@ -250,8 +225,8 @@ export default {
 }
 
 .navbar {
-  background-color: var(--color-forest);
-  color: var(--color-sand);
+  background-color: #D9D9D9;
+  color: #2B2B2B;
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
@@ -260,10 +235,14 @@ export default {
 }
 
 .navbar-brand a {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: var(--color-sand);
-  text-decoration: none;
+  display: block;
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+}
+
+.navbar-brand img {
+  display: block;
 }
 
 .nav-links {
@@ -273,33 +252,6 @@ export default {
   gap: 2rem;
   margin: 0;
   padding: 0;
-}
-
-.theme-control {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-}
-
-.theme-control label {
-  color: var(--color-sand);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
-
-.theme-control select {
-  border: 1px solid rgba(244, 235, 216, 0.6);
-  background: transparent;
-  color: var(--color-sand);
-  border-radius: 4px;
-  padding: 0.28rem 0.45rem;
-  font-size: 0.78rem;
-}
-
-.theme-control select option {
-  color: var(--color-charcoal);
-  background: #fff;
 }
 
 .navbar-search {
@@ -336,7 +288,7 @@ export default {
 }
 
 .nav-links a {
-  color: var(--color-sand);
+  color: #2B2B2B;
   text-decoration: none;
   transition: color 0.3s;
 }
