@@ -15,7 +15,9 @@
 
     <nav class="navbar">
       <div class="navbar-brand">
-        <router-link to="/">Razo Wild</router-link>
+        <router-link to="/">
+          <img src="/src/assets/images/site/razowild-logo.svg" alt="Razo Wild" style="height:36px;" />
+        </router-link>
       </div>
 
       <form class="navbar-search" @submit.prevent="submitHeaderSearch">

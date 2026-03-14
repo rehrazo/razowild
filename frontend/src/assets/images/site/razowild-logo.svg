@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="140" viewBox="0 0 600 140" role="img" aria-label="Razo Wild logo">
+  <title>Razo Wild</title>
+  <defs>
+    <linearGradient id="gw" x1="0" x2="1">
+      <stop offset="0%" stop-color="#6a8a73"/>
+      <stop offset="100%" stop-color="#202024"/>
+    </linearGradient>
+  </defs>
+  <!-- icon: mountain + leaf -->
+  <g transform="translate(20,12)">
+    <rect width="116" height="116" rx="18" fill="#f8f1e9"/>
+    <g transform="translate(58,58) scale(0.9)" text-anchor="middle">
+      <!-- mountain -->
+      <path d="M-36,28 L0,-34 L36,28 Z" fill="#202024"/>
+      <path d="M-18,18 L0,-8 L18,18 Z" fill="#6a8a73"/>
+      <!-- leaf accent -->
+      <path d="M-4,8 C-18,2 -18,-16 -2,-20 C6,-21 14,-10 6,-2 C2,2 -2,6 -4,8 Z" fill="#fe994f" opacity="0.95"/>
+    </g>
+  </g>
+
+  <!-- wordmark -->
+  <g transform="translate(160,92)">
+    <text x="0" y="-10" font-family="Georgia, 'Times New Roman', serif" font-size="40" fill="#202024" font-weight="700">Razo</text>
+    <text x="120" y="-10" font-family="Georgia, 'Times New Roman', serif" font-size="40" fill="#6a8a73" font-weight="700">Wild</text>
+    <rect x="0" y="6" width="260" height="6" rx="3" fill="#fe994f" opacity="0.9" />
+  </g>
+</svg>

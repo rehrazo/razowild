@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200" role="img" aria-label="Razo Wild icon">
+  <title>Razo Wild icon</title>
+  <defs>
+    <linearGradient id="gi" x1="0" x2="1">
+      <stop offset="0%" stop-color="#6a8a73"/>
+      <stop offset="100%" stop-color="#202024"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="28" fill="#f8f1e9"/>
+  <!-- centered mountain -->
+  <g transform="translate(100,100)">
+    <path d="M-50,50 L0,-40 L50,50 Z" fill="url(#gi)"/>
+    <path d="M-20,20 L0,-8 L20,20 Z" fill="#6a8a73"/>
+    <path d="M-8,12 C-12,6 -12,-6 -4,-10 C2,-12 10,-6 6,0 C2,6 -2,10 -8,12 Z" fill="#fe994f"/>
+  </g>
+</svg>
