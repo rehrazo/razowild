@@ -1,4 +1,5 @@
--- E-commerce Database Schema with Extended Product Fields
+-- NOTE: Create the database before applying this schema:
+--   CREATE DATABASE IF NOT EXISTS `razowild_db` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE users (
     user_id INT PRIMARY KEY AUTO_INCREMENT,

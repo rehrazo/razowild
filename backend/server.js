@@ -129,7 +129,7 @@ const pool = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'camptime',
+  database: process.env.DB_NAME || 'razowild_db',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
@@ -139,7 +139,7 @@ app.locals.pool = pool;
 
 // Routes
 app.get('/', (req, res) => {
-  res.json({ message: 'Camptime Backend API', version: '1.0.0', health: '/api/health' });
+  res.json({ message: 'Razo Wild Backend API', version: '1.0.0', health: '/api/health' });
 });
 
 app.get('/api/health', async (req, res) => {
@@ -310,5 +310,5 @@ const PORT = process.env.PORT || 5000;
 enforceStartupSecurityConfig();
 
 app.listen(PORT, () => {
-  console.log(`Camptime Backend Server running on port ${PORT}`);
+  console.log(`Razo Wild Backend Server running on port ${PORT}`);
 });

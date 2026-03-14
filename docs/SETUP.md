@@ -28,7 +28,7 @@ Before you begin, ensure you have the following installed on your system:
    - `DB_HOST`: Your MySQL host (default is localhost)
    - `DB_USER`: Your MySQL username
    - `DB_PASSWORD`: Your MySQL password
-   - `DB_NAME`: Your database name (default is camptime)
+   - `DB_NAME`: Your database name (default is razowild_db)
    - `PORT`: The port on which the application will run (default is 5000)
    - `JWT_SECRET`: Required for login/signup JWT authentication
    - `JWT_EXPIRE`: JWT expiration window (default `7d`)
@@ -56,13 +56,13 @@ Before you begin, ensure you have the following installed on your system:
    # If MySQL is installed as a service
    Start-Service MySQL80  # or your MySQL service name
    ```
-2. **Create a Database**: In the MySQL shell or your database GUI (like MySQL Workbench), create a database named `camptime`:
+2. **Create a Database**: In the MySQL shell or your database GUI (like MySQL Workbench), create a database named `razowild_db`:
    ```sql
-   CREATE DATABASE camptime;
+   CREATE DATABASE razowild_db;
    ```
 3. **Import Schema**: Run the schema file to create tables:
    ```powershell
-   mysql -u root -p camptime < database/schema.sql
+   mysql -u root -p razowild_db < database/schema.sql
    ```
 4. **Initial Data Seeding** (optional): Seed an admin user from the `backend` folder:
    ```powershell
