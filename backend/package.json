@@ -1,5 +1,5 @@
 {
-    "name": "camptime-backend",
+    "name": "razowild-backend",
     "version": "1.0.0",
     "description": "Backend API for Camptime e-commerce platform",
     "main": "server.js",

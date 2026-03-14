@@ -1,4 +1,4 @@
-const THEME_STORAGE_KEY = 'camptime-theme'
+const THEME_STORAGE_KEY = 'razowild-theme'
 const DEFAULT_THEME = 'lake-stone'
 
 const THEMES = Object.freeze({

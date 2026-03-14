@@ -1,8 +1,8 @@
 module.exports = {
   apps: [
     {
-      name: 'camptime-api',
-      cwd: '/var/www/camptime/backend',
+      name: 'razowild-api',
+      cwd: '/var/www/razowild/backend',
       script: 'server.js',
       exec_mode: 'fork',
       instances: 1,
@@ -14,8 +14,8 @@ module.exports = {
       },
     },
     {
-      name: 'camptime-storefront',
-      cwd: '/var/www/camptime/frontend',
+      name: 'razowild-storefront',
+      cwd: '/var/www/razowild/frontend',
       script: 'npm',
       args: 'run preview -- --host 127.0.0.1 --port 3000 --strictPort',
       exec_mode: 'fork',
@@ -27,8 +27,8 @@ module.exports = {
       },
     },
     {
-      name: 'camptime-admin',
-      cwd: '/var/www/camptime/frontend',
+      name: 'razowild-admin',
+      cwd: '/var/www/razowild/frontend',
       script: 'npm',
       args: 'run preview -- --host 127.0.0.1 --port 3001 --strictPort',
       exec_mode: 'fork',

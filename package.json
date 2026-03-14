@@ -1,7 +1,7 @@
 {
-  "name": "camptime",
+  "name": "razowild",
   "version": "1.0.0",
-  "description": "Camptime e-commerce platform - camping gear store",
+  "description": "Razo Wild e-commerce platform - outdoor gear store",
   "scripts": {
     "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install && cd ..",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",

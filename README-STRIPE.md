@@ -1,7 +1,7 @@
-# Stripe Go-Live Notes (Camptime)
+# Stripe Go-Live Notes (Razo Wild)
 
 ## Scope
-This document covers Stripe setup and production readiness for the current Camptime integration.
+This document covers Stripe setup and production readiness for the Razo Wild integration.
 
 Current integration includes:
 
