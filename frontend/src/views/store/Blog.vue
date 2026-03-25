@@ -166,6 +166,8 @@ import { ref, computed } from 'vue'
 export default {
   name: 'Blog',
   setup() {
+    const demoBlogImage = new URL('../../assets/images/site/CampByRiver.jpg', import.meta.url).href
+
     const searchQuery = ref('')
     const selectedCategory = ref('')
     const selectedTag = ref('')
@@ -204,7 +206,7 @@ export default {
         category: 'Beginner Tips',
         author: 'Sarah Johnson',
         date: new Date('2026-02-20'),
-        image: '/images/blog/tent-guide.jpg',
+        image: demoBlogImage,
         views: 1523,
         likes: 342,
         readingTime: 8,
@@ -219,7 +221,7 @@ export default {
         category: 'Camping Hacks',
         author: 'Michael Chen',
         date: new Date('2026-02-18'),
-        image: '/images/blog/camping-hacks.jpg',
+        image: demoBlogImage,
         views: 2104,
         likes: 456,
         readingTime: 6,
@@ -233,7 +235,7 @@ export default {
         category: 'Destinations',
         author: 'Emily Rodriguez',
         date: new Date('2026-02-15'),
-        image: '/images/blog/spring-destinations.jpg',
+        image: demoBlogImage,
         views: 1876,
         likes: 389,
         readingTime: 7,
@@ -247,7 +249,7 @@ export default {
         category: 'Sustainability',
         author: 'David Kim',
         date: new Date('2026-02-12'),
-        image: '/images/blog/sustainable-camping.jpg',
+        image: demoBlogImage,
         views: 1432,
         likes: 278,
         readingTime: 9,
@@ -261,7 +263,7 @@ export default {
         category: 'Beginner Tips',
         author: 'Amanda Lee',
         date: new Date('2026-02-10'),
-        image: '/images/blog/winter-camping.jpg',
+        image: demoBlogImage,
         views: 1654,
         likes: 312,
         readingTime: 10,
@@ -275,7 +277,7 @@ export default {
         category: 'Gear Reviews',
         author: 'James Wilson',
         date: new Date('2026-02-08'),
-        image: '/images/blog/stove-review.jpg',
+        image: demoBlogImage,
         views: 2341,
         likes: 567,
         readingTime: 12,
@@ -289,7 +291,7 @@ export default {
         category: 'Camping Hacks',
         author: 'Lisa Anderson',
         date: new Date('2026-02-05'),
-        image: '/images/blog/budget-camping.jpg',
+        image: demoBlogImage,
         views: 1923,
         likes: 401,
         readingTime: 8,
@@ -303,7 +305,7 @@ export default {
         category: 'Safety',
         author: 'John Martinez',
         date: new Date('2026-02-01'),
-        image: '/images/blog/desert-safety.jpg',
+        image: demoBlogImage,
         views: 1567,
         likes: 298,
         readingTime: 11,
@@ -317,7 +319,7 @@ export default {
         category: 'Beginner Tips',
         author: 'Sarah Johnson',
         date: new Date('2026-01-28'),
-        image: '/images/blog/mountain-hiking.jpg',
+        image: demoBlogImage,
         views: 1432,
         likes: 267,
         readingTime: 9,
@@ -331,7 +333,7 @@ export default {
         category: 'Camping Hacks',
         author: 'Michael Chen',
         date: new Date('2026-01-25'),
-        image: '/images/blog/meal-plans.jpg',
+        image: demoBlogImage,
         views: 1899,
         likes: 423,
         readingTime: 7,
@@ -345,7 +347,7 @@ export default {
         category: 'Gear Reviews',
         author: 'Emily Rodriguez',
         date: new Date('2026-01-22'),
-        image: '/images/blog/camping-photography.jpg',
+        image: demoBlogImage,
         views: 1723,
         likes: 389,
         readingTime: 8,
@@ -359,7 +361,7 @@ export default {
         category: 'Gear Reviews',
         author: 'David Kim',
         date: new Date('2026-01-20'),
-        image: '/images/blog/sleeping-bags.jpg',
+        image: demoBlogImage,
         views: 2156,
         likes: 512,
         readingTime: 10,
@@ -473,13 +475,13 @@ export default {
 
 <style scoped>
 .blog-page {
-  background-color: #f9f9f9;
+  background-color: var(--apricot-cream-muted);
   min-height: 100vh;
 }
 
 /* Header */
 .blog-header {
-  background: linear-gradient(135deg, var(--color-accent) 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--gradient-accent-end) 100%);
   color: white;
   padding: 3rem 2rem;
   text-align: center;
@@ -513,7 +515,7 @@ export default {
 .search-input {
   width: 100%;
   padding: 1rem 1rem 1rem 3rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 1rem;
   transition: all 0.3s;
@@ -530,7 +532,7 @@ export default {
   left: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #999;
+  color: var(--color-text-subtle);
 }
 
 .filter-controls {
@@ -541,7 +543,7 @@ export default {
 .filter-select {
   flex: 1;
   padding: 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 1rem;
   cursor: pointer;
@@ -605,7 +607,7 @@ export default {
 
 .post-category {
   display: inline-block;
-  background-color: #e8f0ff;
+  background-color: var(--state-info-bg);
   color: var(--color-accent);
   padding: 0.5rem 1rem;
   border-radius: 4px;
@@ -618,12 +620,12 @@ export default {
 .featured-content h2 {
   font-size: 2rem;
   margin: 0 0 1rem 0;
-  color: #333;
+  color: var(--color-text);
   line-height: 1.4;
 }
 
 .post-excerpt {
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 1rem;
   line-height: 1.6;
   margin-bottom: 1.5rem;
@@ -633,13 +635,13 @@ export default {
   display: flex;
   gap: 1.5rem;
   font-size: 0.9rem;
-  color: #999;
+  color: var(--color-text-subtle);
   margin-bottom: 1.5rem;
 }
 
 .author {
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
 }
 
 .btn {
@@ -665,12 +667,12 @@ export default {
 }
 
 .btn-secondary {
-  background-color: #f0f0f0;
-  color: #333;
+  background-color: var(--apricot-cream-muted);
+  color: var(--color-text);
 }
 
 .btn-secondary:hover {
-  background-color: #e0e0e0;
+  background-color: var(--color-border);
 }
 
 .btn-small {
@@ -729,13 +731,13 @@ export default {
 
 .post-content h3 {
   margin: 0 0 0.75rem 0;
-  color: #333;
+  color: var(--color-text);
   font-size: 1.2rem;
   line-height: 1.4;
 }
 
 .post-excerpt {
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 0.95rem;
   line-height: 1.6;
   margin-bottom: 1rem;
@@ -745,10 +747,10 @@ export default {
   display: flex;
   gap: 1rem;
   font-size: 0.85rem;
-  color: #999;
+  color: var(--color-text-subtle);
   margin-bottom: 1rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .reading-time {
@@ -760,7 +762,7 @@ export default {
 .no-posts {
   text-align: center;
   padding: 3rem;
-  color: #666;
+  color: var(--color-text-subtle);
 }
 
 /* Pagination */
@@ -775,7 +777,7 @@ export default {
 .pagination-btn {
   padding: 0.5rem 1rem;
   background-color: white;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s;
@@ -803,7 +805,7 @@ export default {
   height: 36px;
   padding: 0;
   background-color: white;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   cursor: pointer;
   font-weight: 600;
@@ -822,7 +824,7 @@ export default {
 
 /* Newsletter Section */
 .newsletter-section {
-  background: linear-gradient(135deg, var(--color-accent) 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--gradient-accent-end) 100%);
   color: white;
   padding: 3rem 2rem;
   text-align: center;
@@ -863,13 +865,13 @@ export default {
 }
 
 .newsletter-message.success {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: var(--state-success-bg);
+  color: var(--state-success-text);
 }
 
 .newsletter-message.error {
-  background-color: #f8d7da;
-  color: #721c24;
+  background-color: var(--state-error-bg);
+  color: var(--state-error-text);
 }
 
 /* Tags Section */
@@ -883,7 +885,7 @@ export default {
 .tags-section h2 {
   font-size: 1.8rem;
   margin-bottom: 1.5rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .tags-cloud {
@@ -896,12 +898,12 @@ export default {
 .tag {
   padding: 0.5rem 1rem;
   background-color: white;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 20px;
   cursor: pointer;
   transition: all 0.3s;
   font-weight: 500;
-  color: #333;
+  color: var(--color-text);
 }
 
 .tag:hover {

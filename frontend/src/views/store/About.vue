@@ -48,7 +48,7 @@
             </p>
           </div>
           <div class="story-image">
-            <img src="/images/about-hero.jpg" alt="Razo Wild founders" />
+            <img src="@/assets/images/site/CampByRiver.jpg" alt="Razo Wild founders" />
           </div>
         </div>
       </div>
@@ -234,6 +234,8 @@
 export default {
   name: 'About',
   setup() {
+    const partnerLogo = new URL('../../assets/images/site/Trust_Badge.png', import.meta.url).href
+
     const teamMembers = [
       {
         id: 1,
@@ -303,12 +305,12 @@ export default {
     ]
 
     const partners = [
-      { id: 1, name: 'CampGear', logo: '/images/brands/campgear.png' },
-      { id: 2, name: 'NatureRest', logo: '/images/brands/naturerest.png' },
-      { id: 3, name: 'TrailBlaze', logo: '/images/brands/trailblaze.png' },
-      { id: 4, name: 'CookWild', logo: '/images/brands/cookwild.png' },
-      { id: 5, name: 'ComfortCamp', logo: '/images/brands/comfortcamp.png' },
-      { id: 6, name: 'LightPath', logo: '/images/brands/lightpath.png' },
+      { id: 1, name: 'CampGear', logo: partnerLogo },
+      { id: 2, name: 'NatureRest', logo: partnerLogo },
+      { id: 3, name: 'TrailBlaze', logo: partnerLogo },
+      { id: 4, name: 'CookWild', logo: partnerLogo },
+      { id: 5, name: 'ComfortCamp', logo: partnerLogo },
+      { id: 6, name: 'LightPath', logo: partnerLogo },
     ]
 
     const timeline = [
@@ -376,7 +378,7 @@ export default {
 
 /* Hero Section */
 .hero-section {
-  background: linear-gradient(135deg, var(--color-accent) 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--gradient-accent-end) 100%);
   color: white;
   padding: 6rem 2rem;
   text-align: center;
@@ -397,7 +399,7 @@ export default {
 /* Mission Section */
 .mission-section {
   padding: 4rem 0;
-  background-color: #f9f9f9;
+  background-color: var(--apricot-cream-muted);
 }
 
 .mission-grid {
@@ -428,12 +430,12 @@ export default {
 
 .mission-item h3 {
   margin: 1rem 0 0.5rem 0;
-  color: #333;
+  color: var(--color-text);
   font-size: 1.3rem;
 }
 
 .mission-item p {
-  color: #666;
+  color: var(--color-text-subtle);
   line-height: 1.6;
   margin: 0;
 }
@@ -453,11 +455,11 @@ export default {
 .story-text h2 {
   font-size: 2.2rem;
   margin-bottom: 1.5rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .story-text p {
-  color: #666;
+  color: var(--color-text-subtle);
   line-height: 1.8;
   margin-bottom: 1.5rem;
 }
@@ -471,7 +473,7 @@ export default {
 /* Stats Section */
 .stats-section {
   padding: 4rem 0;
-  background: linear-gradient(135deg, var(--color-accent) 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--gradient-accent-end) 100%);
   color: white;
 }
 
@@ -507,19 +509,19 @@ export default {
 /* Team Section */
 .team-section {
   padding: 4rem 0;
-  background-color: #f9f9f9;
+  background-color: var(--apricot-cream-muted);
 }
 
 .team-section h2 {
   font-size: 2.2rem;
   text-align: center;
   margin-bottom: 0.5rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .section-subtitle {
   text-align: center;
-  color: #666;
+  color: var(--color-text-subtle);
   margin-bottom: 2rem;
   font-size: 1.1rem;
 }
@@ -549,7 +551,7 @@ export default {
   width: 100%;
   height: 250px;
   overflow: hidden;
-  background-color: #e0e0e0;
+  background-color: var(--color-border);
 }
 
 .member-image img {
@@ -560,7 +562,7 @@ export default {
 
 .team-member h3 {
   margin: 1.5rem 1rem 0.5rem 1rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .member-role {
@@ -571,7 +573,7 @@ export default {
 
 .member-bio {
   padding: 0 1rem;
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 0.9rem;
   line-height: 1.6;
   margin: 0 0 1rem 0;
@@ -611,7 +613,7 @@ export default {
   font-size: 2.2rem;
   text-align: center;
   margin-bottom: 2rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .values-grid {
@@ -641,11 +643,11 @@ export default {
 
 .value-card h3 {
   margin: 0 0 0.5rem 0;
-  color: #333;
+  color: var(--color-text);
 }
 
 .value-card p {
-  color: #666;
+  color: var(--color-text-subtle);
   line-height: 1.6;
   margin: 0;
 }
@@ -653,14 +655,14 @@ export default {
 /* Sustainability Section */
 .sustainability-section {
   padding: 4rem 0;
-  background-color: #f0f8f4;
+  background-color: var(--state-success-bg);
 }
 
 .sustainability-section h2 {
   font-size: 2.2rem;
   text-align: center;
   margin-bottom: 2rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .sustainability-content {
@@ -672,12 +674,12 @@ export default {
 
 .sustainability-text h3 {
   font-size: 1.5rem;
-  color: #333;
+  color: var(--color-text);
   margin-bottom: 1rem;
 }
 
 .sustainability-text p {
-  color: #666;
+  color: var(--color-text-subtle);
   line-height: 1.8;
   margin-bottom: 1.5rem;
 }
@@ -692,14 +694,14 @@ export default {
   padding: 0.75rem 0;
   padding-left: 1.75rem;
   position: relative;
-  color: #666;
+  color: var(--color-text-subtle);
 }
 
 .sustainability-list li:before {
   content: '✓';
   position: absolute;
   left: 0;
-  color: #00b894;
+  color: var(--color-complement);
   font-weight: bold;
   font-size: 1.2rem;
 }
@@ -722,27 +724,27 @@ export default {
   display: block;
   font-size: 2rem;
   font-weight: 700;
-  color: #00b894;
+  color: var(--color-complement);
   margin-bottom: 0.5rem;
 }
 
 .eco-label {
   display: block;
-  color: #333;
+  color: var(--color-text);
   font-weight: 600;
 }
 
 /* Partners Section */
 .partners-section {
   padding: 4rem 0;
-  background-color: #f9f9f9;
+  background-color: var(--apricot-cream-muted);
 }
 
 .partners-section h2 {
   font-size: 2.2rem;
   text-align: center;
   margin-bottom: 0.5rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .partners-grid {
@@ -775,7 +777,7 @@ export default {
 }
 
 .partner-card p {
-  color: #666;
+  color: var(--color-text-subtle);
   margin: 0;
   font-weight: 600;
 }
@@ -789,7 +791,7 @@ export default {
   font-size: 2.2rem;
   text-align: center;
   margin-bottom: 2rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .timeline {
@@ -859,14 +861,14 @@ export default {
 
 .timeline-content p {
   margin: 0.25rem 0;
-  color: #666;
+  color: var(--color-text-subtle);
   line-height: 1.6;
 }
 
 /* Contact CTA Section */
 .contact-cta {
   padding: 4rem 0;
-  background: linear-gradient(135deg, var(--color-accent) 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--gradient-accent-end) 100%);
   color: white;
   text-align: center;
 }

@@ -710,9 +710,9 @@ export default {
 }
 
 .drop-root.active {
-  border-color: var(--color-forest);
+  border-color: var(--dark-spruce);
   background: rgba(99, 172, 77, 0.08);
-  color: var(--color-forest);
+  color: var(--dark-spruce);
 }
 
 .tree-card {
@@ -743,13 +743,13 @@ export default {
 
 .category-row.drop-target {
   background: rgba(99, 172, 77, 0.08);
-  outline: 2px solid var(--color-forest);
+  outline: 2px solid var(--dark-spruce);
   outline-offset: -2px;
 }
 
 .category-row.selected-category {
   background: rgba(99, 172, 77, 0.12);
-  border-left: 4px solid var(--color-forest);
+  border-left: 4px solid var(--dark-spruce);
   padding-left: calc(1rem - 4px);
 }
 
@@ -768,7 +768,7 @@ export default {
   padding: 0.1rem 0.45rem;
   border-radius: 999px;
   background: rgba(99, 172, 77, 0.14);
-  color: var(--color-forest);
+  color: var(--dark-spruce);
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.02em;
@@ -807,7 +807,7 @@ export default {
 }
 
 .view-products-link {
-  color: var(--color-forest);
+  color: var(--dark-spruce);
   font-weight: 600;
   text-decoration: none;
 }
@@ -887,8 +887,8 @@ export default {
 }
 
 .btn-primary {
-  background-color: var(--color-forest);
-  color: var(--color-sand);
+  background-color: var(--dark-spruce);
+  color: var(--apricot-cream);
 }
 
 .btn-secondary {
@@ -917,7 +917,7 @@ export default {
 }
 
 .collapse-toggle:hover {
-  color: var(--color-forest);
+  color: var(--dark-spruce);
 }
 
 @media (max-width: 768px) {

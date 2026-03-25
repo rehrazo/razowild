@@ -20,6 +20,7 @@
                 v-model="email"
                 type="email"
                 placeholder="you@example.com"
+                autocomplete="email"
                 required
                 class="form-input"
               />
@@ -59,6 +60,8 @@
                 type="text"
                 placeholder="000000"
                 maxlength="6"
+                inputmode="numeric"
+                autocomplete="one-time-code"
                 required
                 class="form-input code-input"
               />
@@ -96,6 +99,7 @@
                   v-model="newPassword.password"
                   :type="showNewPassword ? 'text' : 'password'"
                   placeholder="••••••••"
+                  autocomplete="new-password"
                   required
                   class="form-input"
                   @input="updatePasswordStrength"
@@ -146,6 +150,7 @@
                 v-model="newPassword.confirm"
                 type="password"
                 placeholder="••••••••"
+                autocomplete="new-password"
                 required
                 class="form-input"
               />
@@ -428,23 +433,23 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--color-accent) 0%, #764ba2 100%);
-  padding: 2rem;
+  background: linear-gradient(135deg, var(--dark-spruce) 0%, var(--color-accent-dark) 100%);
+  padding: 1.5rem 1rem;
 }
 
 .forgot-password-container {
   display: grid;
   grid-template-columns: 1fr 350px;
-  gap: 2rem;
+  gap: 1.4rem;
   width: 100%;
-  max-width: 1000px;
+  max-width: 1040px;
 }
 
 .form-wrapper {
   background: white;
-  border-radius: 12px;
-  padding: 2.5rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  border-radius: 14px;
+  padding: 2rem;
+  box-shadow: 0 16px 38px rgba(65, 39, 34, 0.12);
 }
 
 .header {
@@ -465,13 +470,13 @@ export default {
 }
 
 .form-wrapper h1 {
-  font-size: 2rem;
-  color: #333;
+  font-size: clamp(1.75rem, 2.6vw, 2.2rem);
+  color: var(--dark-coffee);
   margin: 0.5rem 0 0 0;
 }
 
 .subtitle {
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 0.95rem;
   margin: 0.75rem 0 0 0;
 }
@@ -502,12 +507,12 @@ export default {
 .form-group label {
   display: block;
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
   margin-bottom: 0.5rem;
 }
 
 .code-info {
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 0.9rem;
   margin: 0.25rem 0 0.75rem 0;
 }
@@ -515,7 +520,7 @@ export default {
 .form-input {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 1rem;
   transition: all 0.3s;
@@ -525,7 +530,7 @@ export default {
 .form-input:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 3px rgba(12, 124, 89, 0.18);
 }
 
 .code-input {
@@ -567,7 +572,7 @@ export default {
 
 .strength-bar {
   height: 4px;
-  background-color: #e0e0e0;
+  background-color: var(--color-border);
   border-radius: 2px;
   overflow: hidden;
   margin-bottom: 0.5rem;
@@ -580,11 +585,11 @@ export default {
 }
 
 .strength-fill.weak {
-  background-color: #ff6b6b;
+  background-color: var(--color-accent);
 }
 
 .strength-fill.fair {
-  background-color: #ffa94d;
+  background-color: var(--state-warning-border);
 }
 
 .strength-fill.good {
@@ -592,11 +597,11 @@ export default {
 }
 
 .strength-fill.strong {
-  background-color: #55efc4;
+  background-color: var(--color-complement);
 }
 
 .strength-fill.very-strong {
-  background-color: #00b894;
+  background-color: var(--color-complement);
 }
 
 .strength-text {
@@ -605,11 +610,11 @@ export default {
 }
 
 .strength-text.weak {
-  color: #ff6b6b;
+  color: var(--color-accent);
 }
 
 .strength-text.fair {
-  color: #ffa94d;
+  color: var(--state-warning-text);
 }
 
 .strength-text.good {
@@ -617,15 +622,15 @@ export default {
 }
 
 .strength-text.strong {
-  color: #55efc4;
+  color: var(--color-complement);
 }
 
 .strength-text.very-strong {
-  color: #00b894;
+  color: var(--color-complement);
 }
 
 .password-requirements {
-  background-color: #f9f9f9;
+  background-color: var(--apricot-cream-muted);
   padding: 1rem;
   border-radius: 4px;
   margin-top: 1rem;
@@ -636,7 +641,7 @@ export default {
   margin: 0 0 0.75rem 0;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
 }
 
 .password-requirements ul {
@@ -651,11 +656,11 @@ export default {
   gap: 0.5rem;
   padding: 0.5rem 0;
   font-size: 0.85rem;
-  color: #999;
+  color: var(--color-text-subtle);
 }
 
 .password-requirements li.met {
-  color: #00b894;
+  color: var(--color-complement);
 }
 
 .check {
@@ -670,14 +675,15 @@ export default {
 
 .error-message {
   display: block;
-  color: #ff6b6b;
+  color: var(--state-error-text);
   font-size: 0.8rem;
   margin-top: 0.25rem;
 }
 
 .success-message {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: var(--state-success-bg);
+  color: var(--state-success-text);
+  border: 1px solid var(--state-success-border);
   padding: 0.75rem 1rem;
   border-radius: 4px;
   margin-bottom: 1rem;
@@ -711,12 +717,12 @@ export default {
 }
 
 .btn-secondary {
-  background-color: #f0f0f0;
-  color: #333;
+  background-color: var(--apricot-cream-muted);
+  color: var(--color-text);
 }
 
 .btn-secondary:hover {
-  background-color: #e0e0e0;
+  background-color: var(--color-border);
 }
 
 .btn-large {
@@ -725,7 +731,7 @@ export default {
 
 .timer {
   text-align: center;
-  color: #999;
+  color: var(--color-text-subtle);
   font-size: 0.85rem;
   margin-top: 0.5rem;
 }
@@ -751,7 +757,7 @@ export default {
 }
 
 .help-section {
-  background-color: #f9f9f9;
+  background-color: var(--apricot-cream-muted);
   padding: 1rem;
   border-radius: 4px;
   margin-top: 1.5rem;
@@ -761,7 +767,7 @@ export default {
   margin: 0 0 0.75rem 0;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
 }
 
 .help-section ul {
@@ -775,7 +781,7 @@ export default {
   padding-left: 1.5rem;
   position: relative;
   font-size: 0.85rem;
-  color: #666;
+  color: var(--color-text-subtle);
 }
 
 .help-section li:before {
@@ -793,7 +799,7 @@ export default {
 .success-icon {
   width: 80px;
   height: 80px;
-  background-color: #00b894;
+  background-color: var(--color-complement);
   color: white;
   border-radius: 50%;
   display: flex;
@@ -804,27 +810,27 @@ export default {
 }
 
 .success-content h2 {
-  color: #333;
+  color: var(--color-text);
   margin-bottom: 0.5rem;
 }
 
 .success-content p {
-  color: #666;
+  color: var(--color-text-subtle);
   margin-bottom: 2rem;
 }
 
 .security-tips {
   background: white;
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 1.5rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 16px 38px rgba(65, 39, 34, 0.12);
   height: fit-content;
 }
 
 .security-tips h3 {
   margin-top: 0;
   margin-bottom: 1rem;
-  color: #333;
+  color: var(--color-text);
   font-size: 1.1rem;
 }
 
@@ -847,17 +853,21 @@ export default {
 .tip h4 {
   margin: 0 0 0.25rem 0;
   font-size: 0.9rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .tip p {
   margin: 0;
   font-size: 0.8rem;
-  color: #666;
+  color: var(--color-text-subtle);
   line-height: 1.4;
 }
 
 @media (max-width: 768px) {
+  .forgot-password-page {
+    padding: 1rem;
+  }
+
   .forgot-password-container {
     grid-template-columns: 1fr;
   }

@@ -607,7 +607,7 @@ export default {
 
 <style scoped>
 .product-reviews {
-  background-color: #f9f9f9;
+  background-color: var(--apricot-cream-muted);
   padding: 2rem;
 }
 
@@ -626,7 +626,7 @@ export default {
 .reviews-header h2 {
   margin: 0;
   font-size: 1.8rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .btn {
@@ -649,12 +649,12 @@ export default {
 }
 
 .btn-secondary {
-  background-color: #f0f0f0;
-  color: #333;
+  background-color: var(--apricot-cream-muted);
+  color: var(--color-text);
 }
 
 .btn-secondary:hover {
-  background-color: #e0e0e0;
+  background-color: var(--color-border);
 }
 
 .review-summary {
@@ -674,7 +674,7 @@ export default {
 .average-rating {
   text-align: center;
   padding: 1rem;
-  background-color: #f5f5f5;
+  background-color: var(--apricot-cream-muted);
   border-radius: 8px;
 }
 
@@ -687,20 +687,20 @@ export default {
 
 .rating-stars {
   font-size: 1.5rem;
-  color: #ffc107;
+  color: var(--rating-star);
   margin-bottom: 0.75rem;
 }
 
 .rating-stars span {
-  color: #ddd;
+  color: var(--color-border);
 }
 
 .rating-stars span.filled {
-  color: #ffc107;
+  color: var(--rating-star);
 }
 
 .rating-text {
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 0.9rem;
 }
 
@@ -721,33 +721,33 @@ export default {
   display: flex;
   gap: 0.25rem;
   font-size: 0.85rem;
-  color: #ffc107;
+  color: var(--rating-star);
 }
 
 .star-label span {
-  color: #ddd;
+  color: var(--color-border);
 }
 
 .star-label span.filled {
-  color: #ffc107;
+  color: var(--rating-star);
 }
 
 .progress-bar {
   height: 8px;
-  background-color: #e0e0e0;
+  background-color: var(--color-border);
   border-radius: 4px;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--color-accent), #764ba2);
+  background: linear-gradient(90deg, var(--color-accent), var(--gradient-accent-end));
   transition: width 0.3s;
 }
 
 .count {
   text-align: right;
-  color: #999;
+  color: var(--color-text-subtle);
   font-size: 0.9rem;
 }
 
@@ -774,7 +774,7 @@ export default {
 .write-review-section h3 {
   margin-top: 0;
   margin-bottom: 1.5rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .review-form {
@@ -791,7 +791,7 @@ export default {
 
 .form-group label {
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
 }
 
 .rating-input {
@@ -803,28 +803,28 @@ export default {
   width: 40px;
   height: 40px;
   font-size: 1.5rem;
-  background-color: #f0f0f0;
-  border: 2px solid #ddd;
+  background-color: var(--apricot-cream-muted);
+  border: 2px solid var(--color-border);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s;
-  color: #ddd;
+  color: var(--color-border);
 }
 
 .star-btn:hover {
   border-color: var(--color-accent);
-  color: #ffc107;
+  color: var(--rating-star);
 }
 
 .star-btn.active {
   background-color: var(--color-accent);
   border-color: var(--color-accent);
-  color: #ffc107;
+  color: var(--rating-star);
 }
 
 .form-input {
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 1rem;
   transition: all 0.3s;
@@ -839,7 +839,7 @@ export default {
 
 .character-count {
   font-size: 0.8rem;
-  color: #999;
+  color: var(--color-text-subtle);
   text-align: right;
 }
 
@@ -869,7 +869,7 @@ export default {
 }
 
 .error-message {
-  color: #ff6b6b;
+  color: var(--state-error-text);
   font-size: 0.8rem;
 }
 
@@ -902,7 +902,7 @@ export default {
 
 .select-input {
   padding: 0.5rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.9rem;
@@ -916,12 +916,12 @@ export default {
 
 .review-item {
   padding: 2rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--color-border);
   transition: background-color 0.3s;
 }
 
 .review-item:hover {
-  background-color: #f9f9f9;
+  background-color: var(--apricot-cream-muted);
 }
 
 .review-item:last-child {
@@ -951,25 +951,25 @@ export default {
 
 .reviewer-info h4 {
   margin: 0 0 0.25rem 0;
-  color: #333;
+  color: var(--color-text);
 }
 
 .reviewer-name {
   margin: 0 0 0.25rem 0;
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 0.9rem;
 }
 
 .review-date {
   margin: 0;
-  color: #999;
+  color: var(--color-text-subtle);
   font-size: 0.85rem;
 }
 
 .verified-badge {
   display: inline-block;
-  background-color: #d4edda;
-  color: #155724;
+  background-color: var(--state-success-bg);
+  color: var(--state-success-text);
   padding: 0.25rem 0.75rem;
   border-radius: 4px;
   font-size: 0.75rem;
@@ -985,26 +985,26 @@ export default {
   display: flex;
   gap: 0.25rem;
   font-size: 1rem;
-  color: #ffc107;
+  color: var(--rating-star);
   margin-bottom: 0.5rem;
   justify-content: flex-end;
 }
 
 .review-rating .stars span {
-  color: #ddd;
+  color: var(--color-border);
 }
 
 .review-rating .stars span.filled {
-  color: #ffc107;
+  color: var(--rating-star);
 }
 
 .rating-text {
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 0.85rem;
 }
 
 .review-text {
-  color: #555;
+  color: var(--color-text-subtle);
   line-height: 1.6;
   margin-bottom: 1rem;
 }
@@ -1018,7 +1018,7 @@ export default {
 
 .aspect-tag {
   display: inline-block;
-  background-color: #e8f0ff;
+  background-color: var(--state-info-bg);
   color: var(--color-accent);
   padding: 0.4rem 0.8rem;
   border-radius: 20px;
@@ -1031,7 +1031,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding-top: 1rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--color-border);
 }
 
 .helpful-votes {
@@ -1041,8 +1041,8 @@ export default {
 
 .helpful-btn {
   padding: 0.5rem 1rem;
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
+  background-color: var(--apricot-cream-muted);
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.85rem;
@@ -1063,7 +1063,7 @@ export default {
 .report-btn {
   background: none;
   border: none;
-  color: #999;
+  color: var(--color-text-subtle);
   cursor: pointer;
   font-size: 0.85rem;
   transition: color 0.3s;
@@ -1076,7 +1076,7 @@ export default {
 .no-reviews {
   text-align: center;
   padding: 3rem;
-  color: #666;
+  color: var(--color-text-subtle);
 }
 
 .pagination {
@@ -1085,13 +1085,13 @@ export default {
   align-items: center;
   gap: 1rem;
   padding: 2rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--color-border);
 }
 
 .pagination-btn {
   padding: 0.5rem 1rem;
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
+  background-color: var(--apricot-cream-muted);
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s;
@@ -1118,8 +1118,8 @@ export default {
   width: 36px;
   height: 36px;
   padding: 0;
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
+  background-color: var(--apricot-cream-muted);
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   cursor: pointer;
   font-weight: 600;

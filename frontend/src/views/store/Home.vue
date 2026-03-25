@@ -2,6 +2,7 @@
   <div class="home">
     <section class="hero" :style="heroStyle">
       <div class="hero-overlay"></div>
+      <div class="hero-text-bg"></div>
       <div class="hero-content container">
         <p class="hero-brand">RAZO WILD</p>
         <h1>PACK UP. HEAD OUT. CAMP ON.</h1>
@@ -10,15 +11,18 @@
       </div>
     </section>
 
-    <section class="category-section">
-      <div class="container">
+    <section class="category-section featured-section">
+      <div class="container featured-container">
         <h2>Featured Categories</h2>
-        <div class="category-grid">
-          <article v-for="category in featuredCategories" :key="category.title" class="category-card" :style="categoryCardStyle(category.image)">
-            <div class="card-overlay"></div>
-            <div class="card-content">
-              <h3>{{ category.title }}</h3>
-              <router-link :to="category.to" class="card-link">Shop Now</router-link>
+        <div class="category-grid featured-grid">
+          <article v-for="category in featuredCategories" :key="category.title" class="category-card">
+            <div class="category-card-media" :style="categoryCardStyle(category.image)">
+              <div class="card-overlay"></div>
+              <div class="card-content">
+                <h3>
+                  <router-link :to="category.to" class="card-link">{{ category.title }}</router-link>
+                </h3>
+              </div>
             </div>
           </article>
         </div>
@@ -26,13 +30,25 @@
     </section>
 
     <section class="welcome-section">
-      <div class="container welcome-content">
-        <h2>Welcome to Razo Wild</h2>
-        <p>
-          Here at Razo Wild, our mission is to deliver a fast, user-friendly shopping experience
-          with high-quality outdoor products at fair prices.
-        </p>
-        <p class="promise">We promise the highest quality camping products.</p>
+      <div class="container welcome-layout">
+        <figure class="welcome-side-image">
+          <img :src="welcomeLeftImage" alt="Camping tent near the water at sunset" />
+        </figure>
+
+        <div class="welcome-content">
+          <h2>Welcome to Razo Wild</h2>
+          <p>
+            Here at Razo Wild,  our mission is to provide a fast, user-friendly, 
+            and customer service-oriented online shopping experience. Through our years of industry experience, 
+            we have gone to great lengths to offer the best quality camping gear supplies to our customers at affordable prices,
+             as we know our customers will always be the key to our success!
+          </p>
+          <p class="promise">We promise the highest quality camping products.</p>
+        </div>
+
+        <figure class="welcome-side-image">
+          <img :src="welcomeRightImage" alt="Campfire in an outdoor camping setup" />
+        </figure>
       </div>
     </section>
 
@@ -41,11 +57,13 @@
         <h2>Recommended</h2>
         <p class="section-subtitle">Popular &amp; top-rated collections</p>
         <div class="category-grid">
-          <article v-for="category in recommendedCategories" :key="category.title" class="category-card" :style="categoryCardStyle(category.image)">
-            <div class="card-overlay"></div>
-            <div class="card-content">
-              <h3>{{ category.title }}</h3>
-              <router-link :to="category.to" class="card-link">Shop Now</router-link>
+          <article v-for="category in recommendedCategories" :key="category.title" class="category-card">
+            <div class="category-card-media" :style="categoryCardStyle(category.image)">
+              <div class="card-overlay"></div>
+              <div class="card-content">
+                <h3>{{ category.title }}</h3>
+                <router-link :to="category.to" class="card-link">Shop Now</router-link>
+              </div>
             </div>
           </article>
         </div>
@@ -81,7 +99,9 @@
 
 <script>
 import { onMounted, ref } from 'vue'
-import homeBanner from '../../assets/images/site/home_page_banner_cropped.jpg'
+import homeBanner from '../../assets/images/site/home_page_banner_cropped3.jpg'
+import welcomeLeftImage from '../../assets/images/site/CampByRiver.jpg'
+import welcomeRightImage from '../../assets/images/site/CampFire.jpg'
 
 const defaultRoute = '/products'
 const defaultFeaturedCategories = [
@@ -107,16 +127,19 @@ export default {
     const heroStyle = {
       backgroundImage: `url(${homeBanner})`,
       backgroundSize: 'cover',
-      backgroundPosition: 'center',
+      backgroundPosition: 'center top',
       backgroundRepeat: 'no-repeat',
     }
 
     const mapCategoryToCard = (category) => {
       const categoryId = Number(category?.category_id)
+      const categoryImage = String(
+        category?.home_feature_image_url || category?.image_url || category?.image || ''
+      ).trim()
 
       return {
         title: String(category?.name || '').trim() || 'Category',
-        image: String(category?.home_feature_image_url || '').trim() || homeBanner,
+        image: categoryImage || homeBanner,
         to: Number.isInteger(categoryId) && categoryId > 0 ? `/products?category_id=${categoryId}` : defaultRoute,
       }
     }
@@ -187,6 +210,8 @@ export default {
       heroStyle,
       featuredCategories,
       recommendedCategories,
+      welcomeLeftImage,
+      welcomeRightImage,
       categoryCardStyle,
     }
   },
@@ -194,30 +219,55 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Paytone+One&display=swap');
+
 .home {
   width: 100%;
-  background: var(--color-sand);
+  background: var(--apricot-cream);
 }
 
 .hero {
-  min-height: 78vh;
+  min-height: 45vh;
   position: relative;
   display: flex;
   align-items: center;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(43, 43, 43, 0.45);
+  background: linear-gradient(
+    180deg,
+    rgba(27, 81, 45, 0.08) 0%,
+    rgba(27, 81, 45, 0.22) 58%,
+    rgba(27, 81, 45, 0.36) 100%
+  );
 }
+
 
 .hero-content {
   position: relative;
-  z-index: 1;
-  color: #fff;
+  z-index: 2;
+  color: var(--color-white);
   text-align: center;
   padding: 5rem 1rem;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.55), 0 1px 2px rgba(0,0,0,0.25);
+}
+
+.hero-text-bg {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(30,30,30,0.38) 0%, rgba(30,30,30,0.62) 100%);
+  pointer-events: none;
 }
 
 .hero-brand {
@@ -247,22 +297,22 @@ export default {
 }
 
 .btn-primary {
-  background-color: var(--color-forest);
-  color: var(--color-sand);
+  background-color: var(--dark-spruce);
+  color: var(--apricot-cream);
 }
 
 .btn-primary:hover {
-  background-color: var(--color-charcoal);
+  background-color: var(--dark-coffee);
   text-decoration: none;
 }
 
 .btn-secondary {
-  background-color: var(--color-sand);
-  color: var(--color-charcoal);
+  background-color: var(--apricot-cream);
+  color: var(--dark-coffee);
 }
 
 .btn-secondary:hover {
-  background-color: #fff;
+  background-color: var(--color-white);
   text-decoration: none;
 }
 
@@ -271,6 +321,8 @@ export default {
 .cta,
 .trust-section {
   padding: 4rem 0;
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
 }
 
 .category-section h2,
@@ -279,12 +331,12 @@ export default {
   font-size: clamp(1.6rem, 3vw, 2.2rem);
   margin-bottom: 1rem;
   text-align: center;
-  color: var(--color-charcoal);
+  color: var(--dark-coffee);
 }
 
 .section-subtitle {
   text-align: center;
-  color: var(--color-charcoal);
+  color: var(--dark-coffee);
   opacity: 0.8;
   margin-bottom: 2rem;
 }
@@ -293,12 +345,51 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
+  padding: 12px;
+  border-radius: 12px;
+  background-color: var(--dark-coffee);
+  box-shadow: 0 10px 24px rgba(65, 39, 34, 0.16);
+}
+
+.featured-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 25px;
+  background-color: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+.featured-container {
+  max-width: none;
+  width: 100%;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+.featured-section {
+  background-color: var(--deep-wine);
+}
+
+.featured-section h2 {
+  color: var(--cream-white);
+}
+
+.featured-grid .category-card {
+  min-height: 340px;
 }
 
 .category-card {
   position: relative;
   min-height: 200px;
   border-radius: 8px;
+  overflow: hidden;
+}
+
+.category-card-media {
+  position: relative;
+  min-height: 100%;
+  height: 100%;
+  border-radius: 6px;
   overflow: hidden;
   display: flex;
   align-items: end;
@@ -307,13 +398,18 @@ export default {
 .card-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(43, 43, 43, 0.45);
+  background: linear-gradient(
+    180deg,
+    rgba(65, 39, 34, 0) 0%,
+    rgba(65, 39, 34, 0.12) 48%,
+    rgba(65, 39, 34, 0.68) 100%
+  );
 }
 
 .card-content {
   position: relative;
   z-index: 1;
-  color: #fff;
+  color: var(--color-white);
   padding: 1rem;
 }
 
@@ -322,21 +418,49 @@ export default {
 }
 
 .card-link {
-  color: var(--color-sand);
+  color: var(--cream-white);
   font-weight: 600;
 }
 
 .welcome-section {
-  background: #fff;
+  background: var(--color-white);
+}
+
+.welcome-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(320px, 1.5fr) minmax(220px, 1fr);
+  gap: 25px;
+  align-items: stretch;
+}
+
+.welcome-side-image {
+  margin: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  min-height: 340px;
+}
+
+.welcome-side-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .welcome-content {
   text-align: center;
-  max-width: 860px;
+  max-width: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.welcome-content h2 {
+  font-family: 'Paytone One', sans-serif;
 }
 
 .welcome-content p {
-  color: var(--color-charcoal);
+  color: var(--dark-coffee);
   opacity: 0.9;
   margin: 0 auto 1rem;
 }
@@ -346,18 +470,21 @@ export default {
 }
 
 .recommended {
-  background: rgba(99, 172, 77, 0.07);
+  background: rgba(12, 124, 89, 0.1);
 }
 
+
+
 .cta {
-  background: var(--color-forest);
-  color: var(--color-sand);
+  background: var(--color-white);
+  color: var(--dark-coffee);
   text-align: center;
 }
 
+
 .cta h2,
 .cta p {
-  color: var(--color-sand);
+  color: var(--dark-coffee);
 }
 
 .cta p {
@@ -371,23 +498,48 @@ export default {
 }
 
 .trust-card {
-  background: #fff;
+  background: var(--color-white);
   border-radius: 8px;
   padding: 1.5rem;
 }
 
 .trust-card h3 {
-  color: var(--color-forest);
+  color: var(--dark-spruce);
   margin-bottom: 0.5rem;
 }
 
 .trust-card p {
-  color: var(--color-charcoal);
+  color: var(--dark-coffee);
 }
 
 @media (max-width: 768px) {
   .hero {
-    min-height: 66vh;
+    min-height: 35vh;
+  }
+
+  .welcome-layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .welcome-side-image {
+    min-height: 240px;
+  }
+
+  .featured-container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .featured-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 540px) {
+  .featured-grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>

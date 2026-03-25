@@ -57,7 +57,7 @@ export default {
 
 <style scoped>
 .track-page {
-  background: var(--color-sand);
+  background: var(--apricot-cream);
   min-height: 100%;
 }
 
@@ -69,7 +69,7 @@ export default {
 
 h1 {
   margin: 0 0 0.75rem;
-  color: #2B2B2B;
+  color: var(--color-text);
 }
 
 .intro {
@@ -77,7 +77,7 @@ h1 {
 }
 
 .track-form {
-  background: #fff;
+  background: var(--color-white);
   border-radius: 8px;
   padding: 1.25rem;
   display: grid;
@@ -95,14 +95,14 @@ label {
 }
 
 input {
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   padding: 0.65rem;
 }
 
 .btn-track {
-  background: var(--color-forest);
-    background: var(--color-forest);
+  background: var(--dark-spruce);
+    background: var(--dark-spruce);
   border: none;
   border-radius: 4px;
   padding: 0.7rem 1rem;
@@ -111,21 +111,21 @@ input {
 
 .status-message {
   margin-top: 1rem;
-  background: #fff;
+  background: var(--color-white);
   border-radius: 8px;
   padding: 0.9rem 1rem;
 }
 
 .help-box {
   margin-top: 1rem;
-  background: #fff;
+  background: var(--color-white);
   border-radius: 8px;
   padding: 1rem;
 }
 
 .help-box h2 {
-  color: var(--color-forest);
-    color: var(--color-forest);
+  color: var(--dark-spruce);
+    color: var(--dark-spruce);
   font-size: 1.1rem;
 }
 

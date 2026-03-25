@@ -2,14 +2,19 @@ import { createRouter, createWebHistory } from 'vue-router'
 import StorefrontLayout from '../layouts/StorefrontLayout.vue'
 import AdminLayout from '../layouts/AdminLayout.vue'
 import Home from '../views/store/Home.vue'
+import About from '../views/store/About.vue'
+import Contact from '../views/store/Contact.vue'
+import FAQ from '../views/store/FAQ.vue'
 import Products from '../views/store/Products.vue'
 import ProductDetail from '../views/store/ProductDetail.vue'
 import Cart from '../views/store/Cart.vue'
 import Login from '../views/store/Login.vue'
+import ForgotPassword from '../views/store/ForgotPassword.vue'
 import AdminLogin from '../views/admin/AdminLogin.vue'
 import Signup from '../views/store/Signup.vue'
 import Account from '../views/store/Account.vue'
 import Checkout from '../views/store/Checkout.vue'
+import NotFound from '../views/store/NotFound.vue'
 import AdminDashboard from '../views/admin/AdminDashboard.vue'
 import AdminProductEdit from '../views/admin/AdminProductEdit.vue'
 import AdminUncategorizedProducts from '../views/admin/AdminUncategorizedProducts.vue'
@@ -29,6 +34,15 @@ const routes = [
     path: '/',
     component: StorefrontLayout,
     children: [
+            {
+              path: 'store/design-guide',
+              name: 'DesignGuide',
+              component: () => import('../views/store/DesignGuide.vue'),
+              meta: {
+                title: 'Design Guide | Razo Wild',
+                description: 'Brand color palette, typography, spacing, and UI components for Razo Wild.',
+              },
+            },
       {
         path: '',
         name: 'Home',
@@ -36,6 +50,33 @@ const routes = [
         meta: {
           title: 'Razo Wild | Camping Gear and Outdoor Essentials',
           description: 'Find premium tents, sleeping bags, camp furniture, and outdoor gear at Razo Wild.',
+        },
+      },
+      {
+        path: 'about',
+        name: 'About',
+        component: About,
+        meta: {
+          title: 'About Us | Razo Wild',
+          description: 'Learn more about Razo Wild and our mission to serve outdoor enthusiasts.',
+        },
+      },
+      {
+        path: 'contact',
+        name: 'Contact',
+        component: Contact,
+        meta: {
+          title: 'Contact Us | Razo Wild',
+          description: 'Contact the Razo Wild team for product, shipping, and support questions.',
+        },
+      },
+      {
+        path: 'faq',
+        name: 'FAQ',
+        component: FAQ,
+        meta: {
+          title: 'FAQ | Razo Wild',
+          description: 'Browse frequently asked questions about orders, shipping, returns, and products.',
         },
       },
       {
@@ -77,6 +118,16 @@ const routes = [
         },
       },
       {
+        path: 'forgot-password',
+        name: 'ForgotPassword',
+        component: ForgotPassword,
+        meta: {
+          title: 'Reset Password | Razo Wild',
+          description: 'Reset your Razo Wild account password securely.',
+          noindex: true,
+        },
+      },
+      {
         path: 'admin/login',
         name: 'AdminLogin',
         component: AdminLogin,
@@ -99,6 +150,10 @@ const routes = [
           description: 'Create your Razo Wild account to manage orders and checkout faster.',
           noindex: true,
         },
+      },
+      {
+        path: 'signup',
+        redirect: '/register',
       },
       {
         path: 'account',
@@ -220,6 +275,16 @@ const routes = [
         component: AdminOrderExportManager,
       },
     ],
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: NotFound,
+    meta: {
+      title: 'Page Not Found | Razo Wild',
+      description: DEFAULT_DESCRIPTION,
+      noindex: true,
+    },
   },
 ]
 

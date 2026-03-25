@@ -164,8 +164,8 @@ export default {
 
 <style scoped>
 .header {
-  background-color: var(--color-sand);
-  border-bottom: 1px solid var(--color-forest);
+  background-color: var(--cream-white);
+  border-bottom: 1px solid var(--forest-green);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -186,7 +186,7 @@ export default {
   align-items: center;
   gap: 0.5rem;
   text-decoration: none;
-  color: var(--color-forest);
+  color: var(--forest-green);
   font-weight: 700;
   font-size: 1.3rem;
   white-space: nowrap;
@@ -211,7 +211,7 @@ export default {
   display: flex;
   flex: 1;
   max-width: 400px;
-  border: 1px solid var(--color-forest);
+  border: 1px solid var(--forest-green);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -229,15 +229,15 @@ export default {
 
 .search-btn {
   padding: 0.75rem 1rem;
-  background-color: var(--color-forest);
-  color: var(--color-sand);
+  background-color: var(--forest-green);
+  color: var(--cream-white);
   border: none;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
 .search-btn:hover {
-  background-color: #2B2B2B;
+  background-color: var(--coffee-brown);
 }
 
 .nav-menu {
@@ -253,18 +253,18 @@ export default {
 
 .nav-link {
   text-decoration: none;
-  color: #2B2B2B;
+  color: var(--coffee-brown);
   font-weight: 500;
   transition: color 0.3s;
   position: relative;
 }
 
 .nav-link:hover {
-  color: var(--color-forest);
+  color: var(--forest-green);
 }
 
 .nav-link.active {
-  color: var(--color-forest);
+  color: var(--forest-green);
 }
 
 .nav-link.active::after {
@@ -274,7 +274,7 @@ export default {
   left: 0;
   right: 0;
   height: 2px;
-  background-color: var(--color-forest);
+  background-color: var(--forest-green);
 }
 
 .header-icons {
@@ -287,7 +287,7 @@ export default {
 .icon-link {
   position: relative;
   text-decoration: none;
-  color: #2B2B2B;
+  color: var(--coffee-brown);
   cursor: pointer;
   border: none;
   background: none;
@@ -296,7 +296,7 @@ export default {
 }
 
 .icon-link:hover {
-  color: var(--color-forest);
+  color: var(--forest-green);
 }
 
 .icon {
@@ -307,8 +307,8 @@ export default {
   position: absolute;
   top: -8px;
   right: -8px;
-  background-color: var(--color-forest);
-  color: var(--color-sand);
+  background-color: var(--forest-green);
+  color: var(--cream-white);
   border-radius: 50%;
   width: 20px;
   height: 20px;
@@ -327,8 +327,8 @@ export default {
   position: absolute;
   top: 100%;
   right: 0;
-  background: var(--color-sand);
-  border: 1px solid var(--color-forest);
+  background: var(--cream-white);
+  border: 1px solid var(--forest-green);
   border-radius: 4px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   min-width: 200px;
@@ -357,7 +357,7 @@ export default {
 .divider {
   margin: 0.5rem 0;
   border: none;
-  border-top: 1px solid var(--color-forest);
+  border-top: 1px solid var(--dark-spruce);
 }
 
 .logout-btn {
@@ -394,8 +394,8 @@ export default {
 
 .mobile-menu {
   display: none;
-  background-color: var(--color-sand);
-  border-top: 1px solid var(--color-forest);
+  background-color: var(--apricot-cream);
+  border-top: 1px solid var(--dark-spruce);
 }
 
 @media (max-width: 767px) {
@@ -415,7 +415,7 @@ export default {
 
 .mobile-nav-link:hover {
   background-color: rgba(99, 172, 77, 0.12);
-  color: var(--color-forest);
+  color: var(--dark-spruce);
 }
 
 @media (max-width: 767px) {

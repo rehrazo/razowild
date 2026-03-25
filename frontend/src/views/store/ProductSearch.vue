@@ -338,7 +338,7 @@ import { ref, computed, onMounted } from 'vue'
 export default {
   name: 'ProductSearch',
   setup() {
-    const fallbackImage = '/images/placeholder-product.jpg'
+    const fallbackImage = new URL('../../assets/images/site/Gear.jpg', import.meta.url).href
 
     const searchQuery = ref('')
     const filterSearch = ref('')
@@ -379,7 +379,7 @@ export default {
         id: product.product_id,
         name: product.name || 'Unnamed Product',
         brand: product.brand || 'Unknown Brand',
-        category: product.category_path || product.category || 'Uncategorized',
+        color: var(--rating-star);
         price: basePrice,
         originalPrice: hasMsrp ? msrp : basePrice,
         image: product.primary_image_url || product.image || fallbackImage,
@@ -582,7 +582,7 @@ export default {
 
 <style scoped>
 .product-search {
-  background-color: #f5f5f5;
+  background-color: var(--apricot-cream-muted);
   min-height: 100vh;
 }
 
@@ -599,13 +599,13 @@ export default {
 
 .search-header h1 {
   font-size: 2.5rem;
-  color: #333;
+  color: var(--color-text);
   margin-bottom: 0.5rem;
 }
 
 .search-header p {
   font-size: 1.1rem;
-  color: #666;
+  color: var(--color-text-subtle);
 }
 
 .main-search-bar {
@@ -618,7 +618,7 @@ export default {
   flex: 1;
   padding: 1rem;
   font-size: 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   transition: all 0.3s;
 }
@@ -670,7 +670,7 @@ export default {
 .filters-header h2 {
   margin: 0;
   font-size: 1.3rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .clear-filters {
@@ -690,7 +690,7 @@ export default {
 .filter-section {
   margin-bottom: 1.5rem;
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .filter-section:last-child {
@@ -706,7 +706,7 @@ export default {
 .filter-toggle {
   background: none;
   border: none;
-  color: #333;
+  color: var(--color-text);
   cursor: pointer;
   font-size: 1rem;
   font-weight: 600;
@@ -724,7 +724,7 @@ export default {
 .filter-input {
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 0.9rem;
   margin-bottom: 0.75rem;
@@ -765,7 +765,7 @@ export default {
 }
 
 .count {
-  color: #999;
+  color: var(--color-text-subtle);
   font-size: 0.85rem;
   margin-left: auto;
 }
@@ -788,7 +788,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem;
-  background-color: #f5f5f5;
+  background-color: var(--apricot-cream-muted);
   border-radius: 4px;
   font-weight: 600;
   color: var(--color-accent);
@@ -801,11 +801,11 @@ export default {
 }
 
 .stars span {
-  color: #ddd;
+  color: var(--color-border);
 }
 
 .stars span.filled {
-  color: #ffc107;
+  color: var(--rating-star);
 }
 
 .search-results {
@@ -821,11 +821,11 @@ export default {
   align-items: center;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .result-count {
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 0.95rem;
   margin: 0;
 }
@@ -838,12 +838,12 @@ export default {
 
 .sort-controls label {
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
 }
 
 .sort-select {
   padding: 0.5rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 0.9rem;
   cursor: pointer;
@@ -857,8 +857,8 @@ export default {
 
 .view-btn {
   padding: 0.5rem 1rem;
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
+  background-color: var(--apricot-cream-muted);
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s;
@@ -891,8 +891,8 @@ export default {
 }
 
 .product-card {
-  background: #f9f9f9;
-  border: 1px solid #e0e0e0;
+  background: var(--apricot-cream-muted);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   overflow: hidden;
   transition: all 0.3s;
@@ -945,15 +945,15 @@ export default {
 }
 
 .badge.sale {
-  background-color: #ff6b6b;
+  background-color: var(--color-accent);
 }
 
 .badge.new {
-  background-color: #00b894;
+  background-color: var(--color-complement);
 }
 
 .badge.out-of-stock {
-  background-color: #999;
+  background-color: var(--color-text-subtle);
 }
 
 .product-details {
@@ -971,12 +971,12 @@ export default {
 .product-details h3 {
   margin: 0 0 0.5rem 0;
   font-size: 1rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .brand {
   margin: 0 0 0.5rem 0;
-  color: #999;
+  color: var(--color-text-subtle);
   font-size: 0.85rem;
 }
 
@@ -988,13 +988,13 @@ export default {
 }
 
 .review-count {
-  color: #999;
+  color: var(--color-text-subtle);
   font-size: 0.8rem;
 }
 
 .product-description {
   display: none;
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 0.9rem;
   margin-bottom: 0.75rem;
   line-height: 1.4;
@@ -1010,7 +1010,7 @@ export default {
 
 .original-price {
   margin: 0;
-  color: #999;
+  color: var(--color-text-subtle);
   text-decoration: line-through;
   font-size: 0.9rem;
 }
@@ -1024,7 +1024,7 @@ export default {
 
 .discount {
   margin: 0.25rem 0 0 0;
-  color: #ff6b6b;
+  color: var(--color-accent);
   font-size: 0.85rem;
   font-weight: 600;
 }
@@ -1035,12 +1035,12 @@ export default {
 }
 
 .in-stock {
-  color: #00b894;
+  color: var(--color-complement);
   font-weight: 600;
 }
 
 .out-of-stock-text {
-  color: #ff6b6b;
+  color: var(--color-accent);
   font-weight: 600;
 }
 
@@ -1077,12 +1077,12 @@ export default {
 }
 
 .btn-secondary {
-  background-color: #f0f0f0;
-  color: #333;
+  background-color: var(--apricot-cream-muted);
+  color: var(--color-text);
 }
 
 .btn-secondary:hover {
-  background-color: #e0e0e0;
+  background-color: var(--color-border);
 }
 
 .btn-small {
@@ -1093,7 +1093,7 @@ export default {
 .no-results {
   text-align: center;
   padding: 3rem;
-  color: #666;
+  color: var(--color-text-subtle);
 }
 
 .pagination {
@@ -1102,13 +1102,13 @@ export default {
   align-items: center;
   gap: 1rem;
   padding-top: 2rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--color-border);
 }
 
 .pagination-btn {
   padding: 0.5rem 1rem;
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
+  background-color: var(--apricot-cream-muted);
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s;
@@ -1134,8 +1134,8 @@ export default {
   width: 40px;
   height: 40px;
   padding: 0;
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
+  background-color: var(--apricot-cream-muted);
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s;

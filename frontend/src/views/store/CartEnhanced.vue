@@ -208,6 +208,13 @@ import { useRouter } from 'vue-router'
 export default {
   name: 'CartEnhanced',
   setup() {
+    const tentImage = new URL('../../assets/images/site/Tents.jpg', import.meta.url).href
+    const sleepingBagImage = new URL('../../assets/images/site/SleepingBags.jpg', import.meta.url).href
+    const stoveImage = new URL('../../assets/images/site/Camping_Cookwares.jpg', import.meta.url).href
+    const padImage = new URL('../../assets/images/site/Camp_Furniture.jpg', import.meta.url).href
+    const lanternImage = new URL('../../assets/images/site/Gear.jpg', import.meta.url).href
+    const bottleImage = new URL('../../assets/images/site/Hike.jpg', import.meta.url).href
+
     const router = useRouter()
     const couponCode = ref('')
     const appliedCoupon = ref(null)
@@ -226,7 +233,7 @@ export default {
         category: 'Tents',
         price: 199.99,
         originalPrice: 249.99,
-        image: '/images/tent.jpg',
+        image: tentImage,
         quantity: 1,
         onSale: true,
       },
@@ -236,7 +243,7 @@ export default {
         category: 'Sleeping Bags',
         price: 89.99,
         originalPrice: 89.99,
-        image: '/images/sleeping-bag.jpg',
+        image: sleepingBagImage,
         quantity: 2,
         onSale: false,
       },
@@ -247,25 +254,25 @@ export default {
         id: 101,
         name: 'Camping Stove',
         price: 45.99,
-        image: '/images/stove.jpg',
+        image: stoveImage,
       },
       {
         id: 102,
         name: 'Sleeping Pad',
         price: 59.99,
-        image: '/images/pad.jpg',
+        image: padImage,
       },
       {
         id: 103,
         name: 'Lantern LED',
         price: 34.99,
-        image: '/images/lantern.jpg',
+        image: lanternImage,
       },
       {
         id: 104,
         name: 'Water Bottle',
         price: 24.99,
-        image: '/images/bottle.jpg',
+        image: bottleImage,
       },
     ]
 
@@ -451,14 +458,14 @@ export default {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
-  background-color: #f9f9f9;
+  background-color: var(--apricot-cream-muted);
   min-height: 100vh;
 }
 
 .cart-page h1 {
   font-size: 2rem;
   margin-bottom: 2rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .cart-container {
@@ -486,7 +493,7 @@ export default {
 
 .items-header h2 {
   margin: 0;
-  color: #333;
+  color: var(--color-text);
 }
 
 .btn-link {
@@ -516,7 +523,7 @@ export default {
   gap: 1rem;
   align-items: center;
   background: white;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: 1rem;
   transition: box-shadow 0.3s;
@@ -536,17 +543,17 @@ export default {
 .item-details h3 {
   margin: 0 0 0.5rem 0;
   font-size: 1rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .item-category {
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 0.8rem;
   margin: 0.25rem 0;
 }
 
 .sale-label {
-  color: #ff6b6b;
+  color: var(--color-accent);
   font-size: 0.75rem;
   font-weight: 700;
   margin: 0.5rem 0 0 0;
@@ -556,7 +563,7 @@ export default {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   padding: 0.25rem;
 }
@@ -565,7 +572,7 @@ export default {
   width: 32px;
   height: 32px;
   border: none;
-  background: #f5f5f5;
+  background: var(--apricot-cream-muted);
   cursor: pointer;
   border-radius: 2px;
   font-size: 1.2rem;
@@ -573,7 +580,7 @@ export default {
 }
 
 .qty-btn:hover {
-  background-color: #e0e0e0;
+  background-color: var(--color-border);
 }
 
 .qty-input {
@@ -589,7 +596,7 @@ export default {
 
 .original-price {
   margin: 0;
-  color: #999;
+  color: var(--color-text-subtle);
   text-decoration: line-through;
   font-size: 0.8rem;
 }
@@ -612,29 +619,29 @@ export default {
   width: 32px;
   height: 32px;
   border: none;
-  background: #f5f5f5;
+  background: var(--apricot-cream-muted);
   cursor: pointer;
   border-radius: 4px;
   font-size: 1.2rem;
   transition: all 0.3s;
-  color: #999;
+  color: var(--color-text-subtle);
 }
 
 .remove-btn:hover {
-  background-color: #ff6b6b;
-  color: white;
+  background-color: var(--color-accent);
+  color: var(--color-white);
 }
 
 /* Recommendations */
 .recommendations {
   margin-top: 2rem;
   padding-top: 2rem;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid var(--color-border);
 }
 
 .recommendations h3 {
   margin-top: 0;
-  color: #333;
+  color: var(--color-text);
 }
 
 .recommendations-grid {
@@ -644,7 +651,7 @@ export default {
 }
 
 .rec-item {
-  background: #f9f9f9;
+  background: var(--apricot-cream-muted);
   padding: 1rem;
   border-radius: 8px;
   text-align: center;
@@ -666,7 +673,7 @@ export default {
 .rec-item h4 {
   margin: 0.5rem 0;
   font-size: 0.9rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .rec-item .price {
@@ -690,20 +697,20 @@ export default {
   margin-top: 0;
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
-  color: #333;
+  color: var(--color-text);
   border-bottom: 2px solid var(--color-accent);
   padding-bottom: 0.5rem;
 }
 
 .order-summary h3 {
   margin: 1rem 0 0.75rem 0;
-  color: #333;
+  color: var(--color-text);
   font-size: 1rem;
 }
 
 /* Coupon Section */
 .coupon-section {
-  background: #f9f9f9;
+  background: var(--apricot-cream-muted);
   padding: 1rem;
   border-radius: 4px;
   margin-bottom: 1.5rem;
@@ -718,7 +725,7 @@ export default {
 .coupon-input {
   flex: 1;
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 0.9rem;
 }
@@ -753,9 +760,9 @@ export default {
 }
 
 .coupon-applied {
-  background: #d4edda;
-  border: 1px solid #c3e6cb;
-  color: #155724;
+  background: var(--state-success-bg);
+  border: 1px solid var(--state-success-border);
+  color: var(--state-success-text);
   padding: 1rem;
   border-radius: 4px;
   margin-bottom: 1rem;
@@ -772,18 +779,18 @@ export default {
 }
 
 .discount-text {
-  color: #0c5460;
+  color: var(--color-complement);
 }
 
 .remove-coupon {
-  color: #0c5460;
+  color: var(--color-complement);
   text-decoration: underline;
 }
 
 .coupon-error {
-  background: #f8d7da;
-  border: 1px solid #f5c6cb;
-  color: #721c24;
+  background: var(--state-error-bg);
+  border: 1px solid var(--state-error-border);
+  color: var(--state-error-text);
   padding: 0.75rem;
   border-radius: 4px;
   font-size: 0.9rem;
@@ -800,7 +807,7 @@ export default {
   margin: 0 0 0.5rem 0;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
 }
 
 .available-coupons ul {
@@ -812,12 +819,12 @@ export default {
 .available-coupons li {
   padding: 0.5rem 0;
   font-size: 0.8rem;
-  color: #666;
+  color: var(--color-text-subtle);
 }
 
 /* Order Details */
 .order-details {
-  border-top: 1px solid #ddd;
+  border-top: 1px solid var(--color-border);
   padding-top: 1.5rem;
 }
 
@@ -825,8 +832,8 @@ export default {
   display: flex;
   justify-content: space-between;
   padding: 0.75rem 0;
-  border-bottom: 1px solid #e0e0e0;
-  color: #555;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-subtle);
 }
 
 .summary-row.total {
@@ -839,18 +846,18 @@ export default {
 }
 
 .summary-row.discount-row {
-  color: #ff6b6b;
+  color: var(--color-accent);
   font-weight: 600;
 }
 
 .shipping-cost {
-  color: #00b894;
+  color: var(--color-complement);
   font-weight: 600;
 }
 
 .free-shipping-badge {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: var(--state-success-bg);
+  color: var(--state-success-text);
   padding: 0.2rem 0.5rem;
   border-radius: 3px;
   font-size: 0.75rem;
@@ -860,14 +867,14 @@ export default {
 
 .summary-divider {
   height: 2px;
-  background-color: #e0e0e0;
+  background-color: var(--color-border);
   margin: 1rem 0;
 }
 
 .shipping-options {
   margin: 1.5rem 0;
   padding: 1rem;
-  background: #f9f9f9;
+  background: var(--apricot-cream-muted);
   border-radius: 4px;
 }
 
@@ -885,9 +892,9 @@ export default {
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
-  background: #fff;
+  background: var(--color-white);
 }
 
 .shipping-option input {
@@ -906,12 +913,12 @@ export default {
 
 .method-name {
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
 }
 
 .method-time {
   font-size: 0.8rem;
-  color: #999;
+  color: var(--color-text-subtle);
 }
 
 .method-price {
@@ -920,8 +927,8 @@ export default {
 }
 
 .promo-banner {
-  background: linear-gradient(135deg, #ffd93d 0%, #ffeb3b 100%);
-  color: #333;
+  background: linear-gradient(135deg, var(--state-warning-border) 0%, var(--state-warning-bg) 100%);
+  color: var(--color-text);
   padding: 1rem;
   border-radius: 4px;
   margin: 1rem 0;
@@ -957,7 +964,7 @@ export default {
 }
 
 .trust-badges {
-  background: #f0f8ff;
+  background: var(--state-info-bg);
   padding: 1rem;
   border-radius: 4px;
   border-left: 4px solid var(--color-accent);
@@ -965,7 +972,7 @@ export default {
 
 .trust-badges p {
   margin: 0.5rem 0;
-  color: #333;
+  color: var(--color-text);
   font-size: 0.85rem;
 }
 
@@ -984,12 +991,12 @@ export default {
 }
 
 .empty-cart h2 {
-  color: #333;
+  color: var(--color-text);
   margin-bottom: 1rem;
 }
 
 .empty-cart p {
-  color: #666;
+  color: var(--color-text-subtle);
   margin-bottom: 2rem;
   font-size: 1.1rem;
 }

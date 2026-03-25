@@ -61,6 +61,7 @@
                   v-model="signupForm.firstName"
                   type="text"
                   placeholder="John"
+                  autocomplete="given-name"
                   required
                   class="form-input"
                 />
@@ -74,6 +75,7 @@
                   v-model="signupForm.lastName"
                   type="text"
                   placeholder="Doe"
+                  autocomplete="family-name"
                   required
                   class="form-input"
                 />
@@ -88,6 +90,7 @@
                 v-model="signupForm.email"
                 type="email"
                 placeholder="you@example.com"
+                autocomplete="email"
                 required
                 class="form-input"
               />
@@ -102,6 +105,7 @@
                   v-model="signupForm.password"
                   :type="showPassword ? 'text' : 'password'"
                   placeholder="••••••••"
+                  autocomplete="new-password"
                   required
                   class="form-input"
                 />
@@ -128,6 +132,7 @@
                 v-model="signupForm.confirmPassword"
                 type="password"
                 placeholder="••••••••"
+                autocomplete="new-password"
                 required
                 class="form-input"
               />
@@ -137,8 +142,8 @@
             <label class="checkbox-option">
               <input v-model="signupForm.agreeTerms" type="checkbox" required />
               <span>
-                I agree to the <a href="#" class="link">Terms of Service</a> and 
-                <a href="#" class="link">Privacy Policy</a>
+                I agree to the <router-link to="/terms-conditions" class="link">Terms of Service</router-link> and 
+                <router-link to="/privacy-policy" class="link">Privacy Policy</router-link>
               </span>
             </label>
             <span v-if="errors.agreeTerms" class="error-message">{{ errors.agreeTerms }}</span>
@@ -345,24 +350,24 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f5f5f5;
-  padding: 2rem;
+  background-color: rgba(246, 216, 174, 0.45);
+  padding: 1.75rem 1rem;
 }
 
 .signup-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  gap: 1.5rem;
   background: white;
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  max-width: 1000px;
+  box-shadow: 0 16px 38px rgba(65, 39, 34, 0.12);
+  max-width: 1060px;
   width: 100%;
 }
 
 .signup-branding {
-  background: linear-gradient(135deg, var(--color-accent) 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--dark-spruce) 0%, var(--color-accent-dark) 100%);
   color: white;
   padding: 3rem 2rem;
   display: flex;
@@ -433,13 +438,13 @@ export default {
 }
 
 .form-wrapper h2 {
-  font-size: 1.8rem;
-  color: #333;
+  font-size: clamp(1.65rem, 2.2vw, 1.95rem);
+  color: var(--dark-coffee);
   margin: 0 0 0.5rem 0;
 }
 
 .form-subtitle {
-  color: #666;
+  color: var(--color-text-subtle);
   margin: 0 0 1.5rem 0;
   font-size: 0.95rem;
 }
@@ -457,19 +462,19 @@ export default {
   justify-content: center;
   gap: 0.75rem;
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   background-color: white;
   cursor: pointer;
   transition: all 0.3s;
   font-size: 0.95rem;
   font-weight: 500;
-  color: #333;
+  color: var(--color-text);
 }
 
 .social-btn:hover {
   border-color: var(--color-accent);
-  background-color: #f9f9f9;
+  background-color: var(--apricot-cream-muted);
 }
 
 .social-icon {
@@ -478,11 +483,11 @@ export default {
 }
 
 .google-btn:hover {
-  border-color: #db4437;
+  border-color: var(--badge-social-google);
 }
 
 .facebook-btn:hover {
-  border-color: #4267b2;
+  border-color: var(--badge-social-facebook);
 }
 
 .divider {
@@ -498,13 +503,13 @@ export default {
   left: 0;
   right: 0;
   height: 1px;
-  background-color: #ddd;
+  background-color: var(--color-border);
 }
 
 .divider span {
   background-color: white;
   padding: 0 0.75rem;
-  color: #999;
+  color: var(--color-text-subtle);
   position: relative;
   font-size: 0.9rem;
 }
@@ -526,14 +531,14 @@ export default {
 .form-group label {
   display: block;
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
   margin-bottom: 0.5rem;
 }
 
 .form-input {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 1rem;
   transition: all 0.3s;
@@ -543,7 +548,7 @@ export default {
 .form-input:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 3px rgba(12, 124, 89, 0.18);
 }
 
 .password-input-wrapper {
@@ -585,33 +590,33 @@ export default {
 }
 
 .strength-indicator.weak {
-  background-color: #ffe0e0;
-  color: #842029;
+  background-color: var(--state-error-bg);
+  color: var(--state-error-text);
 }
 
 .strength-indicator.fair {
-  background-color: #fff3cd;
-  color: #664d03;
+  background-color: var(--state-warning-bg);
+  color: var(--state-warning-text);
 }
 
 .strength-indicator.good {
-  background-color: #cfe2ff;
-  color: #084298;
+  background-color: var(--state-info-bg);
+  color: var(--color-complement);
 }
 
 .strength-indicator.strong {
-  background-color: #d1e7dd;
-  color: #0f5132;
+  background-color: var(--state-success-bg);
+  color: var(--state-success-text);
 }
 
 .strength-indicator.very-strong {
-  background-color: #d1e7dd;
-  color: #0f5132;
+  background-color: var(--state-success-bg);
+  color: var(--state-success-text);
 }
 
 .error-message {
   display: block;
-  color: #ff6b6b;
+  color: var(--state-error-text);
   font-size: 0.8rem;
   margin-top: 0.25rem;
 }
@@ -623,7 +628,7 @@ export default {
   cursor: pointer;
   margin-bottom: 1rem;
   font-size: 0.9rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .checkbox-option input {
@@ -676,7 +681,7 @@ export default {
 
 .login-prompt {
   text-align: center;
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 0.95rem;
 }
 
@@ -692,6 +697,10 @@ export default {
 }
 
 @media (max-width: 768px) {
+  .signup-page {
+    padding: 1rem;
+  }
+
   .signup-container {
     grid-template-columns: 1fr;
     gap: 0;

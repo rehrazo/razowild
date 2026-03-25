@@ -121,6 +121,11 @@ import { ref, computed } from 'vue'
 export default {
   name: 'Wishlist',
   setup() {
+    const tentImage = new URL('../../assets/images/site/Tents.jpg', import.meta.url).href
+    const sleepingBagImage = new URL('../../assets/images/site/SleepingBags.jpg', import.meta.url).href
+    const backpackImage = new URL('../../assets/images/site/outdoorClothing.jpg', import.meta.url).href
+    const stoveImage = new URL('../../assets/images/site/Camping_Cookwares.jpg', import.meta.url).href
+
     const sortBy = ref('recent')
     const categoryFilter = ref('')
 
@@ -131,7 +136,7 @@ export default {
         category: 'Tents',
         price: 199.99,
         originalPrice: 249.99,
-        image: '/images/tent.jpg',
+        image: tentImage,
         reviews: 145,
         stock: 12,
         onSale: true,
@@ -143,7 +148,7 @@ export default {
         category: 'Sleeping Bags',
         price: 89.99,
         originalPrice: 89.99,
-        image: '/images/sleeping-bag.jpg',
+        image: sleepingBagImage,
         reviews: 98,
         stock: 25,
         onSale: false,
@@ -155,7 +160,7 @@ export default {
         category: 'Backpacks',
         price: 129.99,
         originalPrice: 159.99,
-        image: '/images/backpack.jpg',
+        image: backpackImage,
         reviews: 76,
         stock: 0,
         onSale: true,
@@ -167,7 +172,7 @@ export default {
         category: 'Cooking',
         price: 45.99,
         originalPrice: 45.99,
-        image: '/images/stove.jpg',
+        image: stoveImage,
         reviews: 52,
         stock: 18,
         onSale: false,
@@ -309,7 +314,7 @@ export default {
 }
 
 .stat {
-  background: linear-gradient(135deg, var(--color-accent) 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--gradient-accent-end) 100%);
   color: white;
   padding: 1.5rem;
   border-radius: 8px;
@@ -345,12 +350,12 @@ export default {
 
 .filter-group label {
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
 }
 
 .select-input {
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 1rem;
   background-color: white;
@@ -373,7 +378,7 @@ export default {
 
 .wishlist-item {
   background: white;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   overflow: hidden;
   transition: box-shadow 0.3s, transform 0.3s;
@@ -389,7 +394,7 @@ export default {
   width: 100%;
   height: 250px;
   overflow: hidden;
-  background-color: #f5f5f5;
+  background-color: var(--apricot-cream-muted);
 }
 
 .item-image img {
@@ -407,8 +412,8 @@ export default {
   position: absolute;
   top: 10px;
   right: 10px;
-  background-color: #ff6b6b;
-  color: white;
+  background-color: var(--color-accent);
+  color: var(--color-white);
   padding: 0.5rem 1rem;
   border-radius: 4px;
   font-weight: 700;
@@ -422,7 +427,7 @@ export default {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: white;
+  background-color: var(--color-white);
   border: none;
   cursor: pointer;
   font-size: 1.2rem;
@@ -434,8 +439,8 @@ export default {
 }
 
 .remove-btn:hover {
-  background-color: #ff6b6b;
-  color: white;
+  background-color: var(--color-accent);
+  color: var(--color-white);
 }
 
 .item-details {
@@ -445,11 +450,11 @@ export default {
 .item-details h3 {
   margin: 0 0 0.5rem 0;
   font-size: 1.1rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .item-category {
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 0.85rem;
   margin: 0.25rem 0;
 }
@@ -462,12 +467,12 @@ export default {
 }
 
 .stars {
-  color: #ffc107;
+  color: var(--rating-star);
   font-size: 0.95rem;
 }
 
 .review-count {
-  color: #999;
+  color: var(--color-text-subtle);
   font-size: 0.8rem;
 }
 
@@ -477,7 +482,7 @@ export default {
 
 .original-price {
   margin: 0;
-  color: #999;
+  color: var(--color-text-subtle);
   text-decoration: line-through;
   font-size: 0.9rem;
 }
@@ -491,7 +496,7 @@ export default {
 
 .discount {
   margin: 0.25rem 0 0 0;
-  color: #ff6b6b;
+  color: var(--color-accent);
   font-size: 0.85rem;
   font-weight: 600;
 }
@@ -506,13 +511,13 @@ export default {
 }
 
 .stock-status.in-stock {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: var(--state-success-bg);
+  color: var(--state-success-text);
 }
 
 .stock-status.out-of-stock {
-  background-color: #f8d7da;
-  color: #842029;
+  background-color: var(--state-error-bg);
+  color: var(--state-error-text);
 }
 
 .item-actions {
@@ -549,12 +554,12 @@ export default {
 }
 
 .btn-secondary {
-  background-color: #f0f0f0;
-  color: #333;
+  background-color: var(--apricot-cream-muted);
+  color: var(--color-text);
 }
 
 .btn-secondary:hover {
-  background-color: #e0e0e0;
+  background-color: var(--color-border);
 }
 
 .btn-small {
@@ -563,19 +568,19 @@ export default {
 }
 
 .btn-danger {
-  background-color: #ff6b6b;
-  color: white;
+  background-color: var(--color-accent);
+  color: var(--color-white);
 }
 
 .btn-danger:hover {
-  background-color: #ee5a52;
+  background-color: var(--color-accent-dark);
 }
 
 .item-meta {
   font-size: 0.8rem;
-  color: #999;
+  color: var(--color-text-subtle);
   padding-top: 0.75rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--color-border);
 }
 
 .item-meta p {
@@ -601,7 +606,7 @@ export default {
   display: flex;
   gap: 1rem;
   padding-top: 2rem;
-  border-top: 2px solid #e0e0e0;
+  border-top: 2px solid var(--color-border);
 }
 
 .empty-wishlist {
@@ -616,12 +621,12 @@ export default {
 }
 
 .empty-wishlist h2 {
-  color: #333;
+  color: var(--color-text);
   margin-bottom: 1rem;
 }
 
 .empty-wishlist p {
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 1.1rem;
   margin-bottom: 2rem;
 }

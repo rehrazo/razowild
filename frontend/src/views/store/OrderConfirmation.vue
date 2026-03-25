@@ -214,7 +214,7 @@ export default {
   text-align: center;
   margin-bottom: 3rem;
   padding-bottom: 2rem;
-  border-bottom: 2px solid #e0e0e0;
+  border-bottom: 2px solid var(--color-border);
 }
 
 .success-icon {
@@ -223,7 +223,7 @@ export default {
   justify-content: center;
   width: 80px;
   height: 80px;
-  background-color: #4caf50;
+  background-color: var(--color-complement);
   color: white;
   border-radius: 50%;
   font-size: 3rem;
@@ -232,13 +232,13 @@ export default {
 
 .success-header h1 {
   font-size: 2.5rem;
-  color: #333;
+  color: var(--color-text);
   margin: 0 0 0.5rem 0;
 }
 
 .success-header p {
   font-size: 1.1rem;
-  color: #666;
+  color: var(--color-text-subtle);
   margin: 0;
 }
 
@@ -253,7 +253,7 @@ export default {
 .info-section h2 {
   font-size: 1.3rem;
   margin-bottom: 1rem;
-  color: #333;
+  color: var(--color-text);
   border-bottom: 2px solid var(--color-accent);
   padding-bottom: 0.5rem;
 }
@@ -267,13 +267,13 @@ export default {
 }
 
 .order-date {
-  color: #666;
+  color: var(--color-text-subtle);
   margin: 0;
   font-size: 0.95rem;
 }
 
 .info-box {
-  background-color: #f9f9f9;
+  background-color: var(--apricot-cream-muted);
   border-left: 4px solid var(--color-accent);
   padding: 1.5rem;
   border-radius: 4px;
@@ -281,17 +281,17 @@ export default {
 
 .info-box p {
   margin: 0.5rem 0;
-  color: #555;
+  color: var(--color-text-subtle);
   line-height: 1.6;
 }
 
 .info-box strong {
-  color: #333;
+  color: var(--color-text);
 }
 
 .items-table {
   background: white;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -300,10 +300,10 @@ export default {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: 1rem;
-  background-color: #f5f5f5;
+  background-color: var(--apricot-cream-muted);
   padding: 1rem;
   font-weight: 600;
-  border-bottom: 2px solid #ddd;
+  border-bottom: 2px solid var(--color-border);
 }
 
 .table-row {
@@ -311,7 +311,7 @@ export default {
   grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: 1rem;
   padding: 1rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--color-border);
   align-items: center;
 }
 
@@ -326,8 +326,8 @@ export default {
 }
 
 .summary-box {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
+  background-color: var(--apricot-cream-muted);
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   padding: 1.5rem;
 }
@@ -336,8 +336,8 @@ export default {
   display: flex;
   justify-content: space-between;
   padding: 0.75rem 0;
-  border-bottom: 1px solid #e0e0e0;
-  color: #555;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-subtle);
 }
 
 .summary-row.total {
@@ -357,7 +357,7 @@ export default {
 .step {
   display: flex;
   gap: 1rem;
-  background-color: #f9f9f9;
+  background-color: var(--apricot-cream-muted);
   padding: 1.5rem;
   border-radius: 4px;
   border-left: 4px solid var(--color-accent);
@@ -379,12 +379,12 @@ export default {
 .step-content h3 {
   margin: 0 0 0.5rem 0;
   font-size: 1.1rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .step-content p {
   margin: 0;
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 0.95rem;
   line-height: 1.4;
 }
@@ -394,7 +394,7 @@ export default {
   gap: 1rem;
   margin-top: 2.5rem;
   padding-top: 2rem;
-  border-top: 2px solid #e0e0e0;
+  border-top: 2px solid var(--color-border);
 }
 
 .btn {
@@ -420,18 +420,18 @@ export default {
 }
 
 .btn-secondary {
-  background-color: #f0f0f0;
-  color: #333;
+  background-color: var(--apricot-cream-muted);
+  color: var(--color-text);
 }
 
 .btn-secondary:hover {
-  background-color: #e0e0e0;
+  background-color: var(--color-border);
 }
 
 .loading {
   text-align: center;
   padding: 3rem;
-  color: #666;
+  color: var(--color-text-subtle);
 }
 
 @media (max-width: 768px) {

@@ -638,9 +638,9 @@ export default {
 }
 
 .tab-btn.active {
-  background: var(--color-forest);
+  background: var(--dark-spruce);
   color: #D9C7A3;
-  border-color: var(--color-forest);
+  border-color: var(--dark-spruce);
 }
 
 .settings-grid {
@@ -674,7 +674,7 @@ export default {
 
 .form-input:focus {
   outline: none;
-  border-color: var(--color-forest);
+  border-color: var(--dark-spruce);
   box-shadow: 0 0 0 2px rgba(99, 172, 77, 0.15);
 }
 
@@ -776,14 +776,14 @@ export default {
 .image-index {
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--color-forest);
+  color: var(--dark-spruce);
 }
 
 .set-primary-btn {
   border: none;
   border-radius: 4px;
-  background: var(--color-forest);
-  color: var(--color-sand);
+  background: var(--dark-spruce);
+  color: var(--apricot-cream);
   padding: 0.3rem 0.55rem;
   font-size: 0.78rem;
   font-weight: 600;
@@ -831,8 +831,8 @@ export default {
 }
 
 .btn-primary {
-  background-color: var(--color-forest);
-  color: var(--color-sand);
+  background-color: var(--dark-spruce);
+  color: var(--apricot-cream);
 }
 
 .btn-secondary {

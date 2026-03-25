@@ -59,7 +59,7 @@
       </div>
     </nav>
 
-    <main class="main-content">
+    <main class="main-content" :class="{ 'main-content-home': route.path === '/' }">
       <router-view />
     </main>
 
@@ -162,6 +162,7 @@ export default {
     }
 
     return {
+      route,
       currentYear,
       headerSearch,
       isLoggedIn,
@@ -183,8 +184,8 @@ export default {
 }
 
 .top-header {
-  background-color: var(--color-complement);
-  color: var(--color-sand);
+  background: var(--forest-green);
+  color: var(--cream-white);
   border-bottom: 1px solid rgba(217, 199, 163, 0.25);
 }
 
@@ -196,6 +197,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  border-radius: 0 0 6px 6px;
 }
 
 .top-header-label {
@@ -213,20 +215,33 @@ export default {
 }
 
 .social-links a {
-  color: var(--color-sand);
+  color: var(--cream-white);
+  font-size: 0.92em;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.social-links a:hover {
+  color: var(--sage-green);
+  text-decoration: underline;
+}
+
+.social-links a {
+  color: var(--apricot-cream);
   text-decoration: none;
   font-size: 0.82rem;
   font-weight: 600;
 }
 
 .social-links a:hover {
-  color: #fff;
+  color: var(--color-white);
   text-decoration: underline;
 }
 
 .navbar {
-  background-color: #D9D9D9;
-  color: #2B2B2B;
+  background-color: var(--apricot-cream-muted);
+  color: var(--color-text);
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
@@ -259,7 +274,7 @@ export default {
   align-items: center;
   flex: 1;
   max-width: 460px;
-  border: 1px solid rgba(244, 235, 216, 0.6);
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   overflow: hidden;
   margin: 0 1rem;
@@ -269,45 +284,55 @@ export default {
   flex: 1;
   border: none;
   padding: 0.6rem 0.7rem;
-  background: #fff;
-  color: #2B2B2B;
+  background: var(--color-white);
+  color: var(--color-text);
   font-size: 0.9rem;
 }
 
 .navbar-search input:focus {
   outline: none;
+  box-shadow: inset 0 0 0 2px var(--focus-ring);
 }
 
 .navbar-search button {
   border: none;
   background: var(--color-complement);
-  color: var(--color-sand);
+  color: var(--apricot-cream);
   padding: 0.6rem 0.85rem;
   font-size: 0.85rem;
   font-weight: 700;
 }
 
 .nav-links a {
-  color: #2B2B2B;
+  color: var(--color-text);
   text-decoration: none;
   transition: color 0.3s;
 }
 
 .nav-links a:hover {
-  color: #2B2B2B;
+  color: var(--color-accent);
+}
+
+.nav-links a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 .main-content {
   flex: 1;
   padding: 2rem;
-  background-color: var(--color-sand);
-  color: #2B2B2B;
+  background-color: var(--apricot-cream);
+  color: var(--color-text);
+}
+
+.main-content-home {
+  padding-top: 0;
 }
 
 .category-navbar {
-  background-color: var(--color-forest);
-  border-top: 1px solid rgba(217, 199, 163, 0.25);
-  border-bottom: 1px solid rgba(217, 199, 163, 0.25);
+  background-color: var(--sage-green);
+  border-bottom: 1px solid rgba(65, 39, 34, 0.2);
   overflow-x: auto;
 }
 
@@ -322,7 +347,7 @@ export default {
 }
 
 .category-link {
-  color: var(--color-sand);
+  color: var(--apricot-cream);
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 600;
@@ -333,12 +358,12 @@ export default {
 }
 
 .category-link:hover {
-  color: var(--color-sand);
+  color: var(--apricot-cream);
 }
 
 .category-link.active {
-  color: var(--color-sand);
-  border-color: var(--color-sand);
+  color: var(--apricot-cream);
+  border-color: var(--apricot-cream);
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 4px;
   padding: 0.2rem 0.45rem 0.25rem;
@@ -380,8 +405,8 @@ export default {
 }
 
 .footer {
-  background-color: var(--color-complement);
-  color: var(--color-sand);
+  background-color: var(--forest-green);
+  color: var(--cream-white);
   margin-top: 2rem;
 }
 
@@ -402,7 +427,7 @@ export default {
 
 .footer-column h4 {
   margin: 0 0 0.4rem;
-  color: #fff;
+  color: var(--cream-white);
   font-size: 0.95rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -412,12 +437,12 @@ export default {
 .footer-column a {
   margin: 0;
   font-size: 0.87rem;
-  color: var(--color-sand);
+  color: var(--cream-white);
   text-decoration: none;
 }
 
 .footer-column a:hover {
-  color: #fff;
+  color: var(--apricot-cream);
   text-decoration: underline;
 }
 
@@ -429,11 +454,11 @@ export default {
 }
 
 .payment-tags span {
-  border: 1px solid rgba(217, 199, 163, 0.4);
+  border: 1px solid rgba(217, 199, 163, 0.26);
   border-radius: 3px;
   padding: 0.2rem 0.45rem;
   font-size: 0.75rem;
-  color: #fff;
+  color: var(--cream-white);
 }
 
 .footer-bottom {
@@ -445,7 +470,7 @@ export default {
 .footer-bottom p {
   margin: 0;
   font-size: 0.82rem;
-  color: var(--color-sand);
+  color: var(--cream-white);
 }
 
 @media (max-width: 980px) {

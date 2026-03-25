@@ -560,7 +560,7 @@ export default {
 .breadcrumbs {
   margin-bottom: 0.85rem;
   font-size: 0.9rem;
-  color: #666;
+  color: var(--color-text-subtle);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -568,7 +568,7 @@ export default {
 }
 
 .breadcrumb-link {
-  color: var(--color-forest);
+  color: var(--dark-spruce);
   text-decoration: none;
 }
 
@@ -577,12 +577,12 @@ export default {
 }
 
 .breadcrumb-current {
-  color: #333;
+  color: var(--color-text);
   font-weight: 600;
 }
 
 .breadcrumb-separator {
-  color: #999;
+  color: var(--color-text-subtle);
 }
 
 .back-link:hover {
@@ -594,7 +594,7 @@ export default {
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
   align-items: start;
-  background-color: #ECE3D1;
+  background-color: var(--apricot-cream-muted);
   padding: 1.5rem;
   border-radius: 8px;
 }
@@ -602,7 +602,7 @@ export default {
 .product-image img {
   width: 100%;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(65, 39, 34, 0.12);
 }
 
 .image-thumbnails {
@@ -631,7 +631,7 @@ export default {
 }
 
 .thumbnail-btn.active {
-  border-color: var(--color-forest);
+  border-color: var(--dark-spruce);
 }
 
 .product-info h1 {
@@ -640,7 +640,7 @@ export default {
 }
 
 .category {
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 1rem;
   margin-bottom: 1rem;
 }
@@ -653,12 +653,12 @@ export default {
 }
 
 .stars {
-  color: #ffc107;
+  color: var(--rating-star);
   font-size: 1.2rem;
 }
 
 .reviews {
-  color: #777;
+  color: var(--color-text-subtle);
   font-size: 0.95rem;
 }
 
@@ -670,7 +670,7 @@ export default {
 }
 
 .description {
-  color: #555;
+  color: var(--color-text-muted);
   line-height: 1.6;
   margin-bottom: 2rem;
   font-size: 1rem;
@@ -688,7 +688,7 @@ export default {
 }
 
 .brief-description {
-  color: #444;
+  color: var(--color-text);
   line-height: 1.5;
   margin-bottom: 0.75rem;
   font-size: 1rem;
@@ -713,7 +713,7 @@ export default {
   padding: 0.5rem 0;
   padding-left: 1.5rem;
   position: relative;
-  color: #555;
+  color: var(--color-text-muted);
 }
 
 .features li:before {
@@ -738,7 +738,7 @@ export default {
 .quantity-input {
   width: 80px;
   padding: 0.5rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 1rem;
 }
@@ -760,7 +760,7 @@ export default {
 
 .variant-select {
   padding: 0.55rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 0.95rem;
 }
@@ -768,21 +768,21 @@ export default {
 .variant-value-display {
   margin: 0;
   padding: 0.55rem 0.65rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
-  background: #f7f7f7;
-  color: #333;
+  background: var(--color-white);
+  color: var(--color-text);
   font-size: 0.95rem;
 }
 
 .variant-error {
-  color: #c62828;
+  color: var(--color-accent-dark);
   margin: 0.5rem 0 0;
   font-size: 0.9rem;
 }
 
 .variant-sku {
-  color: var(--color-forest);
+  color: var(--dark-spruce);
   margin: 0.5rem 0 0;
   font-size: 0.9rem;
   font-weight: 600;
@@ -819,16 +819,16 @@ export default {
 }
 
 .btn-secondary {
-  background-color: #f0f0f0;
-  color: #333;
+  background-color: var(--apricot-cream-muted);
+  color: var(--color-text);
 }
 
 .btn-secondary:hover {
-  background-color: #e0e0e0;
+  background-color: rgba(65, 39, 34, 0.12);
 }
 
 .product-meta {
-  background-color: #f9f9f9;
+  background-color: var(--color-white);
   padding: 1.5rem;
   border-radius: 4px;
   border-left: 4px solid var(--color-accent);
@@ -836,13 +836,13 @@ export default {
 
 .product-meta p {
   margin: 0.5rem 0;
-  color: #555;
+  color: var(--color-text-muted);
 }
 
 .loading {
   text-align: center;
   padding: 3rem;
-  color: #666;
+  color: var(--color-text-subtle);
 }
 
 @media (max-width: 768px) {

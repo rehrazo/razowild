@@ -123,8 +123,8 @@ export default {
 
 <style scoped>
 .footer {
-  background-color: var(--color-complement);
-  color: var(--color-sand);
+  background-color: var(--forest-green);
+  color: var(--cream-white);
   margin-top: 4rem;
 }
 
@@ -135,7 +135,7 @@ export default {
 }
 
 .newsletter-section {
-  background: var(--color-sand);
+  background: var(--cream-white);
   border-radius: 8px;
   padding: 2rem;
   margin-bottom: 3rem;
@@ -171,8 +171,8 @@ export default {
 
 .newsletter-btn {
   padding: 0.75rem 1.5rem;
-  background-color: var(--color-forest);
-  color: var(--color-sand);
+  background-color: var(--forest-green);
+  color: var(--cream-white);
   border: none;
   border-radius: 4px;
   font-weight: 600;
@@ -194,7 +194,7 @@ export default {
 .footer-column h4 {
   margin-top: 0;
   margin-bottom: 1rem;
-  color: var(--color-sand);
+  color: var(--cream-white);
   font-size: 1rem;
 }
 
@@ -209,14 +209,14 @@ export default {
 }
 
 .footer-column a {
-  color: var(--color-sand);
+  color: var(--cream-white);
   text-decoration: none;
   transition: color 0.3s;
   font-size: 0.95rem;
 }
 
 .footer-column a:hover {
-  color: #2B2B2B;
+  color: var(--coffee-brown);
 }
 
 .social-links {
@@ -230,27 +230,27 @@ export default {
   justify-content: center;
   width: 40px;
   height: 40px;
-  background-color: rgba(217, 199, 163, 0.2);
+  background-color: var(--forest-green);
   border-radius: 4px;
-  color: var(--color-sand);
+  color: var(--cream-white);
   text-decoration: none;
   transition: background-color 0.3s;
   font-weight: 600;
 }
 
 .social-link:hover {
-  background-color: #2B2B2B;
+  background-color: var(--sage-green);
 }
 
 .payment-methods {
   padding-bottom: 2rem;
-  border-bottom: 1px solid rgba(217, 199, 163, 0.3);
+  border-bottom: 1px solid var(--cream-white-muted);
 }
 
 .payment-methods h4 {
   margin-top: 0;
   margin-bottom: 1rem;
-  color: var(--color-sand);
+  color: var(--cream-white);
 }
 
 .payment-icons {
@@ -273,19 +273,19 @@ export default {
   margin-top: 2rem;
   text-align: center;
   padding-top: 2rem;
-  border-top: 1px solid rgba(217, 199, 163, 0.3);
+  border-top: 1px solid var(--cream-white-muted);
 }
 
 .copyright {
   margin: 0 0 0.5rem 0;
   font-size: 0.95rem;
-  color: var(--color-sand);
+  color: var(--cream-white);
 }
 
 .footer-text {
   margin: 0;
   font-size: 0.9rem;
-  color: rgba(217, 199, 163, 0.9);
+  color: var(--cream-white);
 }
 
 @media (max-width: 768px) {

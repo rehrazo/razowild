@@ -63,7 +63,7 @@ export default {
 
 <style scoped>
 .policy-page {
-  background: var(--color-sand);
+  background: var(--apricot-cream);
   min-height: 100%;
 }
 
@@ -75,16 +75,16 @@ export default {
 
 h1 {
   margin: 0 0 0.75rem;
-    color: var(--color-forest);
+    color: var(--dark-spruce);
 }
 
 .intro {
   margin-bottom: 1.5rem;
-  color: #2B2B2B;
+  color: var(--color-text);
 }
 
 section {
-  background: #fff;
+  background: var(--color-white);
   border-radius: 8px;
   padding: 1.1rem 1.2rem;
   margin-bottom: 1rem;
@@ -92,7 +92,7 @@ section {
 
 h2 {
   margin: 0 0 0.6rem;
-  color: var(--color-forest);
+  color: var(--dark-spruce);
   font-size: 1.15rem;
 }
 

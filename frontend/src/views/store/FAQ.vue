@@ -358,13 +358,13 @@ export default {
 
 <style scoped>
 .faq-page {
-  background-color: #f9f9f9;
+  background-color: var(--apricot-cream-muted);
   min-height: 100vh;
 }
 
 /* Header */
 .faq-header {
-  background: linear-gradient(135deg, var(--color-accent) 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--dark-spruce) 0%, var(--color-accent-dark) 100%);
   color: white;
   padding: 3rem 2rem;
   text-align: center;
@@ -384,8 +384,8 @@ export default {
 /* Search Section */
 .faq-search-section {
   padding: 2rem;
-  background: white;
-  border-bottom: 1px solid #e0e0e0;
+  background: var(--color-white);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .search-container {
@@ -397,7 +397,7 @@ export default {
 .faq-search-input {
   width: 100%;
   padding: 1rem 1rem 1rem 3rem;
-  border: 2px solid #ddd;
+  border: 2px solid var(--color-border);
   border-radius: 4px;
   font-size: 1rem;
   transition: all 0.3s;
@@ -406,7 +406,7 @@ export default {
 .faq-search-input:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
 .search-icon {
@@ -414,7 +414,7 @@ export default {
   left: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #999;
+  color: var(--color-text-subtle);
 }
 
 /* Main Container */
@@ -429,20 +429,20 @@ export default {
 
 /* Categories Sidebar */
 .categories-sidebar {
-  background: white;
+  background: var(--color-white);
   padding: 1.5rem;
   border-radius: 8px;
   height: fit-content;
   position: sticky;
   top: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(65, 39, 34, 0.12);
 }
 
 .categories-sidebar h3 {
   margin-top: 0;
   margin-bottom: 1rem;
   font-size: 1.1rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .category-btn {
@@ -456,12 +456,12 @@ export default {
   cursor: pointer;
   border-radius: 4px;
   transition: all 0.3s;
-  color: #666;
+  color: var(--color-text-subtle);
   font-weight: 500;
 }
 
 .category-btn:hover {
-  background-color: #f0f0f0;
+  background-color: var(--apricot-cream-muted);
   color: var(--color-accent);
 }
 
@@ -472,9 +472,9 @@ export default {
 
 /* FAQ Content */
 .faq-content {
-  background: white;
+  background: var(--color-white);
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(65, 39, 34, 0.12);
 }
 
 .faq-list {
@@ -483,7 +483,7 @@ export default {
 }
 
 .faq-item {
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .faq-item:last-child {
@@ -503,16 +503,16 @@ export default {
   transition: all 0.3s;
   font-size: 1rem;
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
 }
 
 .faq-question:hover {
-  background-color: #f9f9f9;
+  background-color: var(--apricot-cream-muted);
   color: var(--color-accent);
 }
 
 .faq-question.active {
-  background-color: #e8f0ff;
+  background-color: rgba(12, 124, 89, 0.12);
   color: var(--color-accent);
 }
 
@@ -523,7 +523,7 @@ export default {
   width: 24px;
   height: 24px;
   background-color: var(--color-accent);
-  color: white;
+  color: var(--color-white);
   border-radius: 50%;
   font-weight: 700;
   flex-shrink: 0;
@@ -535,7 +535,7 @@ export default {
 
 .faq-answer {
   padding: 0 1.5rem 1.5rem 3.5rem;
-  color: #666;
+  color: var(--color-text-subtle);
   line-height: 1.8;
   animation: slideDown 0.3s ease-in;
 }
@@ -556,7 +556,7 @@ export default {
 }
 
 .sub-points {
-  background-color: #f9f9f9;
+  background-color: var(--apricot-cream-muted);
   padding: 1rem;
   border-radius: 4px;
   margin: 1rem 0;
@@ -583,7 +583,7 @@ export default {
 }
 
 .related-links {
-  background-color: #e8f0ff;
+  background-color: rgba(12, 124, 89, 0.12);
   padding: 1rem;
   border-radius: 4px;
   margin-top: 1rem;
@@ -616,7 +616,7 @@ export default {
 .no-results {
   padding: 3rem;
   text-align: center;
-  color: #666;
+  color: var(--color-text-subtle);
 }
 
 /* Help Section */
@@ -630,12 +630,12 @@ export default {
 .help-section h2 {
   font-size: 2rem;
   margin-bottom: 0.5rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .help-section p {
   font-size: 1.1rem;
-  color: #666;
+  color: var(--color-text-subtle);
   margin-bottom: 2rem;
 }
 
@@ -646,16 +646,16 @@ export default {
 }
 
 .help-card {
-  background: white;
+  background: var(--color-white);
   padding: 2rem;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(65, 39, 34, 0.12);
   transition: all 0.3s;
 }
 
 .help-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 16px rgba(65, 39, 34, 0.18);
 }
 
 .help-icon {
@@ -666,11 +666,11 @@ export default {
 
 .help-card h3 {
   margin: 1rem 0 0.5rem 0;
-  color: #333;
+  color: var(--color-text);
 }
 
 .help-card p {
-  color: #666;
+  color: var(--color-text-subtle);
   margin-bottom: 1.5rem;
   font-size: 0.95rem;
 }
@@ -690,7 +690,7 @@ export default {
 
 .btn-secondary {
   background-color: var(--color-accent);
-  color: white;
+  color: var(--color-white);
 }
 
 .btn-secondary:hover {
@@ -699,7 +699,7 @@ export default {
 
 /* Feedback Section */
 .feedback-section {
-  background-color: #f0f8f4;
+  background-color: rgba(12, 124, 89, 0.1);
   padding: 3rem 2rem;
   margin-top: 3rem;
 }
@@ -713,11 +713,11 @@ export default {
 .feedback-section h2 {
   font-size: 1.8rem;
   margin-bottom: 0.5rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .feedback-section p {
-  color: #666;
+  color: var(--color-text-subtle);
   margin-bottom: 1.5rem;
 }
 
@@ -731,8 +731,8 @@ export default {
 .feedback-btn {
   padding: 0.75rem 2rem;
   border-radius: 4px;
-  border: 2px solid #ddd;
-  background: white;
+  border: 2px solid var(--color-border);
+  background: var(--color-white);
   cursor: pointer;
   font-size: 1rem;
   font-weight: 600;
@@ -745,20 +745,21 @@ export default {
 }
 
 .feedback-btn.yes:hover {
-  background-color: #d4edda;
-  border-color: #00b894;
-  color: #00b894;
+  background-color: var(--state-success-bg);
+  border-color: var(--color-complement);
+  color: var(--color-complement);
 }
 
 .feedback-btn.no:hover {
-  background-color: #f8d7da;
-  border-color: #ff6b6b;
-  color: #ff6b6b;
+  background-color: rgba(165, 28, 40, 0.14);
+  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 .feedback-message {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: var(--state-success-bg);
+  color: var(--state-success-text);
+  border: 1px solid var(--state-success-border);
   padding: 0.75rem 1rem;
   border-radius: 4px;
   font-weight: 600;

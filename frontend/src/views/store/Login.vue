@@ -56,6 +56,7 @@
                 v-model="loginForm.email"
                 type="email"
                 placeholder="you@example.com"
+                autocomplete="email"
                 required
                 class="form-input"
               />
@@ -70,6 +71,7 @@
                   v-model="loginForm.password"
                   :type="showPassword ? 'text' : 'password'"
                   placeholder="••••••••"
+                  autocomplete="current-password"
                   required
                   class="form-input"
                 />
@@ -102,7 +104,7 @@
           <!-- Sign Up Link -->
           <p class="signup-prompt">
             Don't have an account? 
-            <router-link to="/signup" class="signup-link">Create one</router-link>
+            <router-link to="/register" class="signup-link">Create one</router-link>
           </p>
 
           <!-- Guest Checkout -->
@@ -222,24 +224,24 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f5f5f5;
-  padding: 2rem;
+  background-color: rgba(246, 216, 174, 0.45);
+  padding: 1.75rem 1rem;
 }
 
 .login-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  gap: 1.5rem;
   background: white;
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  max-width: 1000px;
+  box-shadow: 0 16px 38px rgba(65, 39, 34, 0.12);
+  max-width: 1060px;
   width: 100%;
 }
 
 .login-branding {
-  background: linear-gradient(135deg, var(--color-accent) 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--dark-spruce) 0%, var(--color-accent-dark) 100%);
   color: white;
   padding: 3rem 2rem;
   display: flex;
@@ -300,13 +302,13 @@ export default {
 }
 
 .form-wrapper h2 {
-  font-size: 1.8rem;
-  color: #333;
+  font-size: clamp(1.65rem, 2.2vw, 1.95rem);
+  color: var(--dark-coffee);
   margin: 0 0 0.5rem 0;
 }
 
 .form-subtitle {
-  color: #666;
+  color: var(--color-text-subtle);
   margin: 0 0 1.5rem 0;
   font-size: 0.95rem;
 }
@@ -324,19 +326,19 @@ export default {
   justify-content: center;
   gap: 0.75rem;
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   background-color: white;
   cursor: pointer;
   transition: all 0.3s;
   font-size: 0.95rem;
   font-weight: 500;
-  color: #333;
+  color: var(--color-text);
 }
 
 .social-btn:hover {
   border-color: var(--color-accent);
-  background-color: #f9f9f9;
+  background-color: var(--apricot-cream-muted);
 }
 
 .social-icon {
@@ -345,11 +347,11 @@ export default {
 }
 
 .google-btn:hover {
-  border-color: #db4437;
+  border-color: var(--badge-social-google);
 }
 
 .facebook-btn:hover {
-  border-color: #4267b2;
+  border-color: var(--badge-social-facebook);
 }
 
 .divider {
@@ -365,13 +367,13 @@ export default {
   left: 0;
   right: 0;
   height: 1px;
-  background-color: #ddd;
+  background-color: var(--color-border);
 }
 
 .divider span {
   background-color: white;
   padding: 0 0.75rem;
-  color: #999;
+  color: var(--color-text-subtle);
   position: relative;
   font-size: 0.9rem;
 }
@@ -387,14 +389,14 @@ export default {
 .form-group label {
   display: block;
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
   margin-bottom: 0.5rem;
 }
 
 .form-input {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 1rem;
   transition: all 0.3s;
@@ -403,7 +405,7 @@ export default {
 .form-input:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 3px rgba(12, 124, 89, 0.18);
 }
 
 .password-input-wrapper {
@@ -434,7 +436,7 @@ export default {
 
 .error-message {
   display: block;
-  color: #ff6b6b;
+  color: var(--state-error-text);
   font-size: 0.8rem;
   margin-top: 0.25rem;
 }
@@ -453,7 +455,7 @@ export default {
   gap: 0.5rem;
   cursor: pointer;
   font-size: 0.9rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .remember-me input {
@@ -505,7 +507,7 @@ export default {
 
 .signup-prompt {
   text-align: center;
-  color: #666;
+  color: var(--color-text-subtle);
   margin-bottom: 1.5rem;
   font-size: 0.95rem;
 }
@@ -524,11 +526,11 @@ export default {
 .guest-checkout {
   text-align: center;
   padding-top: 1.5rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--color-border);
 }
 
 .guest-checkout p {
-  color: #666;
+  color: var(--color-text-subtle);
   margin-bottom: 0.75rem;
   font-size: 0.9rem;
 }
@@ -545,6 +547,10 @@ export default {
 }
 
 @media (max-width: 768px) {
+  .login-page {
+    padding: 1rem;
+  }
+
   .login-container {
     grid-template-columns: 1fr;
     gap: 0;

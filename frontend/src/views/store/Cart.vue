@@ -56,10 +56,13 @@
             v-model="couponCode"
             type="text"
             placeholder="Enter coupon code"
+            autocomplete="off"
             class="coupon-input"
           />
           <button @click="applyCoupon" class="btn btn-secondary">Apply</button>
         </div>
+
+        <p v-if="couponError" class="coupon-error" aria-live="polite">{{ couponError }}</p>
 
         <div v-if="couponApplied" class="coupon-applied">
           <p>✓ Coupon applied: {{ couponCode }}</p>
@@ -101,6 +104,7 @@ export default {
     const cartItems = computed(() => cartStore.items)
     const couponCode = ref('')
     const couponApplied = ref(false)
+    const couponError = ref('')
     const discountPercentage = ref(0)
 
     const subtotal = computed(() => {
@@ -146,14 +150,26 @@ export default {
     }
 
     const applyCoupon = () => {
-      if (couponCode.value.toUpperCase() === 'CAMP10') {
+      const normalized = String(couponCode.value || '').trim().toUpperCase()
+      couponError.value = ''
+
+      if (!normalized) {
+        couponError.value = 'Enter a coupon code before applying.'
+        return
+      }
+
+      if (normalized === 'CAMP10') {
         discountPercentage.value = 10
         couponApplied.value = true
-      } else if (couponCode.value.toUpperCase() === 'CAMP20') {
+        couponCode.value = normalized
+      } else if (normalized === 'CAMP20') {
         discountPercentage.value = 20
         couponApplied.value = true
+        couponCode.value = normalized
       } else {
-        alert('Invalid coupon code')
+        couponApplied.value = false
+        discountPercentage.value = 0
+        couponError.value = 'That code is invalid. Try CAMP10 or CAMP20.'
       }
     }
 
@@ -168,6 +184,7 @@ export default {
       cartItems,
       couponCode,
       couponApplied,
+      couponError,
       subtotal,
       discount,
       tax,
@@ -186,14 +203,15 @@ export default {
 
 <style scoped>
 .cart {
-  max-width: 1200px;
+  max-width: 1240px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2.25rem 1.5rem;
 }
 
 .cart h1 {
-  font-size: 2rem;
-  margin-bottom: 2rem;
+  font-size: clamp(1.9rem, 3vw, 2.35rem);
+  margin-bottom: 1.4rem;
+  color: var(--dark-coffee);
 }
 
 .cart-container {
@@ -214,9 +232,10 @@ export default {
   gap: 1rem;
   align-items: center;
   background: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
   padding: 1rem;
+  box-shadow: 0 6px 20px rgba(65, 39, 34, 0.05);
 }
 
 .item-image {
@@ -228,23 +247,24 @@ export default {
 
 .item-details h3 {
   margin: 0 0 0.5rem 0;
-  font-size: 1.1rem;
+  font-size: 1.16rem;
+  line-height: 1.35;
 }
 
 .item-category {
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 0.9rem;
   margin: 0.25rem 0;
 }
 
 .item-variant {
-  color: #444;
+  color: var(--color-text);
   font-size: 0.85rem;
   margin: 0.25rem 0;
 }
 
 .item-sku {
-  color: var(--color-forest);
+  color: var(--dark-spruce);
   font-size: 0.85rem;
   margin: 0.25rem 0;
 }
@@ -259,7 +279,7 @@ export default {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   padding: 0.25rem;
 }
@@ -268,7 +288,7 @@ export default {
   width: 32px;
   height: 32px;
   border: none;
-  background: #f5f5f5;
+  background: var(--apricot-cream-muted);
   cursor: pointer;
   border-radius: 2px;
   font-size: 1.2rem;
@@ -276,7 +296,7 @@ export default {
 }
 
 .qty-btn:hover {
-  background-color: #e0e0e0;
+  background-color: var(--color-border);
 }
 
 .qty-input {
@@ -284,6 +304,10 @@ export default {
   text-align: center;
   border: none;
   font-size: 1rem;
+}
+
+.qty-input:focus {
+  outline: none;
 }
 
 .item-total {
@@ -294,7 +318,7 @@ export default {
 
 .remove-btn {
   padding: 0.5rem 1rem;
-  background-color: #ff6b6b;
+  background-color: var(--color-accent);
   color: white;
   border: none;
   border-radius: 4px;
@@ -303,17 +327,18 @@ export default {
 }
 
 .remove-btn:hover {
-  background-color: #ee5a52;
+  background-color: var(--color-accent-dark);
 }
 
 .cart-summary {
-  background: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
   padding: 1.5rem;
   height: fit-content;
   position: sticky;
-  top: 20px;
+  top: 14px;
+  box-shadow: 0 8px 24px rgba(65, 39, 34, 0.06);
 }
 
 .cart-summary h2 {
@@ -327,7 +352,7 @@ export default {
   justify-content: space-between;
   margin-bottom: 1rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .summary-row.total {
@@ -348,14 +373,27 @@ export default {
 .coupon-input {
   flex: 1;
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 0.9rem;
 }
 
+.coupon-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(12, 124, 89, 0.18);
+}
+
+.coupon-error {
+  margin: 0 0 0.9rem;
+  color: var(--state-error-text);
+  font-size: 0.9rem;
+}
+
 .coupon-applied {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: var(--state-success-bg);
+  color: var(--state-success-text);
+  border: 1px solid var(--state-success-border);
   padding: 0.75rem;
   border-radius: 4px;
   margin-bottom: 1rem;
@@ -388,12 +426,12 @@ export default {
 }
 
 .btn-secondary {
-  background-color: #e0e0e0;
-  color: #333;
+  background-color: var(--color-border);
+  color: var(--color-text);
 }
 
 .btn-secondary:hover {
-  background-color: #d0d0d0;
+  background-color: var(--color-border-strong);
 }
 
 .empty-cart {
@@ -403,11 +441,11 @@ export default {
 
 .empty-cart h2 {
   margin-bottom: 1rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .empty-cart p {
-  color: #666;
+  color: var(--color-text-subtle);
   margin-bottom: 2rem;
   font-size: 1.1rem;
 }
@@ -419,6 +457,10 @@ export default {
 }
 
 @media (max-width: 768px) {
+  .cart {
+    padding: 1.25rem 1rem;
+  }
+
   .cart-container {
     grid-template-columns: 1fr;
   }
@@ -426,6 +468,7 @@ export default {
   .cart-item {
     grid-template-columns: 80px 1fr;
     gap: 0.75rem;
+    padding: 0.85rem;
   }
 
   .item-details,
@@ -433,6 +476,11 @@ export default {
   .item-total,
   .remove-btn {
     grid-column: 2;
+  }
+
+  .item-total {
+    text-align: left;
+    margin-top: 0.25rem;
   }
 
   .item-image {
@@ -445,8 +493,13 @@ export default {
     justify-self: flex-start;
   }
 
+  .remove-btn {
+    justify-self: flex-start;
+  }
+
   .cart-summary {
     position: static;
+    padding: 1.2rem;
   }
 }
 </style>

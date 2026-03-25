@@ -249,8 +249,8 @@ export default {
 }
 
 .btn-primary {
-  background-color: var(--color-forest);
-  color: var(--color-sand);
+  background-color: var(--dark-spruce);
+  color: var(--apricot-cream);
 }
 
 .btn-secondary {

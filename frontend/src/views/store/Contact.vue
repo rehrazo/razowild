@@ -383,7 +383,7 @@ export default {
 
 <style scoped>
 .contact-page {
-  background-color: #f9f9f9;
+  background-color: var(--apricot-cream-muted);
   padding: 2rem;
 }
 
@@ -399,13 +399,13 @@ export default {
 
 .contact-header h1 {
   font-size: 2.5rem;
-  color: #333;
+  color: var(--color-text);
   margin-bottom: 0.5rem;
 }
 
 .contact-header p {
   font-size: 1.1rem;
-  color: #666;
+  color: var(--color-text-subtle);
 }
 
 .contact-content {
@@ -416,17 +416,17 @@ export default {
 }
 
 .contact-form-section {
-  background: white;
+  background: var(--color-white);
   padding: 2rem;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(65, 39, 34, 0.12);
 }
 
 .contact-form-section h2 {
   margin-top: 0;
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
-  color: #333;
+  color: var(--color-text);
   border-bottom: 2px solid var(--color-accent);
   padding-bottom: 0.5rem;
 }
@@ -450,13 +450,13 @@ export default {
 
 .form-group label {
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
   margin-bottom: 0.5rem;
 }
 
 .form-input {
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 1rem;
   transition: border-color 0.3s;
@@ -466,7 +466,7 @@ export default {
 .form-input:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
 textarea.form-input {
@@ -476,7 +476,7 @@ textarea.form-input {
 
 .character-count {
   font-size: 0.8rem;
-  color: #999;
+  color: var(--color-text-subtle);
   margin-top: 0.25rem;
   text-align: right;
 }
@@ -516,14 +516,15 @@ textarea.form-input {
 }
 
 .error-message {
-  color: #ff6b6b;
+  color: var(--state-error-text);
   font-size: 0.8rem;
   margin-top: 0.25rem;
 }
 
 .success-message {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: var(--state-success-bg);
+  color: var(--state-success-text);
+  border: 1px solid var(--state-success-border);
   padding: 1rem;
   border-radius: 4px;
   margin-top: 1rem;
@@ -557,12 +558,12 @@ textarea.form-input {
 }
 
 .btn-secondary {
-  background-color: #f0f0f0;
-  color: #333;
+  background-color: var(--apricot-cream-muted);
+  color: var(--color-text);
 }
 
 .btn-secondary:hover {
-  background-color: #e0e0e0;
+  background-color: rgba(65, 39, 34, 0.12);
 }
 
 .btn-large {
@@ -581,16 +582,16 @@ textarea.form-input {
 }
 
 .info-card {
-  background: white;
+  background: var(--color-white);
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(65, 39, 34, 0.12);
 }
 
 .info-card h3 {
   margin-top: 0;
   margin-bottom: 1rem;
-  color: #333;
+  color: var(--color-text);
   font-size: 1.2rem;
   border-bottom: 2px solid var(--color-accent);
   padding-bottom: 0.5rem;
@@ -613,12 +614,12 @@ textarea.form-input {
 
 .contact-item h4 {
   margin: 0 0 0.25rem 0;
-  color: #333;
+  color: var(--color-text);
 }
 
 .contact-item p {
   margin: 0.25rem 0;
-  color: #666;
+  color: var(--color-text-subtle);
 }
 
 .contact-item a {
@@ -634,7 +635,7 @@ textarea.form-input {
 .contact-item small {
   display: block;
   font-size: 0.8rem;
-  color: #999;
+  color: var(--color-text-subtle);
   margin-top: 0.25rem;
 }
 
@@ -649,17 +650,17 @@ textarea.form-input {
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem;
-  background-color: #f5f5f5;
+  background-color: var(--apricot-cream-muted);
   border-radius: 4px;
 }
 
 .day {
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
 }
 
 .time {
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 0.9rem;
 }
 
@@ -675,7 +676,7 @@ textarea.form-input {
   width: 40px;
   height: 40px;
   background-color: var(--color-accent);
-  color: white;
+  color: var(--color-white);
   border-radius: 50%;
   text-decoration: none;
   font-weight: 600;
@@ -688,17 +689,17 @@ textarea.form-input {
 }
 
 .faq-section {
-  background: white;
+  background: var(--color-white);
   padding: 2rem;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(65, 39, 34, 0.12);
 }
 
 .faq-section h2 {
   margin-top: 0;
   margin-bottom: 1.5rem;
   font-size: 1.8rem;
-  color: #333;
+  color: var(--color-text);
   text-align: center;
   border-bottom: 2px solid var(--color-accent);
   padding-bottom: 1rem;
@@ -711,7 +712,7 @@ textarea.form-input {
 }
 
 .faq-item {
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -719,7 +720,7 @@ textarea.form-input {
 .faq-question {
   width: 100%;
   padding: 1rem;
-  background-color: #f9f9f9;
+  background-color: var(--apricot-cream-muted);
   border: none;
   cursor: pointer;
   display: flex;
@@ -727,13 +728,13 @@ textarea.form-input {
   gap: 1rem;
   font-size: 1rem;
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
   transition: all 0.3s;
   text-align: left;
 }
 
 .faq-question:hover {
-  background-color: #e8f0ff;
+  background-color: rgba(12, 124, 89, 0.12);
   color: var(--color-accent);
 }
 
@@ -750,7 +751,7 @@ textarea.form-input {
 
 .faq-answer {
   padding: 1rem;
-  color: #666;
+  color: var(--color-text-subtle);
   line-height: 1.6;
   animation: slideDown 0.3s ease-in;
 }

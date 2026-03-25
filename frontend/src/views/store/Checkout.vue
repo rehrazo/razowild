@@ -16,6 +16,10 @@
     <div class="checkout-container">
       <div class="checkout-form">
         <form @submit.prevent="submitOrder">
+          <p v-if="statusMessage" class="form-status" :class="statusType" aria-live="polite">
+            {{ statusMessage }}
+          </p>
+
           <!-- Shipping Information -->
           <section class="form-section">
             <h2>Shipping Address</h2>
@@ -27,6 +31,7 @@
                   id="firstName"
                   v-model="form.firstName" 
                   type="text" 
+                  autocomplete="given-name"
                   required
                   class="form-input"
                 />
@@ -37,6 +42,7 @@
                   id="lastName"
                   v-model="form.lastName" 
                   type="text" 
+                  autocomplete="family-name"
                   required
                   class="form-input"
                 />
@@ -49,6 +55,7 @@
                 id="email"
                 v-model="form.email" 
                 type="email" 
+                autocomplete="email"
                 required
                 class="form-input"
               />
@@ -60,6 +67,8 @@
                 id="phone"
                 v-model="form.phone" 
                 type="tel" 
+                autocomplete="tel"
+                inputmode="tel"
                 required
                 class="form-input"
               />
@@ -71,6 +80,7 @@
                 id="address"
                 v-model="form.address" 
                 type="text" 
+                autocomplete="street-address"
                 required
                 class="form-input"
               />
@@ -83,6 +93,7 @@
                   id="city"
                   v-model="form.city" 
                   type="text" 
+                  autocomplete="address-level2"
                   required
                   class="form-input"
                 />
@@ -93,6 +104,7 @@
                   id="state"
                   v-model="form.state" 
                   type="text" 
+                  autocomplete="address-level1"
                   required
                   class="form-input"
                 />
@@ -103,6 +115,8 @@
                   id="zip"
                   v-model="form.zip" 
                   type="text" 
+                  autocomplete="postal-code"
+                  inputmode="numeric"
                   required
                   class="form-input"
                 />
@@ -234,6 +248,8 @@ export default {
     })
 
     const isSubmitting = ref(false)
+    const statusMessage = ref('')
+    const statusType = ref('error')
 
     const orderItems = computed(() => cartStore.items)
 
@@ -276,7 +292,8 @@ export default {
 
     const submitOrder = async () => {
       if (!orderItems.value.length) {
-        alert('Your cart is empty.')
+        statusType.value = 'error'
+        statusMessage.value = 'Your cart is empty.'
         router.push('/products')
         return
       }
@@ -285,6 +302,7 @@ export default {
         return
       }
 
+      statusMessage.value = ''
       isSubmitting.value = true
 
       try {
@@ -347,11 +365,13 @@ export default {
           throw new Error('Stripe checkout session could not be started')
         } else {
           const errorData = await response.json().catch(() => ({}))
-          alert(errorData.error || 'Error starting Stripe checkout')
+          statusType.value = 'error'
+          statusMessage.value = errorData.error || 'Unable to start secure checkout. Please try again.'
         }
       } catch (error) {
         console.error('Error submitting order:', error)
-        alert('Error submitting order. Please try again.')
+        statusType.value = 'error'
+        statusMessage.value = 'Error submitting order. Please try again.'
       } finally {
         isSubmitting.value = false
       }
@@ -366,6 +386,8 @@ export default {
       tax,
       total,
       stripeMode,
+      statusMessage,
+      statusType,
       isSubmitting,
       submitOrder,
     }
@@ -375,14 +397,15 @@ export default {
 
 <style scoped>
 .checkout {
-  max-width: 1200px;
+  max-width: 1240px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2.25rem 1.5rem;
 }
 
 .checkout h1 {
-  font-size: 2rem;
-  margin-bottom: 2rem;
+  font-size: clamp(1.9rem, 3vw, 2.35rem);
+  margin-bottom: 1.4rem;
+  color: var(--dark-coffee);
 }
 
 .stripe-mode-banner {
@@ -394,21 +417,21 @@ export default {
 }
 
 .stripe-mode-banner.test {
-  background: #fff9e8;
-  border-color: #efcf70;
-  color: #6b4f00;
+  background: var(--state-warning-bg);
+  border-color: var(--state-warning-border);
+  color: var(--state-warning-text);
 }
 
 .stripe-mode-banner.live {
-  background: #edf7ed;
-  border-color: #8ec58e;
-  color: #1b5e20;
+  background: var(--state-success-bg);
+  border-color: var(--state-success-border);
+  color: var(--state-success-text);
 }
 
 .stripe-mode-banner.unknown {
-  background: #fff0f0;
-  border-color: #efb3b3;
-  color: #8a1f1f;
+  background: var(--state-error-bg);
+  border-color: var(--state-error-border);
+  color: var(--state-error-text);
 }
 
 .checkout-container {
@@ -419,15 +442,36 @@ export default {
 
 .checkout-form {
   background: white;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 1.9rem;
+  box-shadow: 0 8px 24px rgba(65, 39, 34, 0.06);
+}
+
+.form-status {
+  margin: 0 0 1rem;
+  padding: 0.75rem 0.85rem;
   border-radius: 8px;
-  padding: 2rem;
+  border: 1px solid transparent;
+  font-size: 0.94rem;
+}
+
+.form-status.error {
+  background: var(--state-error-bg);
+  border-color: var(--state-error-border);
+  color: var(--state-error-text);
+}
+
+.form-status.success {
+  background: var(--state-success-bg);
+  border-color: var(--state-success-border);
+  color: var(--state-success-text);
 }
 
 .form-section {
   margin-bottom: 2rem;
   padding-bottom: 2rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .form-section:last-child {
@@ -437,7 +481,7 @@ export default {
 .form-section h2 {
   font-size: 1.3rem;
   margin-bottom: 1.5rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .form-row {
@@ -455,12 +499,12 @@ export default {
 .form-group label {
   font-weight: 600;
   margin-bottom: 0.5rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .form-input {
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 1rem;
   transition: border-color 0.3s;
@@ -469,7 +513,7 @@ export default {
 .form-input:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 3px rgba(12, 124, 89, 0.18);
 }
 
 .shipping-options {
@@ -482,9 +526,9 @@ export default {
   display: flex;
   align-items: center;
   padding: 1rem;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--color-border);
   border-radius: 4px;
-  background-color: #f9f9f9;
+  background-color: var(--apricot-cream-muted);
 }
 
 .radio-option,
@@ -493,7 +537,7 @@ export default {
   align-items: center;
   cursor: pointer;
   padding: 1rem;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--color-border);
   border-radius: 4px;
   transition: all 0.3s;
 }
@@ -501,7 +545,7 @@ export default {
 .radio-option:hover,
 .checkbox-option:hover {
   border-color: var(--color-accent);
-  background-color: #f9f9f9;
+  background-color: var(--apricot-cream-muted);
 }
 
 .radio-option input[type="radio"],
@@ -541,9 +585,9 @@ export default {
 
 .payment-note {
   margin: 0;
-  color: #555;
-  background: #f7f9ff;
-  border: 1px solid #dce3ff;
+  color: var(--dark-coffee);
+  background: rgba(246, 216, 174, 0.35);
+  border: 1px solid rgba(65, 39, 34, 0.18);
   border-radius: 6px;
   padding: 0.85rem;
 }
@@ -574,13 +618,14 @@ export default {
 }
 
 .order-summary {
-  background: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
   padding: 1.5rem;
   height: fit-content;
   position: sticky;
-  top: 20px;
+  top: 14px;
+  box-shadow: 0 8px 24px rgba(65, 39, 34, 0.06);
 }
 
 .order-summary h2 {
@@ -599,7 +644,7 @@ export default {
   align-items: flex-start;
   padding-bottom: 1rem;
   margin-bottom: 1rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .item-name {
@@ -608,7 +653,7 @@ export default {
 }
 
 .item-qty {
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 0.9rem;
   margin: 0;
 }
@@ -620,7 +665,7 @@ export default {
 
 .summary-divider {
   height: 1px;
-  background-color: #ddd;
+  background-color: var(--color-border);
   margin: 1rem 0;
 }
 
@@ -628,7 +673,7 @@ export default {
   display: flex;
   justify-content: space-between;
   padding: 0.75rem 0;
-  color: #555;
+  color: var(--color-text-subtle);
 }
 
 .summary-row.total {
@@ -641,20 +686,28 @@ export default {
 
 .trust-badges {
   background: white;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--color-border);
   padding-top: 1rem;
   margin-top: 1rem;
 }
 
 .trust-badges p {
   margin: 0.5rem 0;
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 0.9rem;
 }
 
 @media (max-width: 768px) {
+  .checkout {
+    padding: 1.25rem 1rem;
+  }
+
   .checkout-container {
     grid-template-columns: 1fr;
+  }
+
+  .checkout-form {
+    padding: 1.2rem;
   }
 
   .form-row {
@@ -672,6 +725,7 @@ export default {
 
   .order-summary {
     position: static;
+    padding: 1.2rem;
   }
 }
 </style>

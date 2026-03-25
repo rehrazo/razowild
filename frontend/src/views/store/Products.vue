@@ -58,6 +58,49 @@
         <div v-if="filteredProducts.length === 0" class="no-products">
           <p>No products found matching your criteria.</p>
         </div>
+
+        <div v-if="totalItems > 0" class="pagination-summary-wrap">
+          <p class="pagination-summary">Showing {{ displayStartItem }}-{{ displayEndItem }} of {{ totalItems }} items</p>
+        </div>
+
+        <div v-if="totalPages > 1" class="pagination">
+          <div class="pagination-nav">
+            <button
+              class="pagination-btn"
+              :disabled="currentPage <= 1"
+              @click="goToPage(currentPage - 1)"
+            >
+              Previous
+            </button>
+
+            <button
+              v-for="item in pageItems"
+              :key="item.key"
+              class="pagination-btn"
+              :class="{ active: item.type === 'page' && item.value === currentPage, ellipsis: item.type === 'ellipsis' }"
+              :disabled="item.type === 'ellipsis'"
+              @click="item.type === 'page' ? goToPage(item.value) : null"
+            >
+              {{ item.label }}
+            </button>
+
+            <button
+              class="pagination-btn"
+              :disabled="currentPage >= totalPages"
+              @click="goToPage(currentPage + 1)"
+            >
+              Next
+            </button>
+          </div>
+
+          <button
+            v-if="currentPage < totalPages"
+            class="pagination-load-more"
+            @click="loadMore"
+          >
+            Load More
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -77,6 +120,11 @@ export default {
     const categoryTree = ref([])
     const selectedParentCategoryId = ref(null)
     const selectedChildCategoryId = ref(null)
+    const currentPage = ref(1)
+    const perPage = ref(21)
+    const totalPages = ref(1)
+    const totalItems = ref(0)
+    const loadedFromPage = ref(1)
     const cartStore = useCartStore()
 
     const mapProduct = (product) => ({
@@ -148,16 +196,36 @@ export default {
       return null
     })
 
-    const fetchProducts = async () => {
+    const fetchProducts = async (page = currentPage.value, options = {}) => {
+      const { append = false } = options
+      const safePage = Math.max(1, Number(page) || 1)
       const params = new URLSearchParams()
       if (effectiveCategoryId.value) {
         params.set('category_id', String(effectiveCategoryId.value))
       }
 
+      const searchTerm = syncSearchFromQuery()
+      if (searchTerm) {
+        params.set('search', searchTerm)
+      }
+
+      params.set('page', String(safePage))
+      params.set('limit', String(perPage.value))
+
       const endpoint = params.toString() ? `/api/products?${params.toString()}` : '/api/products'
       const response = await fetch(endpoint)
       const data = await response.json()
-      products.value = Array.isArray(data?.data) ? data.data.map(mapProduct) : []
+      const mappedProducts = Array.isArray(data?.data) ? data.data.map(mapProduct) : []
+      products.value = append ? [...products.value, ...mappedProducts] : mappedProducts
+
+      const pagination = data?.pagination || {}
+      currentPage.value = Math.max(1, Number(pagination.page) || safePage)
+      totalPages.value = Math.max(1, Number(pagination.pages) || 1)
+      totalItems.value = Math.max(0, Number(pagination.total) || 0)
+
+      if (!append) {
+        loadedFromPage.value = currentPage.value
+      }
     }
 
     onMounted(async () => {
@@ -174,14 +242,18 @@ export default {
       () => route.query.category_id,
       async () => {
         syncCategoryFromQuery()
-        await fetchProducts()
+        currentPage.value = 1
+        loadedFromPage.value = 1
+        await fetchProducts(1)
       }
     )
 
     watch(
       () => route.query.search,
       async () => {
-        await fetchProducts()
+        currentPage.value = 1
+        loadedFromPage.value = 1
+        await fetchProducts(1)
       }
     )
 
@@ -219,32 +291,113 @@ export default {
       return selectedParentCategory.value?.children || []
     })
 
-    const filteredProducts = computed(() => {
-      const query = syncSearchFromQuery()
+    const filteredProducts = computed(() => products.value)
 
-      return products.value.filter(product => {
-        const matchesSearch = !query ||
-          product.name.toLowerCase().includes(query) ||
-          (product.description || '').toLowerCase().includes(query)
-        return matchesSearch
-      })
+    const pageItems = computed(() => {
+      const maxNumericButtons = 7
+      const total = totalPages.value
+      const current = currentPage.value
+
+      if (total <= maxNumericButtons) {
+        return Array.from({ length: total }, (_, index) => ({
+          key: `page-${index + 1}`,
+          type: 'page',
+          value: index + 1,
+          label: String(index + 1),
+        }))
+      }
+
+      const items = []
+      const interiorSlots = maxNumericButtons - 2
+      let start = Math.max(2, current - Math.floor(interiorSlots / 2))
+      let end = Math.min(total - 1, start + interiorSlots - 1)
+
+      if (end - start + 1 < interiorSlots) {
+        start = Math.max(2, end - interiorSlots + 1)
+      }
+
+      items.push({ key: 'page-1', type: 'page', value: 1, label: '1' })
+
+      if (start > 2) {
+        items.push({ key: 'ellipsis-left', type: 'ellipsis', value: null, label: '...' })
+      }
+
+      for (let page = start; page <= end; page += 1) {
+        items.push({
+          key: `page-${page}`,
+          type: 'page',
+          value: page,
+          label: String(page),
+        })
+      }
+
+      if (end < total - 1) {
+        items.push({ key: 'ellipsis-right', type: 'ellipsis', value: null, label: '...' })
+      }
+
+      items.push({ key: `page-${total}`, type: 'page', value: total, label: String(total) })
+
+      return items
+    })
+
+    const displayStartItem = computed(() => {
+      if (totalItems.value <= 0 || filteredProducts.value.length === 0) {
+        return 0
+      }
+
+      return (loadedFromPage.value - 1) * perPage.value + 1
+    })
+
+    const displayEndItem = computed(() => {
+      if (displayStartItem.value <= 0 || filteredProducts.value.length === 0) {
+        return 0
+      }
+
+      return Math.min(displayStartItem.value + filteredProducts.value.length - 1, totalItems.value)
     })
 
     const selectChildCategory = async (parentId, childId) => {
       selectedParentCategoryId.value = parentId
       selectedChildCategoryId.value = childId
-      await fetchProducts()
+      currentPage.value = 1
+      loadedFromPage.value = 1
+      await fetchProducts(1)
     }
 
     const selectParentOnly = async () => {
       selectedChildCategoryId.value = null
-      await fetchProducts()
+      currentPage.value = 1
+      loadedFromPage.value = 1
+      await fetchProducts(1)
     }
 
     const selectAllCategories = async () => {
       selectedParentCategoryId.value = null
       selectedChildCategoryId.value = null
-      await fetchProducts()
+      currentPage.value = 1
+      loadedFromPage.value = 1
+      await fetchProducts(1)
+    }
+
+    const goToPage = async (page) => {
+      const safePage = Math.max(1, Math.min(Number(page) || 1, totalPages.value))
+      if (safePage === currentPage.value) {
+        return
+      }
+
+      currentPage.value = safePage
+      loadedFromPage.value = safePage
+      await fetchProducts(safePage)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+
+    const loadMore = async () => {
+      if (currentPage.value >= totalPages.value) {
+        return
+      }
+
+      const nextPage = currentPage.value + 1
+      await fetchProducts(nextPage, { append: true })
     }
 
     const addToCart = (product) => {
@@ -265,9 +418,17 @@ export default {
       visibleChildCategories,
       productsHeading,
       filteredProducts,
+      currentPage,
+      totalPages,
+      totalItems,
+      pageItems,
+      displayStartItem,
+      displayEndItem,
       selectChildCategory,
       selectParentOnly,
       selectAllCategories,
+      goToPage,
+      loadMore,
       addToCart,
       openProduct,
     }
@@ -296,8 +457,8 @@ export default {
 }
 
 .category-sidebar {
-  background: #fff;
-  border: 1px solid #ddd;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: 1rem;
 }
@@ -319,17 +480,17 @@ export default {
   border-radius: 6px;
   padding: 0.5rem 0.55rem;
   margin-bottom: 0.2rem;
-  color: #2B2B2B;
+  color: var(--color-text);
   cursor: pointer;
 }
 
 .category-menu-link:hover {
-  background: rgba(99, 172, 77, 0.08);
+  background: rgba(12, 124, 89, 0.1);
 }
 
 .category-menu-link.active {
-  background: var(--color-forest);
-  color: var(--color-sand);
+  background: var(--dark-spruce);
+  color: var(--apricot-cream);
 }
 
 .category-menu-link.child {
@@ -339,7 +500,7 @@ export default {
 
 .empty-categories {
   margin: 0.6rem 0 0;
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 0.9rem;
 }
 
@@ -351,8 +512,8 @@ export default {
 }
 
 .product-card {
-  background: white;
-  border: 1px solid #ddd;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: 1rem;
   transition: box-shadow 0.3s;
@@ -360,11 +521,11 @@ export default {
 }
 
 .product-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(65, 39, 34, 0.12);
 }
 
 .product-card:focus-visible {
-  outline: 2px solid var(--color-forest);
+  outline: 2px solid var(--dark-spruce);
   outline-offset: 2px;
 }
 
@@ -382,13 +543,13 @@ export default {
 }
 
 .category {
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
 }
 
 .description {
-  color: #777;
+  color: var(--color-text-muted);
   font-size: 0.95rem;
   margin-bottom: 1rem;
   line-height: 1.4;
@@ -429,23 +590,96 @@ export default {
 }
 
 .btn-secondary {
-  background-color: #f0f0f0;
-  color: #333;
+  background-color: var(--apricot-cream-muted);
+  color: var(--color-text);
   display: inline-block;
 }
 
 .btn-secondary:hover {
-  background-color: #e0e0e0;
+  background-color: rgba(65, 39, 34, 0.12);
 }
 
 .no-products {
   text-align: center;
   padding: 3rem;
-  color: #666;
+  color: var(--color-text-subtle);
 }
 
 .no-products p {
   font-size: 1.1rem;
+}
+
+.pagination-summary-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.pagination {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.pagination-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.pagination-summary {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.pagination-btn {
+  border: 1px solid var(--color-border);
+  background: var(--color-white);
+  color: var(--color-text);
+  border-radius: 6px;
+  padding: 0.5rem 0.9rem;
+  cursor: pointer;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: rgba(12, 124, 89, 0.12);
+}
+
+.pagination-btn.active {
+  background: var(--dark-spruce);
+  border-color: var(--dark-spruce);
+  color: var(--apricot-cream);
+}
+
+.pagination-btn.ellipsis {
+  border-color: transparent;
+  background: transparent;
+  color: var(--color-text-subtle);
+  cursor: default;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-load-more {
+  border: none;
+  background: var(--color-accent);
+  color: var(--color-white);
+  border-radius: 6px;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.pagination-load-more:hover {
+  background: var(--color-accent-dark);
 }
 
 @media (max-width: 980px) {

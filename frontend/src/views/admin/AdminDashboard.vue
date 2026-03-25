@@ -2489,8 +2489,8 @@ tr:hover {
 }
 
 .btn-refresh {
-  background-color: var(--color-forest);
-  color: var(--color-sand);
+  background-color: var(--dark-spruce);
+  color: var(--apricot-cream);
 }
 
 .btn-refresh:hover {

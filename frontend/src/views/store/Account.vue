@@ -596,8 +596,8 @@ export default {
 }
 
 .sidebar {
-  background: white;
-  border: 1px solid #ddd;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: 1.5rem;
   height: fit-content;
@@ -609,7 +609,7 @@ export default {
   text-align: center;
   margin-bottom: 2rem;
   padding-bottom: 2rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .avatar {
@@ -629,13 +629,13 @@ export default {
 }
 
 .user-email {
-  color: #666;
+  color: var(--color-text-subtle);
   margin: 0.25rem 0;
   font-size: 0.95rem;
 }
 
 .member-since {
-  color: #999;
+  color: var(--color-text-subtle);
   font-size: 0.85rem;
   margin: 0.5rem 0 0 0;
 }
@@ -657,12 +657,12 @@ export default {
   border-radius: 4px;
   cursor: pointer;
   text-align: left;
-  color: #333;
+  color: var(--color-text);
   transition: all 0.3s;
 }
 
 .menu-item:hover {
-  background-color: #f0f0f0;
+  background-color: var(--apricot-cream-muted);
   color: var(--color-accent);
 }
 
@@ -681,8 +681,8 @@ export default {
 }
 
 .content {
-  background: white;
-  border: 1px solid #ddd;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: 2rem;
 }
@@ -705,7 +705,7 @@ export default {
 .tab-content h2 {
   margin-top: 0;
   margin-bottom: 1.5rem;
-  color: #333;
+  color: var(--color-text);
   border-bottom: 2px solid var(--color-accent);
   padding-bottom: 0.5rem;
 }
@@ -742,12 +742,12 @@ export default {
 .form-group label {
   font-weight: 600;
   margin-bottom: 0.5rem;
-  color: #333;
+  color: var(--color-text);
 }
 
 .form-input {
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 1rem;
   transition: border-color 0.3s;
@@ -756,7 +756,7 @@ export default {
 .form-input:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
 .checkbox-option {
@@ -790,7 +790,7 @@ export default {
 }
 
 .help-text {
-  color: #999;
+  color: var(--color-text-subtle);
   font-size: 0.85rem;
   margin: -0.5rem 0 1rem 0;
 }
@@ -801,7 +801,7 @@ export default {
 
 .preference-group h3 {
   margin: 1rem 0 0.75rem 0;
-  color: #333;
+  color: var(--color-text);
 }
 
 .addresses-list,
@@ -815,7 +815,7 @@ export default {
 .address-card,
 .payment-card,
 .order-card {
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   padding: 1rem;
   transition: box-shadow 0.3s;
@@ -824,7 +824,7 @@ export default {
 .address-card:hover,
 .payment-card:hover,
 .order-card:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(65, 39, 34, 0.12);
 }
 
 .address-header,
@@ -837,7 +837,7 @@ export default {
 
 .address-header h4 {
   margin: 0;
-  color: #333;
+  color: var(--color-text);
 }
 
 .address-actions,
@@ -848,7 +848,7 @@ export default {
 
 .action-btn {
   padding: 0.5rem 1rem;
-  background-color: #f0f0f0;
+  background-color: var(--apricot-cream-muted);
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -857,21 +857,21 @@ export default {
 }
 
 .action-btn:hover {
-  background-color: #e0e0e0;
+  background-color: rgba(65, 39, 34, 0.12);
 }
 
 .action-btn.delete {
-  color: #ff6b6b;
+  color: var(--color-accent-dark);
 }
 
 .action-btn.delete:hover {
-  background-color: #ffe0e0;
+  background-color: rgba(165, 28, 40, 0.14);
 }
 
 .address-card p,
 .payment-card p {
   margin: 0.25rem 0;
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 0.95rem;
 }
 
@@ -889,23 +889,23 @@ export default {
 .card-number {
   flex: 1;
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
 }
 
 .order-header {
   padding-bottom: 0.75rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .order-number {
   margin: 0;
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
 }
 
 .order-date {
   margin: 0.25rem 0 0 0;
-  color: #999;
+  color: var(--color-text-subtle);
   font-size: 0.85rem;
 }
 
@@ -917,23 +917,23 @@ export default {
 }
 
 .order-status.delivered {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: var(--state-success-bg);
+  color: var(--state-success-text);
 }
 
 .order-status.shipped {
-  background-color: #cfe2ff;
-  color: #084298;
+  background-color: rgba(12, 124, 89, 0.12);
+  color: var(--color-complement);
 }
 
 .order-status.processing {
-  background-color: #fff3cd;
-  color: #664d03;
+  background-color: rgba(246, 216, 174, 0.55);
+  color: var(--dark-coffee);
 }
 
 .order-status.cancelled {
-  background-color: #f8d7da;
-  color: #842029;
+  background-color: rgba(165, 28, 40, 0.14);
+  color: var(--color-accent-dark);
 }
 
 .order-items {
@@ -942,7 +942,7 @@ export default {
 
 .order-item {
   margin: 0.5rem 0;
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 0.95rem;
 }
 
@@ -951,12 +951,12 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding-top: 0.75rem;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--color-border);
 }
 
 .order-total {
   margin: 0;
-  color: #333;
+  color: var(--color-text);
 }
 
 .btn {
@@ -979,12 +979,12 @@ export default {
 }
 
 .btn-secondary {
-  background-color: #f0f0f0;
-  color: #333;
+  background-color: var(--apricot-cream-muted);
+  color: var(--color-text);
 }
 
 .btn-secondary:hover {
-  background-color: #e0e0e0;
+  background-color: rgba(65, 39, 34, 0.12);
 }
 
 .btn-small {
@@ -993,18 +993,18 @@ export default {
 }
 
 .btn-danger {
-  background-color: #ff6b6b;
+  background-color: var(--color-accent);
   color: white;
 }
 
 .btn-danger:hover {
-  background-color: #ee5a52;
+  background-color: var(--color-accent-dark);
 }
 
 .security-section {
   margin-bottom: 2rem;
   padding-bottom: 2rem;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .security-section:last-child {
@@ -1013,14 +1013,14 @@ export default {
 
 .security-section h3 {
   margin-top: 0;
-  color: #333;
+  color: var(--color-text);
 }
 
 .danger-zone {
-  background-color: #fff5f5;
+  background-color: rgba(165, 28, 40, 0.08);
   padding: 1.5rem;
   border-radius: 4px;
-  border-left: 4px solid #ff6b6b;
+  border-left: 4px solid var(--color-accent);
 }
 
 @media (max-width: 768px) {

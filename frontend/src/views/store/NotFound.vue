@@ -94,18 +94,18 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--color-accent) 0%, #764ba2 100%);
-  padding: 2rem;
+  background: linear-gradient(135deg, var(--dark-spruce) 0%, var(--color-accent-dark) 100%);
+  padding: 1.5rem 1rem;
 }
 
 .not-found-container {
   background: white;
-  border-radius: 16px;
-  padding: 3rem 2rem;
+  border-radius: 14px;
+  padding: 2.4rem 1.6rem;
   max-width: 600px;
   width: 100%;
   text-align: center;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 16px 38px rgba(65, 39, 34, 0.12);
 }
 
 .error-code {
@@ -117,13 +117,13 @@ export default {
 }
 
 .not-found-container h1 {
-  font-size: 2rem;
-  color: #333;
+  font-size: clamp(1.7rem, 2.4vw, 2.15rem);
+  color: var(--dark-coffee);
   margin: 0 0 1rem 0;
 }
 
 .error-message {
-  color: #666;
+  color: var(--color-text-subtle);
   font-size: 1.1rem;
   margin-bottom: 2rem;
   line-height: 1.6;
@@ -152,7 +152,7 @@ export default {
 }
 
 .lost-text {
-  color: #999;
+  color: var(--color-text-subtle);
   font-style: italic;
   font-size: 0.95rem;
 }
@@ -162,7 +162,7 @@ export default {
 }
 
 .suggestions h2 {
-  color: #333;
+  color: var(--color-text);
   font-size: 1.2rem;
   margin-bottom: 1.5rem;
 }
@@ -180,10 +180,11 @@ export default {
   align-items: center;
   gap: 0.5rem;
   padding: 1.5rem;
-  background-color: #f5f5f5;
+  background-color: var(--color-white);
+  border: 1px solid rgba(65, 39, 34, 0.12);
   border-radius: 8px;
   text-decoration: none;
-  color: #333;
+  color: var(--dark-coffee);
   transition: all 0.3s;
 }
 
@@ -205,12 +206,13 @@ export default {
 .search-section {
   margin: 2rem 0;
   padding: 1.5rem;
-  background-color: #f9f9f9;
+  background-color: rgba(246, 216, 174, 0.3);
+  border: 1px solid rgba(65, 39, 34, 0.12);
   border-radius: 8px;
 }
 
 .search-section h3 {
-  color: #333;
+  color: var(--color-text);
   margin-top: 0;
   margin-bottom: 1rem;
 }
@@ -223,7 +225,7 @@ export default {
 .search-input {
   flex: 1;
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   font-size: 1rem;
 }
@@ -231,26 +233,26 @@ export default {
 .search-input:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 3px rgba(12, 124, 89, 0.18);
 }
 
 .support-section {
   margin: 2rem 0;
   padding: 1.5rem;
-  background-color: #e8f0ff;
+  background-color: rgba(246, 216, 174, 0.25);
   border-radius: 8px;
-  border-left: 4px solid var(--color-accent);
+  border-left: 4px solid var(--color-complement);
 }
 
 .support-section h3 {
-  color: #333;
+  color: var(--color-text);
   margin-top: 0;
   margin-bottom: 0.75rem;
 }
 
 .support-section p {
   margin: 0.5rem 0;
-  color: #555;
+  color: var(--dark-coffee);
 }
 
 .support-section a {
@@ -293,6 +295,10 @@ export default {
 }
 
 @media (max-width: 768px) {
+  .not-found {
+    padding: 1rem;
+  }
+
   .not-found-container {
     padding: 2rem 1rem;
   }
