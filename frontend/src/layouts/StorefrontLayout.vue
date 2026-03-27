@@ -16,7 +16,7 @@
     <nav class="navbar">
       <div class="navbar-brand">
         <router-link to="/">
-          <img src="/src/assets/images/site/razoWildLogoGray.png" alt="Razo Wild" style="height:100px;" />
+          <img src="/src/assets/images/site/razoWildLogoCream.png" alt="Razo Wild" style="height:100px;" />
         </router-link>
       </div>
 
@@ -190,7 +190,6 @@ export default {
 }
 
 .top-header-inner {
-  max-width: 1200px;
   margin: 0 auto;
   padding: 0.45rem 2rem;
   display: flex;
@@ -198,6 +197,7 @@ export default {
   justify-content: space-between;
   gap: 1rem;
   border-radius: 0 0 6px 6px;
+  width: 100%;
 }
 
 .top-header-label {
@@ -327,7 +327,7 @@ export default {
 }
 
 .main-content-home {
-  padding-top: 0;
+  padding: 0;
 }
 
 .category-navbar {
@@ -385,6 +385,10 @@ export default {
   .nav-links {
     gap: 1rem;
     flex-wrap: wrap;
+  }
+
+  .top-header {
+    padding: 0;
   }
 
   .top-header-inner {

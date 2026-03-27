@@ -5,7 +5,7 @@
       <div class="hero-text-bg"></div>
       <div class="hero-content container">
         <p class="hero-brand">RAZO WILD</p>
-        <h1>PACK UP. HEAD OUT. CAMP ON.</h1>
+        <h1>CREATE UNFORGETTABLE MOMENTS</h1>
         <p>Premium camping, hiking, and outdoor essentials built for every adventure.</p>
         <router-link to="/products" class="btn btn-primary">Shop Now</router-link>
       </div>
@@ -231,8 +231,9 @@ export default {
   position: relative;
   display: flex;
   align-items: center;
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .hero-overlay {
@@ -357,13 +358,6 @@ export default {
   background-color: transparent;
   box-shadow: none;
   padding: 0;
-}
-
-.featured-container {
-  max-width: none;
-  width: 100%;
-  padding-left: 25px;
-  padding-right: 25px;
 }
 
 .featured-section {
@@ -524,11 +518,6 @@ export default {
 
   .welcome-side-image {
     min-height: 240px;
-  }
-
-  .featured-container {
-    padding-left: 16px;
-    padding-right: 16px;
   }
 
   .featured-grid {

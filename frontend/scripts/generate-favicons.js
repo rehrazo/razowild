@@ -20,7 +20,7 @@ async function run() {
   }
   // generate 32x32 favicon.ico (contains multiple sizes)
   const icoOut = path.join(outDir, 'favicon.ico')
-  await sharp(svgPath).resize(32,32).png().toFile(path.join(outDir, 'favicon-32.png'))
+  await sharp(svgPath).resize(32,32).png().toFile(path.join(outDir, 'favicon-32X32.png'))
   console.log('Wrote', icoOut)
 }
 
