@@ -41,8 +41,8 @@
           <span>${{ subtotal.toFixed(2) }}</span>
         </div>
 
-        <div class="summary-row">
-          <span>Tax (10%):</span>
+        <div v-if="tax > 0" class="summary-row">
+          <span>Tax ({{ taxLabel }}):</span>
           <span>${{ tax.toFixed(2) }}</span>
         </div>
 
@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCartStore } from '../../stores/cart'
 
@@ -106,6 +106,12 @@ export default {
     const couponApplied = ref(false)
     const couponError = ref('')
     const discountPercentage = ref(0)
+    const taxRate = ref(0)
+
+    const taxLabel = computed(() => {
+      const pct = Math.round(taxRate.value * 10000) / 100
+      return `${pct % 1 === 0 ? pct.toFixed(0) : pct}%`
+    })
 
     const subtotal = computed(() => {
       return cartItems.value.reduce((sum, item) => sum + item.price * item.quantity, 0)
@@ -116,8 +122,21 @@ export default {
     })
 
     const tax = computed(() => {
-      return (subtotal.value - discount.value) * 0.1
+      return (subtotal.value - discount.value) * taxRate.value
     })
+
+    const loadTaxRate = async () => {
+      try {
+        const response = await fetch('/api/tax-rates')
+        const data = await response.json()
+        const rates = Array.isArray(data?.data) ? data.data : []
+        if (rates.length) {
+          taxRate.value = Number(rates[0].rate) || 0
+        }
+      } catch (_err) {
+        // keep at 0
+      }
+    }
 
     const shipping = computed(() => {
       return subtotal.value - discount.value >= 50 ? 0 : 9.99
@@ -180,6 +199,8 @@ export default {
       router.push('/checkout')
     }
 
+    onMounted(loadTaxRate)
+
     return {
       cartItems,
       couponCode,
@@ -188,6 +209,7 @@ export default {
       subtotal,
       discount,
       tax,
+      taxLabel,
       shipping,
       total,
       incrementQuantity,

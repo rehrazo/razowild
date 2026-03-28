@@ -11,6 +11,7 @@ const productsRouter = require('./routes/products');
 const categoriesRouter = require('./routes/categories');
 const ordersRouter = require('./routes/orders');
 const paymentsRouter = require('./routes/payments');
+const taxRatesRouter = require('./routes/tax-rates');
 const { requireAdminAuthIfConfigured } = require('./middleware/adminAuth');
 
 dotenv.config();
@@ -287,6 +288,7 @@ app.post('/api/admin/import-products', requireAdminAuthIfConfigured, upload.sing
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/products', requireAdminAuthIfConfigured, productsRouter);
 app.use('/api/categories', requireAdminAuthIfConfigured, categoriesRouter);
+app.use('/api/tax-rates', requireAdminAuthIfConfigured, taxRatesRouter);
 // app.use('/api/cart', require('./routes/cart')); 
 app.use('/api/orders', ordersRouter);
 app.use('/api/payments', paymentsRouter);

@@ -1,580 +1,228 @@
-<template>
+﻿<template>
   <div class="tax-management">
-    <!-- Header -->
     <div class="management-header">
       <h1>Tax Management</h1>
-      <button @click="showNewTax = true" class="btn btn-primary">
-        + Add Tax Group
-      </button>
     </div>
 
-    <!-- Tabs -->
-    <div class="management-tabs">
-      <button 
-        v-for="tab in tabs"
-        :key="tab"
-        @click="activeTab = tab"
-        class="tab-btn"
-        :class="{ active: activeTab === tab }"
-      >
-        {{ tab }}
-      </button>
+    <!-- Add Tax Rate Form -->
+    <div class="add-rate-card">
+      <h2>Add Tax Rate</h2>
+      <div class="add-rate-row">
+        <div class="form-group inline-group">
+          <label>Name</label>
+          <input v-model="addName" type="text" placeholder="e.g. US Sales Tax" class="form-input" />
+        </div>
+        <div class="form-group inline-group">
+          <label>Rate (%)</label>
+          <input v-model="addRatePct" type="number" min="0" max="100" step="0.01" placeholder="e.g. 8.5" class="form-input input-narrow" />
+        </div>
+        <button @click="addTaxRate" class="btn btn-primary" :disabled="addSaving">
+          {{ addSaving ? 'Adding…' : '+ Add' }}
+        </button>
+      </div>
+      <p v-if="addError" class="error-msg">{{ addError }}</p>
     </div>
 
-    <!-- Tax Groups Section -->
-    <section v-if="activeTab === 'Tax Groups'" class="tax-groups-section">
-      <div class="section-header">
-        <h2>Tax Groups</h2>
-        <div class="header-controls">
-          <input 
-            v-model="searchQuery"
-            type="text"
-            placeholder="Search tax groups..."
-            class="search-input"
-          />
-          <select v-model="countryFilter" class="filter-select">
-            <option value="">All Countries</option>
-            <option value="us">United States</option>
-            <option value="ca">Canada</option>
-            <option value="uk">United Kingdom</option>
-            <option value="eu">European Union</option>
-          </select>
-        </div>
-      </div>
+    <p v-if="loadError" class="error-msg">{{ loadError }}</p>
+    <p v-if="loading" class="loading-msg">Loading tax rates…</p>
 
-      <div class="tax-groups-grid">
-        <div v-for="group in filteredTaxGroups" :key="group.id" class="tax-group-card">
-          <div class="group-header">
-            <h3>{{ group.name }}</h3>
-            <span class="group-type-badge" :class="`type-${group.type}`">
-              {{ group.type }}
-            </span>
-          </div>
-
-          <div class="group-details">
-            <p><strong>Country/Region:</strong> {{ group.region }}</p>
-            <p><strong>Rate:</strong> {{ group.rate }}%</p>
-            <p v-if="group.description" class="description">{{ group.description }}</p>
-          </div>
-
-          <div class="group-rules">
-            <h4>Applied To:</h4>
-            <div class="rule-badges">
-              <span v-for="rule in group.appliedTo" :key="rule" class="rule-badge">
-                {{ rule }}
-              </span>
-            </div>
-          </div>
-
-          <div class="group-stats">
-            <span>📦 {{ group.productsCount }} products</span>
-            <span>💰 {{ group.revenue | formatCurrency }}</span>
-          </div>
-
-          <div class="group-actions">
-            <button @click="editTaxGroup(group)" class="btn btn-secondary btn-small">Edit</button>
-            <button @click="toggleTaxStatus(group)" class="btn btn-secondary btn-small">
-              {{ group.active ? 'Disable' : 'Enable' }}
-            </button>
-            <button @click="deleteTaxGroup(group.id)" class="btn btn-danger btn-small">Delete</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Tax Rates Section -->
-    <section v-if="activeTab === 'Tax Rates'" class="tax-rates-section">
-      <h2>View & Configure Tax Rates</h2>
-      
-      <div class="tax-rates-table-container">
-        <table class="tax-rates-table">
-          <thead>
-            <tr>
-              <th>Region/State</th>
-              <th>Country</th>
-              <th>Tax Rate (%)</th>
-              <th>Type</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="rate in allTaxRates" :key="rate.id">
-              <td>{{ rate.region }}</td>
-              <td>{{ rate.country }}</td>
-              <td class="rate-value">
-                <input 
-                  v-model.number="rate.rate"
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  max="100"
-                  class="rate-input"
-                  @change="updateTaxRate(rate)"
-                />
-              </td>
-              <td>{{ rate.type }}</td>
-              <td>
-                <span class="status-badge" :class="rate.active ? 'active' : 'inactive'">
-                  {{ rate.active ? 'Active' : 'Inactive' }}
-                </span>
-              </td>
-              <td class="action-buttons">
-                <button @click="editTaxRate(rate)" class="btn-edit">✎</button>
-                <button @click="deleteTaxRate(rate.id)" class="btn-delete">🗑️</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- Tax Rules Section -->
-    <section v-if="activeTab === 'Tax Rules'" class="tax-rules-section">
-      <h2>Tax Calculation Rules</h2>
-      
-      <div class="rules-list">
-        <div v-for="rule in taxRules" :key="rule.id" class="rule-card">
-          <div class="rule-header">
-            <h3>{{ rule.name }}</h3>
-            <span class="rule-priority">Priority: {{ rule.priority }}</span>
-          </div>
-
-          <p class="rule-description">{{ rule.description }}</p>
-
-          <div class="rule-conditions">
-            <h4>Conditions:</h4>
-            <ul>
-              <li v-for="condition in rule.conditions" :key="condition">
-                {{ condition }}
-              </li>
-            </ul>
-          </div>
-
-          <div class="rule-actions">
-            <button @click="editTaxRule(rule)" class="btn btn-secondary btn-small">Edit</button>
-            <button @click="toggleRuleStatus(rule)" class="btn btn-secondary btn-small">
-              {{ rule.active ? 'Disable' : 'Enable' }}
-            </button>
-            <button @click="deleteTaxRule(rule.id)" class="btn btn-danger btn-small">Delete</button>
-          </div>
-        </div>
-      </div>
-
-      <button @click="showNewRule = true" class="btn btn-primary">+ Add Tax Rule</button>
-    </section>
-
-    <!-- Tax Settings Section -->
-    <section v-if="activeTab === 'Settings'" class="tax-settings-section">
-      <h2>Tax Settings</h2>
-
-      <div class="settings-form">
-        <div class="settings-group">
-          <h3>Display Settings</h3>
-          
-          <label class="checkbox-option">
-            <input v-model="settings.displayTaxInPrice" type="checkbox" />
-            <span>Display tax included in product prices</span>
-          </label>
-
-          <label class="checkbox-option">
-            <input v-model="settings.showTaxBreakdown" type="checkbox" />
-            <span>Show tax breakdown at checkout</span>
-          </label>
-
-          <label class="checkbox-option">
-            <input v-model="settings.calculateTaxOnShipping" type="checkbox" />
-            <span>Calculate tax on shipping charges</span>
-          </label>
-
-          <label class="checkbox-option">
-            <input v-model="settings.enableTaxRounding" type="checkbox" />
-            <span>Round tax amounts</span>
-          </label>
-        </div>
-
-        <div class="settings-group">
-          <h3>Tax Exemptions</h3>
-
-          <label class="checkbox-option">
-            <input v-model="settings.exemptDigitalProducts" type="checkbox" />
-            <span>Exempt digital/downloadable products</span>
-          </label>
-
-          <label class="checkbox-option">
-            <input v-model="settings.exemptGiftCards" type="checkbox" />
-            <span>Exempt gift cards</span>
-          </label>
-
-          <div class="form-group">
-            <label>Tax Exempt Organizations (comma-separated)</label>
-            <textarea 
-              v-model="settings.exemptOrganizations"
-              class="form-input"
-              rows="3"
-            ></textarea>
-          </div>
-        </div>
-
-        <div class="settings-group">
-          <h3>Reporting</h3>
-
-          <label class="checkbox-option">
-            <input v-model="settings.trackTaxByCountry" type="checkbox" />
-            <span>Track tax collection by country</span>
-          </label>
-
-          <label class="checkbox-option">
-            <input v-model="settings.trackTaxByState" type="checkbox" />
-            <span>Track tax collection by state/province</span>
-          </label>
-
-          <div class="form-group">
-            <label>Default Tax Calculation Method</label>
-            <select v-model="settings.calculationMethod" class="form-input">
-              <option value="inclusive">Tax Inclusive (included in price)</option>
-              <option value="exclusive">Tax Exclusive (added to price)</option>
-              <option value="hybrid">Hybrid (varies by region)</option>
-            </select>
-          </div>
-        </div>
-
-        <button @click="saveTaxSettings" class="btn btn-primary">Save Settings</button>
-      </div>
-    </section>
-
-    <!-- Tax Group Editor Modal -->
-    <div v-if="showTaxEditor" class="modal-overlay" @click.self="showTaxEditor = false">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2>{{ editingTaxGroup ? 'Edit Tax Group' : 'New Tax Group' }}</h2>
-          <button @click="showTaxEditor = false" class="close-btn">✕</button>
-        </div>
-
-        <form @submit.prevent="saveTaxGroup" class="tax-form">
-          <div class="form-group">
-            <label>Group Name</label>
-            <input 
-              v-model="editingTaxGroup.name"
-              type="text"
-              placeholder="e.g., US Sales Tax"
-              class="form-input"
-              required
-            />
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label>Country/Region</label>
-              <select v-model="editingTaxGroup.region" class="form-input" required>
-                <option value="">Select Region</option>
-                <option value="United States">United States</option>
-                <option value="Canada">Canada</option>
-                <option value="UK">United Kingdom</option>
-                <option value="EU">European Union</option>
-                <option value="Australia">Australia</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label>Tax Rate (%)</label>
-              <input 
-                v-model.number="editingTaxGroup.rate"
-                type="number"
-                step="0.01"
-                min="0"
-                max="100"
-                class="form-input"
-                required
-              />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>Tax Type</label>
-            <select v-model="editingTaxGroup.type" class="form-input" required>
-              <option value="sales-tax">Sales Tax</option>
-              <option value="vat">VAT (Value Added Tax)</option>
-              <option value="gst">GST (Goods & Services Tax)</option>
-              <option value="hst">HST (Harmonized Sales Tax)</option>
-              <option value="pst">PST (Provincial Sales Tax)</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Description</label>
-            <textarea 
-              v-model="editingTaxGroup.description"
-              class="form-input"
-              rows="3"
-            ></textarea>
-          </div>
-
-          <div class="form-group">
-            <label>Apply To (select products/categories):</label>
-            <div class="checkbox-list">
-              <label v-for="option in applyToOptions" :key="option" class="checkbox-option">
-                <input 
-                  v-model="editingTaxGroup.appliedTo"
-                  type="checkbox"
-                  :value="option"
-                />
-                <span>{{ option }}</span>
-              </label>
-            </div>
-          </div>
-
-          <label class="checkbox-option">
-            <input v-model="editingTaxGroup.active" type="checkbox" />
-            <span>Active</span>
-          </label>
-
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary">
-              {{ editingTaxGroup?.id ? 'Update Tax Group' : 'Create Tax Group' }}
-            </button>
-            <button type="button" @click="showTaxEditor = false" class="btn btn-secondary">
-              Cancel
-            </button>
-          </div>
-        </form>
-      </div>
+    <div v-if="!loading" class="tax-rates-table-container">
+      <table class="tax-rates-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Rate</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="rate in taxRates" :key="rate.id">
+            <td>
+              <input v-if="editingId === rate.id" v-model="editName" type="text" class="form-input input-inline" />
+              <span v-else>{{ rate.name }}</span>
+            </td>
+            <td class="rate-value">
+              <input v-if="editingId === rate.id" v-model="editRatePct" type="number" min="0" max="100" step="0.01" class="form-input input-narrow input-inline" />
+              <span v-else>{{ decimalToPct(rate.rate) }}%</span>
+            </td>
+            <td class="action-buttons">
+              <template v-if="editingId === rate.id">
+                <button class="btn btn-primary btn-small" @click="saveEdit(rate)" :disabled="editSaving">
+                  {{ editSaving ? 'Saving…' : 'Save' }}
+                </button>
+                <button class="btn btn-secondary btn-small" @click="cancelEdit">Cancel</button>
+                <span v-if="editError" class="inline-error">{{ editError }}</span>
+              </template>
+              <template v-else>
+                <button class="btn-edit" @click="startEdit(rate)" title="Edit">✎</button>
+                <button class="btn-delete" @click="deleteTaxRate(rate)" title="Delete">🗑️</button>
+              </template>
+            </td>
+          </tr>
+          <tr v-if="taxRates.length === 0">
+            <td colspan="3" class="empty-row">No tax rates configured yet. Add one above.</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
 
 <script>
-import { ref, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 
 export default {
   name: 'TaxManagement',
   setup() {
-    const activeTab = ref('Tax Groups')
-    const searchQuery = ref('')
-    const countryFilter = ref('')
-    const showTaxEditor = ref(false)
-    const showNewRule = ref(false)
-    const editingTaxGroup = ref(null)
+    const loading = ref(false)
+    const loadError = ref('')
+    const taxRates = ref([])
 
-    const tabs = ['Tax Groups', 'Tax Rates', 'Tax Rules', 'Settings']
+    const addName = ref('')
+    const addRatePct = ref('')
+    const addError = ref('')
+    const addSaving = ref(false)
 
-    const applyToOptions = [
-      'All Products',
-      'Physical Products Only',
-      'Digital Products Only',
-      'Specific Categories',
-      'Specific Regions',
-    ]
+    const editingId = ref(null)
+    const editName = ref('')
+    const editRatePct = ref('')
+    const editError = ref('')
+    const editSaving = ref(false)
 
-    const taxGroups = ref([
-      {
-        id: 1,
-        name: 'US Sales Tax',
-        type: 'sales-tax',
-        region: 'United States',
-        rate: 7.5,
-        description: 'Standard sales tax applied to most products',
-        appliedTo: ['All Products', 'Specific Regions'],
-        productsCount: 145,
-        revenue: 25430.50,
-        active: true,
-      },
-      {
-        id: 2,
-        name: 'Canada GST',
-        type: 'gst',
-        region: 'Canada',
-        rate: 5,
-        description: 'Goods and Services Tax',
-        appliedTo: ['All Products'],
-        productsCount: 42,
-        revenue: 8920.75,
-        active: true,
-      },
-      {
-        id: 3,
-        name: 'EU VAT',
-        type: 'vat',
-        region: 'European Union',
-        rate: 20,
-        description: 'VAT for EU countries',
-        appliedTo: ['All Products', 'Physical Products Only'],
-        productsCount: 98,
-        revenue: 15670.25,
-        active: true,
-      },
-      {
-        id: 4,
-        name: 'UK VAT',
-        type: 'vat',
-        region: 'United Kingdom',
-        rate: 20,
-        description: 'UK Value Added Tax',
-        appliedTo: ['All Products'],
-        productsCount: 67,
-        revenue: 12340.00,
-        active: true,
-      },
-    ])
-
-    const allTaxRates = ref([
-      { id: 1, region: 'California', country: 'US', rate: 8.625, type: 'State', active: true },
-      { id: 2, region: 'New York', country: 'US', rate: 8.875, type: 'State', active: true },
-      { id: 3, region: 'Texas', country: 'US', rate: 8.25, type: 'State', active: true },
-      { id: 4, region: 'Ontario', country: 'CA', rate: 13, type: 'Provincial', active: true },
-      { id: 5, region: 'Quebec', country: 'CA', rate: 14.975, type: 'Provincial', active: true },
-    ])
-
-    const taxRules = ref([
-      {
-        id: 1,
-        name: 'Digital Products Exemption',
-        description: 'No tax applied to digital/downloadable products',
-        priority: 1,
-        conditions: [
-          'Product type is Digital',
-          'Not subject to sales tax',
-        ],
-        active: true,
-      },
-      {
-        id: 2,
-        name: 'Wholesale Tax Exemption',
-        description: 'Tax exemption for wholesale/bulk orders',
-        priority: 2,
-        conditions: [
-          'Order quantity > 100 units',
-          'Customer type is Wholesale',
-        ],
-        active: true,
-      },
-      {
-        id: 3,
-        name: 'Regional Tax Override',
-        description: 'Apply different tax rate based on customer address',
-        priority: 3,
-        conditions: [
-          'Shipping address is in tax zone',
-          'Override standard rates',
-        ],
-        active: false,
-      },
-    ])
-
-    const settings = ref({
-      displayTaxInPrice: false,
-      showTaxBreakdown: true,
-      calculateTaxOnShipping: true,
-      enableTaxRounding: true,
-      exemptDigitalProducts: true,
-      exemptGiftCards: true,
-      exemptOrganizations: 'American Red Cross\nSalvation Army',
-      trackTaxByCountry: true,
-      trackTaxByState: true,
-      calculationMethod: 'exclusive',
-    })
-
-    const filteredTaxGroups = computed(() => {
-      return taxGroups.value.filter(group => {
-        const matchesSearch = !searchQuery.value ||
-          group.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-          group.region.toLowerCase().includes(searchQuery.value.toLowerCase())
-
-        const matchesCountry = !countryFilter.value ||
-          group.region.toLowerCase().includes(countryFilter.value.toLowerCase())
-
-        return matchesSearch && matchesCountry
-      })
-    })
-
-    const editTaxGroup = (group) => {
-      editingTaxGroup.value = { ...group, appliedTo: [...group.appliedTo] }
-      showTaxEditor.value = true
+    const decimalToPct = (rate) => {
+      const n = Math.round(Number(rate) * 10000) / 100
+      return n % 1 === 0 ? n.toFixed(0) : n
     }
 
-    const saveTaxGroup = () => {
-      if (editingTaxGroup.value.id) {
-        const index = taxGroups.value.findIndex(g => g.id === editingTaxGroup.value.id)
-        taxGroups.value[index] = editingTaxGroup.value
-      } else {
-        editingTaxGroup.value.id = Math.max(...taxGroups.value.map(g => g.id)) + 1
-        editingTaxGroup.value.productsCount = 0
-        editingTaxGroup.value.revenue = 0
-        taxGroups.value.push(editingTaxGroup.value)
-      }
-      showTaxEditor.value = false
-      editingTaxGroup.value = null
-      alert('Tax group saved successfully!')
-    }
-
-    const toggleTaxStatus = (group) => {
-      group.active = !group.active
-    }
-
-    const deleteTaxGroup = (id) => {
-      if (confirm('Are you sure you want to delete this tax group?')) {
-        taxGroups.value = taxGroups.value.filter(g => g.id !== id)
+    const getAuthHeaders = () => {
+      const adminToken = String(localStorage.getItem('adminApiToken') || '').trim()
+      const authToken = String(localStorage.getItem('authToken') || '').trim()
+      return {
+        'Content-Type': 'application/json',
+        ...(authToken && { Authorization: `Bearer ${authToken}` }),
+        ...(adminToken && { 'x-admin-token': adminToken }),
       }
     }
 
-    const updateTaxRate = (rate) => {
-      console.log('Tax rate updated:', rate)
-    }
-
-    const editTaxRate = (rate) => {
-      console.log('Edit tax rate:', rate)
-    }
-
-    const deleteTaxRate = (id) => {
-      if (confirm('Are you sure you want to delete this tax rate?')) {
-        allTaxRates.value = allTaxRates.value.filter(r => r.id !== id)
+    const loadTaxRates = async () => {
+      loading.value = true
+      loadError.value = ''
+      try {
+        const response = await fetch('/api/tax-rates')
+        const data = await response.json()
+        if (!response.ok) throw new Error(data.error || 'Failed to load tax rates')
+        taxRates.value = Array.isArray(data.data) ? data.data : []
+      } catch (err) {
+        loadError.value = err.message
+      } finally {
+        loading.value = false
       }
     }
 
-    const editTaxRule = (rule) => {
-      console.log('Edit tax rule:', rule)
-    }
+    const addTaxRate = async () => {
+      const name = String(addName.value || '').trim()
+      const pct = Number(addRatePct.value)
+      addError.value = ''
+      if (!name) { addError.value = 'Name is required.'; return }
+      if (!isFinite(pct) || pct < 0 || pct > 100) { addError.value = 'Rate must be between 0 and 100.'; return }
 
-    const toggleRuleStatus = (rule) => {
-      rule.active = !rule.active
-    }
-
-    const deleteTaxRule = (id) => {
-      if (confirm('Are you sure you want to delete this tax rule?')) {
-        taxRules.value = taxRules.value.filter(r => r.id !== id)
+      addSaving.value = true
+      try {
+        const response = await fetch('/api/tax-rates', {
+          method: 'POST',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({ name, rate: pct / 100 }),
+        })
+        const data = await response.json()
+        if (!response.ok) throw new Error(data.error || 'Failed to add tax rate')
+        taxRates.value.push(data)
+        addName.value = ''
+        addRatePct.value = ''
+      } catch (err) {
+        addError.value = err.message
+      } finally {
+        addSaving.value = false
       }
     }
 
-    const saveTaxSettings = () => {
-      console.log('Tax settings saved:', settings.value)
-      alert('Tax settings saved successfully!')
+    const startEdit = (rate) => {
+      editingId.value = rate.id
+      editName.value = rate.name
+      editRatePct.value = String(decimalToPct(rate.rate))
+      editError.value = ''
     }
+
+    const cancelEdit = () => {
+      editingId.value = null
+      editName.value = ''
+      editRatePct.value = ''
+      editError.value = ''
+    }
+
+    const saveEdit = async (rate) => {
+      const name = String(editName.value || '').trim()
+      const pct = Number(editRatePct.value)
+      editError.value = ''
+      if (!name) { editError.value = 'Name is required.'; return }
+      if (!isFinite(pct) || pct < 0 || pct > 100) { editError.value = 'Rate must be between 0 and 100.'; return }
+
+      editSaving.value = true
+      try {
+        const response = await fetch(`/api/tax-rates/${rate.id}`, {
+          method: 'PUT',
+          headers: getAuthHeaders(),
+          body: JSON.stringify({ name, rate: pct / 100 }),
+        })
+        const data = await response.json()
+        if (!response.ok) throw new Error(data.error || 'Failed to update tax rate')
+        const index = taxRates.value.findIndex((r) => r.id === rate.id)
+        if (index !== -1) taxRates.value[index] = data
+        cancelEdit()
+      } catch (err) {
+        editError.value = err.message
+      } finally {
+        editSaving.value = false
+      }
+    }
+
+    const deleteTaxRate = async (rate) => {
+      if (!confirm(`Delete "${rate.name}"?`)) return
+      try {
+        const response = await fetch(`/api/tax-rates/${rate.id}`, {
+          method: 'DELETE',
+          headers: getAuthHeaders(),
+        })
+        if (!response.ok) {
+          const data = await response.json().catch(() => ({}))
+          throw new Error(data.error || 'Failed to delete')
+        }
+        taxRates.value = taxRates.value.filter((r) => r.id !== rate.id)
+      } catch (err) {
+        loadError.value = err.message
+      }
+    }
+
+    onMounted(loadTaxRates)
 
     return {
-      activeTab,
-      searchQuery,
-      countryFilter,
-      showTaxEditor,
-      showNewRule,
-      editingTaxGroup,
-      tabs,
-      applyToOptions,
-      taxGroups,
-      allTaxRates,
-      taxRules,
-      settings,
-      filteredTaxGroups,
-      editTaxGroup,
-      saveTaxGroup,
-      toggleTaxStatus,
-      deleteTaxGroup,
-      updateTaxRate,
-      editTaxRate,
+      loading,
+      loadError,
+      taxRates,
+      addName,
+      addRatePct,
+      addError,
+      addSaving,
+      addTaxRate,
+      editingId,
+      editName,
+      editRatePct,
+      editError,
+      editSaving,
+      startEdit,
+      cancelEdit,
+      saveEdit,
       deleteTaxRate,
-      editTaxRule,
-      toggleRuleStatus,
-      deleteTaxRule,
-      saveTaxSettings,
+      decimalToPct,
     }
   },
 }
@@ -597,6 +245,75 @@ export default {
 .management-header h1 {
   margin: 0;
   color: #333;
+}
+
+/* Add rate form */
+.add-rate-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.add-rate-card h2 {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.add-rate-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.inline-group {
+  flex: 1;
+  min-width: 160px;
+}
+
+.inline-group label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 0.4rem;
+  color: #555;
+}
+
+.input-narrow {
+  max-width: 120px;
+}
+
+.input-inline {
+  padding: 0.4rem 0.6rem;
+  font-size: 0.9rem;
+}
+
+.error-msg {
+  color: #c0392b;
+  font-size: 0.9rem;
+  margin: 0.5rem 0 0;
+}
+
+.loading-msg {
+  color: #888;
+  padding: 1rem 0;
+}
+
+.empty-row {
+  text-align: center;
+  color: #aaa;
+  padding: 2rem;
+  font-style: italic;
+}
+
+.inline-error {
+  color: #c0392b;
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
 }
 
 .management-tabs {

@@ -56,6 +56,13 @@
           >
             Order Export
           </router-link>
+          <router-link
+            class="admin-nav-link"
+            :class="{ active: route.path === '/admin/tax' }"
+            to="/admin/tax"
+          >
+            Tax
+          </router-link>
         </nav>
 
         <div class="header-actions">
@@ -78,14 +85,108 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '../stores/auth'
+
+function decodeJwtPayload(token) {
+  try {
+    const payloadPart = String(token || '').split('.')[1] || ''
+    if (!payloadPart) {
+      return null
+    }
+
+    const normalized = payloadPart.replace(/-/g, '+').replace(/_/g, '/')
+    const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, '=')
+    const payloadJson = atob(padded)
+    return JSON.parse(payloadJson)
+  } catch (_error) {
+    return null
+  }
+}
+
+function isTokenExpired(token) {
+  const payload = decodeJwtPayload(token)
+  const exp = Number(payload?.exp || 0)
+  if (!exp) {
+    return false
+  }
+
+  const now = Math.floor(Date.now() / 1000)
+  return exp <= now
+}
+
+function clearStoredAuth() {
+  localStorage.removeItem('authToken')
+  localStorage.removeItem('authRole')
+  localStorage.removeItem('adminApiToken')
+}
 
 export default {
   name: 'AdminLayout',
   setup() {
     const route = useRoute()
+    const router = useRouter()
+    const authStore = useAuthStore()
     const notificationCount = ref(5)
+    const isRedirecting = ref(false)
+    let sessionCheckIntervalId = null
+    let originalFetch = null
+
+    const redirectToLogin = () => {
+      if (isRedirecting.value) {
+        return
+      }
+      isRedirecting.value = true
+
+      const redirectPath = route.fullPath || '/admin'
+      clearStoredAuth()
+      authStore.logout()
+      router.replace({
+        name: 'AdminLogin',
+        query: {
+          redirect: redirectPath,
+        },
+      })
+    }
+
+    const checkAdminSession = () => {
+      const authToken = String(localStorage.getItem('authToken') || '').trim()
+      const adminApiToken = String(localStorage.getItem('adminApiToken') || '').trim()
+
+      if (!authToken || !adminApiToken) {
+        redirectToLogin()
+        return
+      }
+
+      if (isTokenExpired(authToken) || isTokenExpired(adminApiToken)) {
+        redirectToLogin()
+      }
+    }
+
+    const hasValidAdminSession = () => {
+      const authToken = String(localStorage.getItem('authToken') || '').trim()
+      const adminApiToken = String(localStorage.getItem('adminApiToken') || '').trim()
+
+      if (!authToken || !adminApiToken) {
+        return false
+      }
+
+      return !isTokenExpired(authToken) && !isTokenExpired(adminApiToken)
+    }
+
+    const isApiRequest = (requestInput) => {
+      if (!requestInput) {
+        return false
+      }
+
+      if (typeof requestInput === 'string') {
+        return requestInput.startsWith('/api/')
+      }
+
+      const requestUrl = String(requestInput.url || '')
+      return requestUrl.includes('/api/')
+    }
 
     const isTabActive = (tab) => {
       return route.path === '/admin' && String(route.query.tab || 'overview') === tab
@@ -102,6 +203,32 @@ export default {
 
       return route.path !== '/admin/products/category-mover' && route.path !== '/admin/products/uncategorized'
     }
+
+    onMounted(() => {
+      checkAdminSession()
+      sessionCheckIntervalId = window.setInterval(checkAdminSession, 15000)
+
+      originalFetch = window.fetch.bind(window)
+      window.fetch = async (...args) => {
+        const response = await originalFetch(...args)
+        const requestInput = args[0]
+        const isUnauthorized = response && (response.status === 401 || response.status === 403)
+        if (isUnauthorized && isApiRequest(requestInput) && !hasValidAdminSession()) {
+          redirectToLogin()
+        }
+        return response
+      }
+    })
+
+    onBeforeUnmount(() => {
+      if (sessionCheckIntervalId) {
+        window.clearInterval(sessionCheckIntervalId)
+      }
+
+      if (originalFetch) {
+        window.fetch = originalFetch
+      }
+    })
 
     return {
       route,

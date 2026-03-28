@@ -552,10 +552,16 @@ export default {
           ? '/api/products'
           : `/api/products/${form.value.product_id || route.params.id}`
         const method = isCreateMode.value ? 'POST' : 'PUT'
+        const authToken = String(localStorage.getItem('authToken') || '').trim()
+        const adminToken = String(localStorage.getItem('adminApiToken') || '').trim()
 
         const response = await fetch(endpoint, {
           method,
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+            ...(adminToken ? { 'x-admin-token': adminToken } : {}),
+          },
           body: JSON.stringify(payload),
         })
 

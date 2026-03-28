@@ -141,9 +141,15 @@ export default {
 
     const getAuthHeaders = () => {
       const adminToken = String(localStorage.getItem('adminApiToken') || '').trim()
+      const authToken = String(localStorage.getItem('authToken') || '').trim()
       return {
         credentials: 'include',
-        ...(adminToken && { headers: { 'x-admin-token': adminToken } }),
+        ...((adminToken || authToken) && {
+          headers: {
+            ...(authToken && { Authorization: `Bearer ${authToken}` }),
+            ...(adminToken && { 'x-admin-token': adminToken }),
+          },
+        }),
       }
     }
 

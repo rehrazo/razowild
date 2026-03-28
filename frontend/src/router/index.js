@@ -22,6 +22,7 @@ import CategoryManager from '../views/admin/CategoryManager.vue'
 import ProductCategoryMover from '../views/admin/ProductCategoryMover.vue'
 import OrderConfirmation from '../views/store/OrderConfirmation.vue'
 import AdminOrderExportManager from '../views/admin/AdminOrderExportManager.vue'
+import TaxManagement from '../views/admin/TaxManagement.vue'
 import ShippingReturns from '../views/store/ShippingReturns.vue'
 import PrivacyPolicy from '../views/store/PrivacyPolicy.vue'
 import TermsConditions from '../views/store/TermsConditions.vue'
@@ -273,6 +274,15 @@ const routes = [
         path: 'orders/export-manager',
         name: 'AdminOrderExportManager',
         component: AdminOrderExportManager,
+      },
+      {
+        path: 'tax',
+        name: 'TaxManagement',
+        component: TaxManagement,
+        meta: {
+          title: 'Tax Management | Razo Wild',
+          noindex: true,
+        },
       },
     ],
   },

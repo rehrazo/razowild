@@ -824,6 +824,18 @@ export default {
       { id: 'settings', label: 'Settings', icon: '⚙️' },
     ]
 
+    const getAdminApiHeaders = (includeJsonContentType = true) => {
+      const authToken = String(localStorage.getItem('authToken') || '').trim()
+      const adminToken = String(localStorage.getItem('adminApiToken') || '').trim()
+      const headers = {
+        ...(includeJsonContentType ? { 'Content-Type': 'application/json' } : {}),
+        ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
+        ...(adminToken ? { 'x-admin-token': adminToken } : {}),
+      }
+
+      return headers
+    }
+
     const stats = {
       totalOrders: 1243,
       totalRevenue: 156780,
@@ -1065,7 +1077,7 @@ export default {
 
         const response = await fetch(endpoint, {
           method,
-          headers: { 'Content-Type': 'application/json' },
+          headers: getAdminApiHeaders(),
           body: JSON.stringify(payload),
         })
 
@@ -1090,6 +1102,7 @@ export default {
       try {
         const response = await fetch(`/api/products/${product.product_id}`, {
           method: 'DELETE',
+          headers: getAdminApiHeaders(false),
         })
 
         if (!response.ok) {
@@ -1224,6 +1237,7 @@ export default {
 
       const response = await fetch('/api/categories/upload-image', {
         method: 'POST',
+        headers: getAdminApiHeaders(false),
         body: formData,
       })
 
@@ -1321,7 +1335,7 @@ export default {
 
         const response = await fetch(`/api/categories/${categoryId}`, {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+          headers: getAdminApiHeaders(),
           body: JSON.stringify({ home_feature_image_url: imageUrl }),
         })
 
@@ -1358,7 +1372,7 @@ export default {
       try {
         const response = await fetch(`/api/categories/${categoryId}`, {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+          headers: getAdminApiHeaders(),
           body: JSON.stringify({
             home_feature_group: normalizedGroup,
           }),
@@ -1387,7 +1401,7 @@ export default {
       try {
         const response = await fetch('/api/categories', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: getAdminApiHeaders(),
           body: JSON.stringify({
             name,
             parent_id: newCategoryParentId.value || null,
@@ -1466,7 +1480,7 @@ export default {
       try {
         const response = await fetch(`/api/categories/${category.category_id}`, {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+          headers: getAdminApiHeaders(),
           body: JSON.stringify({
             home_feature_group: homeFeatureGroup,
             home_feature_image_url: homeFeatureImageUrl || null,
@@ -1496,7 +1510,7 @@ export default {
       try {
         const response = await fetch(`/api/categories/${category.category_id}`, {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+          headers: getAdminApiHeaders(),
           body: JSON.stringify({ name: name.trim() }),
         })
 
@@ -1532,7 +1546,7 @@ export default {
       try {
         const response = await fetch(`/api/categories/${category.category_id}`, {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+          headers: getAdminApiHeaders(),
           body: JSON.stringify({ parent_id: parentId }),
         })
 
@@ -1557,6 +1571,7 @@ export default {
       try {
         const response = await fetch(`/api/categories/${category.category_id}`, {
           method: 'DELETE',
+          headers: getAdminApiHeaders(false),
         })
 
         const data = await response.json().catch(() => ({}))
@@ -1771,6 +1786,7 @@ export default {
 
         const response = await fetch('/api/admin/import-products', {
           method: 'POST',
+          headers: getAdminApiHeaders(false),
           body: formData,
         })
 

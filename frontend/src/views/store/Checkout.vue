@@ -218,7 +218,7 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCartStore } from '../../stores/cart'
 import { loadStripe } from '@stripe/stripe-js'
@@ -250,6 +250,20 @@ export default {
     const isSubmitting = ref(false)
     const statusMessage = ref('')
     const statusType = ref('error')
+    const taxRate = ref(0)
+
+    const loadTaxRate = async () => {
+      try {
+        const response = await fetch('/api/tax-rates')
+        const data = await response.json()
+        const rates = Array.isArray(data?.data) ? data.data : []
+        if (rates.length) {
+          taxRate.value = Number(rates[0].rate) || 0
+        }
+      } catch (_err) {
+        // keep at 0
+      }
+    }
 
     const orderItems = computed(() => cartStore.items)
 
@@ -264,7 +278,7 @@ export default {
     })
 
     const tax = computed(() => {
-      return (subtotal.value + shippingCost.value) * 0.1
+      return (subtotal.value + shippingCost.value) * taxRate.value
     })
 
     const total = computed(() => {
@@ -376,6 +390,8 @@ export default {
         isSubmitting.value = false
       }
     }
+
+    onMounted(loadTaxRate)
 
     return {
       form,
